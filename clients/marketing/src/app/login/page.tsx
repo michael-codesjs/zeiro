@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -196,7 +195,7 @@ export default function Login() {
 
               <div className="mt-10 pt-6 border-t border-gray-100 text-center">
                 <p className="text-gray-600 text-sm">
-                  Don't have an account?{' '}
+                  Don&apos;t have an account?{' '}
                   <Link href="/signup" className="font-medium text-yellow-600 hover:text-yellow-700 transition-colors">
                     Sign up
                   </Link>

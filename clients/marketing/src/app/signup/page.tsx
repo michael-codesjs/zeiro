@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -89,13 +88,6 @@ export default function Signup() {
 
   const getStepProgress = () => {
     return (step / 2) * 100;
-  };
-
-  const isNextDisabled = () => {
-    if (step === 1) {
-      return !name || !email || !password;
-    }
-    return !role || !usageIntent;
   };
   
   const handleBlur = (field: string) => {
@@ -267,7 +259,7 @@ export default function Signup() {
                         htmlFor="role" 
                         className={`absolute text-sm font-medium transition-all duration-300 ${role ? '-top-6 left-0 text-gray-700' : 'top-4 left-12 text-gray-500'}`}
                       >
-                        What's your role?
+                        What&apos;s your role?
                       </label>
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

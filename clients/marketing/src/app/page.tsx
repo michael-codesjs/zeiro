@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Home() {
@@ -16,10 +17,10 @@ export default function Home() {
             <a href="#" className="text-sm text-gray-600 hover:text-yellow-600 transition font-medium">Blog</a>
           </nav>
           <div className="flex items-center gap-4">
-            <a href="/login" className="text-sm text-gray-700 hover:text-yellow-600 font-medium">Sign In</a>
-            <a href="/signup" className="text-sm bg-yellow-400 text-white px-5 py-2.5 rounded-md hover:bg-yellow-500 transition duration-300 font-medium shadow-lg shadow-yellow-400/20">
+            <Link href="/login" className="text-sm text-gray-700 hover:text-yellow-600 font-medium">Sign In</Link>
+            <Link href="/signup" className="text-sm bg-yellow-400 text-white px-5 py-2.5 rounded-md hover:bg-yellow-500 transition duration-300 font-medium shadow-lg shadow-yellow-400/20">
               Start From Zero
-            </a>
+            </Link>
           </div>
         </div>
       </header>
@@ -336,7 +337,7 @@ export default function Home() {
                 Get Started with Zero Learning Curve
               </h2>
               <p className="text-gray-600 mb-8">
-                Our platform is designed to be intuitive from day one. You'll be creating complex queries and visualizations within minutes, not weeks.
+                Our platform is designed to be intuitive from day one. You&apos;ll be creating complex queries and visualizations within minutes, not weeks.
               </p>
               
               <ul className="space-y-4">
@@ -460,7 +461,7 @@ export default function Home() {
               Why Teams <span className="text-yellow-600">Love Zeiro</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Join teams across departments who've transformed their data experience
+              Join teams across departments who&apos;ve transformed their data experience
             </p>
           </div>
 
@@ -480,7 +481,7 @@ export default function Home() {
                 </div>
                 
                 <p className="text-gray-700 mb-8 text-lg italic leading-relaxed">
-                  "Zeiro has completely transformed how our team works with databases. The AI features save us hours every day."
+                  &quot;Zeiro has completely transformed how our team works with databases. The AI features save us hours every day.&quot;
                 </p>
                 
                 <div className="flex items-center">
@@ -510,7 +511,7 @@ export default function Home() {
                 </div>
                 
                 <p className="text-gray-700 mb-8 text-lg italic leading-relaxed">
-                  "The natural language query feature is a game-changer. It's like having a SQL expert on your team 24/7."
+                  &quot;The natural language query feature is a game-changer. It&apos;s like having a SQL expert on your team 24/7.&quot;
                 </p>
                 
                 <div className="flex items-center">
@@ -540,7 +541,7 @@ export default function Home() {
                 </div>
                 
                 <p className="text-gray-700 mb-8 text-lg italic leading-relaxed">
-                  "We've reduced our database management costs by 40% since switching to Zeiro. The ROI is incredible."
+                  &quot;We&apos;ve reduced our database management costs by 40% since switching to Zeiro. The ROI is incredible.&quot;
                 </p>
                 
                 <div className="flex items-center">
@@ -624,7 +625,7 @@ export default function Home() {
                     </h2>
                     
                     <p className="text-white/80 text-lg mb-10 max-w-md">
-                      Join thousands of developers who are working smarter, not harder, with Zeiro's zero-complexity approach.
+                      Join thousands of developers who are working smarter, not harder, with Zeiro&apos;s zero-complexity approach.
                     </p>
                     
                     <div className="flex flex-col sm:flex-row gap-4">
@@ -736,24 +737,26 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-12">
             {/* Database Items */}
             {[
-              { name: "PostgreSQL", logo: "https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" },
-              { name: "MySQL", logo: "https://upload.wikimedia.org/wikipedia/en/d/dd/MySQL_logo.svg" },
-              { name: "Microsoft SQL", logo: "https://upload.wikimedia.org/wikipedia/de/8/8c/Microsoft_SQL_Server_Logo.svg" },
-              { name: "SQLite", logo: "https://upload.wikimedia.org/wikipedia/commons/3/38/SQLite370.svg" },
-              { name: "DynamoDB", logo: "https://upload.wikimedia.org/wikipedia/commons/f/fd/DynamoDB.png" },
-              { name: "MariaDB", logo: "https://upload.wikimedia.org/wikipedia/commons/c/ca/MariaDB_colour_logo.svg" },
-              { name: "Oracle", logo: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Oracle_Logo.svg" },
-              { name: "MongoDB", logo: "https://upload.wikimedia.org/wikipedia/commons/9/93/MongoDB_Logo.svg" },
-              { name: "Neo4j", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e5/Neo4j-logo_color.png" },
-              { name: "Elasticsearch", logo: "https://upload.wikimedia.org/wikipedia/commons/f/f4/Elasticsearch_logo.svg" },
-              { name: "Redis", logo: "https://seeklogo.com/images/R/redis-logo-E403D4DD6A-seeklogo.com.png" },
-              { name: "Cassandra", logo: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Cassandra_logo.svg" },
+              { name: "PostgreSQL", logo: "/images/databases/postgresql.svg" },
+              { name: "MySQL", logo: "/images/databases/mysql.svg" },
+              { name: "Microsoft SQL", logo: "/images/databases/mssql.svg" },
+              { name: "SQLite", logo: "/images/databases/sqlite.svg" },
+              { name: "DynamoDB", logo: "/images/databases/dynamodb.svg" },
+              { name: "MariaDB", logo: "/images/databases/mariadb.svg" },
+              { name: "Oracle", logo: "/images/databases/oracle.svg" },
+              { name: "MongoDB", logo: "/images/databases/mongodb.svg" },
+              { name: "Neo4j", logo: "/images/databases/neo4j.svg" },
+              { name: "Elasticsearch", logo: "/images/databases/elasticsearch.svg" },
+              { name: "Redis", logo: "/images/databases/redis.svg" },
+              { name: "Cassandra", logo: "/images/databases/cassandra.svg" },
             ].map((db, i) => (
               <div key={i} className="flex flex-col items-center">
                 <div className="w-24 h-24 bg-white rounded-xl border border-gray-100 flex items-center justify-center mb-4 transition-transform hover:scale-105 p-3">
-                  <img 
+                  <Image 
                     src={db.logo} 
                     alt={`${db.name} logo`} 
+                    width={64}
+                    height={64}
                     className="max-w-full max-h-full object-contain"
                   />
                 </div>
