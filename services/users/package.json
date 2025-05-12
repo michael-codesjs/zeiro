@@ -16,8 +16,6 @@
   },
   "dependencies": {
     "@zeiro/sdk": "*",
-    "inversify": "^6.0.1",
-    "reflect-metadata": "^0.1.13",
     "validator": "^13.9.0",
     "@middy/core": "^4.2.6",
     "@middy/input-output-logger": "^4.2.6",
