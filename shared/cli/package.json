@@ -1,0 +1,40 @@
+{
+  "name": "@zeiro/cli",
+  "version": "1.0.0",
+  "description": "zeiro cli tool",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "zeiro": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "postbuild": "npm link && chmod +x ./dist/index.js",
+    "postbuild:watch": "npm link && chmod +x ./dist/index.js",
+    "build:watch": "tsc --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michael-codesjs/zeiro.git"
+  },
+  "author": "Michael Phiri(https://github.com/michael-codesjs)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/michael-codesjs/zeiro/issues"
+  },
+  "homepage": "https://github.com/michael-codesjs/zeiro#readme",
+  "dependencies": {
+    "@aws-sdk/client-ssm": "^3.287.0",
+    "chalk": "^4.1.2",
+    "commander": "^11.0.0",
+    "inquirer": "^8.2.5",
+    "minimist": "^1.2.8",
+    "ora": "^5.4.1"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.3",
+    "@types/minimist": "^1.2.2",
+    "@types/node": "^18.14.6",
+    "typescript": "^4.9.5"
+  }
+} 
