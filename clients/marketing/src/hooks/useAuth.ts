@@ -166,7 +166,7 @@ export function useAuth(): Omit<UseAuthReturn, 'loading' | 'error'> {
       console.log('confirm_sign_in_output', confirm_sign_in_output)
       if (confirm_sign_in_output.isSignedIn) {
         toast.success('Account verified and signed in successfully!')
-        router.push('/')
+        window.location.reload()
       } else if (
         confirm_sign_in_output.nextStep.signInStep ===
         'CONFIRM_SIGN_IN_WITH_CUSTOM_CHALLENGE'
