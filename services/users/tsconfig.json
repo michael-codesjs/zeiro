@@ -15,7 +15,9 @@
     "paths": {
       "@adapters/*": ["adapters/*"],
       "@typings/*": ["types/*"],
-      "@typings": ["types/index.ts"]
+      "@typings": ["types/index.ts"],
+      "@repositories": ["repositories/index.ts"],
+      "@repositories/*": ["repositories/*"]
     }
   },
   "include": ["serverless.ts", "application/**/*.ts"],

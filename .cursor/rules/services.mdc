@@ -1,0 +1,23 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Backend Services
+
+The `services/` directory contains backend microservices that power the Zeiro platform.
+
+## User Service
+
+The Users service in [services/users](mdc:services/users) handles user management, including:
+- User registration
+- User profile management
+- User permissions and roles
+
+## Authentication Service
+
+The Authentication service in [services/authentication](mdc:services/authentication) handles:
+- User login and logout
+- Token management
+- Session handling
+- Authentication workflows

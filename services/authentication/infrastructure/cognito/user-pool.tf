@@ -56,6 +56,32 @@ resource "aws_cognito_user_pool" "user_pool" {
     }
   }
 
+  # Custom attribute for usage intent
+  schema {
+    name                     = "usage_intent"
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = false
+    string_attribute_constraints {
+      min_length = 1
+      max_length = 256
+    }
+  }
+
+  # Custom attribute for user role
+  schema {
+    name                     = "role"
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = false
+    string_attribute_constraints {
+      min_length = 1
+      max_length = 50
+    }
+  }
+
   lifecycle {
     ignore_changes = [
       lambda_config

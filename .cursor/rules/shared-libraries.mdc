@@ -1,0 +1,21 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Shared Libraries
+
+The `shared/` directory contains libraries and utilities that are used across multiple workspaces in the project.
+
+## SDK
+
+The Software Development Kit (SDK) in [shared/sdk](mdc:shared/sdk) provides core functionality and interfaces for interacting with Zeiro services.
+
+## CLI
+
+The Command Line Interface (CLI) in [shared/cli](mdc:shared/cli) provides tools for developers to interact with Zeiro from the command line.
+
+The CLI can be installed locally with:
+```bash
+yarn install-cli
+```

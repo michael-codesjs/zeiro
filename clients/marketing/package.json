@@ -1,5 +1,5 @@
 {
-  "name": "marketing",
+  "name": "@zeiro/marketing",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,13 @@
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.3.2"
+    "next": "15.3.2",
+    "react-hot-toast": "^2.5.2",
+    "react-hook-form": "^7.55.0",
+    "react-icons": "^5.5.0",
+    "class-variance-authority": "^0.7.0",
+    "@aws-amplify/adapter-nextjs": "^1.6.0",
+    "aws-amplify": "^6.0.27"
   },
   "devDependencies": {
     "typescript": "^5",

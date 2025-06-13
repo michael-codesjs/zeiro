@@ -1,0 +1,30 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Zeiro Project Overview
+
+Zeiro is a monorepo project managed with Turborepo, with the following key workspace areas:
+
+## Project Structure
+
+- **shared/** - Shared libraries and utilities used across the project
+  - **sdk/** - Software Development Kit for Zeiro
+  - **cli/** - Command Line Interface tools
+
+- **services/** - Backend services
+  - **users/** - User management service
+  - **authentication/** - Authentication service
+
+- **clients/** - Client-facing applications
+  - **marketing/** - Marketing website/materials
+
+- **infrastructure/** - Infrastructure and deployment code
+  - **network/** - Network configuration
+  - **platform/** - Platform configuration
+
+## Key Configuration Files
+
+- [package.json](mdc:package.json) - Main package configuration and workspaces definition
+- [turbo.json](mdc:turbo.json) - Turborepo configuration

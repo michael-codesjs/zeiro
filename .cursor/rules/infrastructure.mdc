@@ -1,0 +1,23 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Infrastructure
+
+The `infrastructure/` directory contains configuration and code for deploying and managing the Zeiro platform.
+
+## Network
+
+The Network configuration in [infrastructure/network](mdc:infrastructure/network) includes:
+- Network topology
+- Routing rules
+- Security groups and firewall settings
+
+## Platform
+
+The Platform configuration in [infrastructure/platform](mdc:infrastructure/platform) includes:
+- Container orchestration
+- Service deployment
+- Resource allocation
+- Scaling policies

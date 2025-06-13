@@ -1,0 +1,49 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Development Workflow
+
+## Getting Started
+
+1. Install dependencies:
+   ```bash
+   yarn install
+   ```
+
+2. Start the development server:
+   ```bash
+   yarn dev
+   ```
+
+## Common Commands
+
+- **Build all packages and apps**:
+  ```bash
+  yarn build
+  ```
+
+- **Lint all packages and apps**:
+  ```bash
+  yarn lint
+  ```
+
+- **Type check all packages and apps**:
+  ```bash
+  yarn check-types
+  ```
+
+- **Format code**:
+  ```bash
+  yarn format
+  ```
+
+- **Install CLI tools**:
+  ```bash
+  yarn install-cli
+  ```
+
+## Workspace Structure
+
+The project uses Yarn workspaces as defined in [package.json](mdc:package.json) to manage the monorepo structure.

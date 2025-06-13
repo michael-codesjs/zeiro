@@ -1,0 +1,42 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Client Applications
+
+The `clients/` directory contains frontend applications and client-facing code for the Zeiro platform.
+
+## File Naming Conventions
+- All file names should use lowercase with hyphens for separation (kebab-case)
+- Component files should be named descriptively: `navigation.tsx`, `dashboard-layout.tsx`, `user-profile.tsx`
+- Avoid PascalCase for file names, use kebab-case instead
+- Page files follow Next.js conventions: `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`
+
+## Component Structure
+- Components should be organized in logical folders under `src/components/`
+- Layout-related components go in `src/components/layout/`
+- UI components go in `src/components/ui/`
+- Feature-specific components go in `src/components/[feature-name]/`
+
+## React Patterns
+- Use "use client" directive only when necessary (client-side interactivity)
+- Prefer server components when possible
+- Keep state management close to where it's needed
+- Use proper component composition patterns
+
+## Marketing Site
+
+The Marketing client in [clients/marketing](mdc:clients/marketing) contains:
+- The main marketing website
+- Landing pages
+- Documentation for public users
+- Contact and sign-up forms
+
+## Dashboard
+
+The Dashboard client in [clients/dashboard](mdc:clients/dashboard) contains:
+- Database management interface
+- Query builder and execution
+- Analytics and monitoring
+- User settings and preferences
