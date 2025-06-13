@@ -16,7 +16,7 @@ const nextConfig = {
     disableOptimizedLoading: true,
   },
   // Keep any existing configuration
-  output: 'export',
+  // Conditionally enable static export for production builds
 };
 
 export default nextConfig; 

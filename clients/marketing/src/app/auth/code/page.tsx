@@ -21,6 +21,9 @@ function VerificationCodeContent() {
   const searchParams = useSearchParams();
   const { answerAuthenticationChallenge } = useAuth();
   
+  // Default verification code (temporary for development)
+  const defaultDevCode = '123456';
+  
   // Extract email from URL params
   useEffect(() => {
     const usernameParam = searchParams.get('username');
@@ -28,6 +31,11 @@ function VerificationCodeContent() {
       setUsername(usernameParam);
     }
   }, [searchParams]);
+
+  // Pre-fill code with default value
+  useEffect(() => {
+    setCode(defaultDevCode);
+  }, []);
 
   // Animation effect
   useEffect(() => {
@@ -105,6 +113,23 @@ function VerificationCodeContent() {
           showBorder={true}
           background="primary"
         >
+          {/* Default Code Indicator */}
+          <div className="mb-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <div className="flex items-center">
+              <div className="shrink-0 mr-3">
+                <div className="bg-yellow-100 rounded-full p-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <div className="text-sm text-yellow-800 font-medium">Default Verification Code</div>
+                <div className="text-yellow-700">Use code: <span className="font-mono font-bold">{defaultDevCode}</span></div>
+              </div>
+            </div>
+          </div>
+
           {/* Email information */}
           <div className="mb-8 bg-indigo-50 rounded-lg p-4 border border-indigo-100">
             <div className="flex items-center">

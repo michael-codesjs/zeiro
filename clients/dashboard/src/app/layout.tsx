@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Navigation from "../components/layout/navigation";
 import "./globals.css";
+import ConfigureAmplifyClientSide from "./amplify.config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ConfigureAmplifyClientSide />
         <div className="flex h-screen bg-slate-50">
           <Navigation />
           <main className="flex-1 flex items-center justify-center">

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "PORT=3003 next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -14,7 +14,9 @@
     "next": "15.3.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+     "@aws-amplify/adapter-nextjs": "^1.6.0",
+    "aws-amplify": "^6.0.27"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
