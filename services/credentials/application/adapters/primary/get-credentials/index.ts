@@ -1,0 +1,1 @@
+export { definition as getCredentials } from './definition' 

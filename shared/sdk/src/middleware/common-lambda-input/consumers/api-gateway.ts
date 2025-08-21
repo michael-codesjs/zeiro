@@ -7,9 +7,15 @@ import { CommonInputEvent, Consumer } from '../types'
 export const apiGatewayConsumer: Consumer = (
   request: middy.Request<APIGatewayProxyEvent, any, Error, Context>,
 ) => {
+  console.log('request', JSON.stringify(request, null, 2))
   const parsedBody = unstringify(request.event.body)
   const input = parsedBody !== null ? parsedBody : request.event.body || {}
+  
+  // Include path parameters
   Object.assign(input, request.event.pathParameters)
+  
+  // Include query string parameters
+  Object.assign(input, request.event.queryStringParameters)
 
   let event: CommonInputEvent<any> = { inputs: [input] } // create new CommonInputEvent with inputs including the request.event.body
 

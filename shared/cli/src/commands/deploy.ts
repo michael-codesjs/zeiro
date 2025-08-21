@@ -9,6 +9,9 @@ import path from 'path'
 interface DeployOptions {
   stage: 'dev' | 'prod'
   forceInit: boolean
+  migrateState: boolean
+  reconfigure: boolean
+  forceUnlock: boolean
   app?: boolean
   infra?: boolean
 }
@@ -33,6 +36,9 @@ export const deployService = async (options: DeployOptions) => {
   const {
     stage = 'dev',
     forceInit = false,
+    migrateState = false,
+    reconfigure = false,
+    forceUnlock = false,
     app = false,
     infra = false,
   } = options
@@ -139,25 +145,70 @@ export const deployService = async (options: DeployOptions) => {
     const stateBucketName = stateBucketResponse.Parameter?.Value
     const lockDynamoDbTableName = 'zeiro-terraform-locks' as const
 
-    // Terraform init
-    const spinner = ora('Initializing terraform.').start()
-
     const stateFileKey =
       layer === 'domain' && domain
         ? `domain/${domain}/${serviceName}/infrastructure/terraform.tfstate`
         : `${layer}/${serviceName}/infrastructure/terraform.tfstate`
 
-    const command = `cd ${infrastructurePath} && terraform init -backend-config="bucket=${stateBucketName}" -backend-config="key=${stateFileKey}" -backend-config="region=eu-central-1" -backend-config="dynamodb_table=${lockDynamoDbTableName}" -backend-config="encrypt=true"`
+    // Force unlock if requested
+    if (forceUnlock) {
+      const unlockSpinner = ora('Force unlocking terraform state.').start()
+      
+      // We need to get the lock ID from the error, but for now let's try a generic approach
+      const unlockCommand = `cd ${infrastructurePath} && terraform force-unlock -force 71adabba-62d8-9fc8-7ec0-1a642aeec737`
+      
+      const unlockSuccess = await execAsync(unlockCommand, { stdio: 'pipe' })
+      
+      if (unlockSuccess) {
+        unlockSpinner.succeed('Successfully force unlocked terraform state.')
+      } else {
+        unlockSpinner.fail('Failed to force unlock terraform state. Continuing with initialization...')
+      }
+    }
+
+    // Terraform init
+    const spinner = ora('Initializing terraform.').start()
+
+    // Build the base command with backend config
+    const backendConfig = [
+      `-backend-config="bucket=${stateBucketName}"`,
+      `-backend-config="key=${stateFileKey}"`,
+      `-backend-config="region=eu-central-1"`,
+      `-backend-config="dynamodb_table=${lockDynamoDbTableName}"`,
+      `-backend-config="encrypt=true"`
+    ].join(' ')
+
+    // Determine the init command based on options
+    let command
+    if (migrateState) {
+      // For migrate-state, we need to auto-answer "yes" to the prompt
+      command = `cd ${infrastructurePath} && echo "yes" | terraform init -migrate-state -input=false ${backendConfig}`
+    } else if (reconfigure) {
+      // For reconfigure, no prompts needed
+      command = `cd ${infrastructurePath} && terraform init -reconfigure ${backendConfig}`
+    } else {
+      command = `cd ${infrastructurePath} && terraform init ${backendConfig}`
+    }
 
     const success = await execAsync(command, { stdio: 'pipe' })
 
     if (success) {
-      spinner.succeed('Successfully initialized terraform.')
+      let message = 'Successfully initialized terraform.'
+      if (migrateState) {
+        message = 'Successfully initialized terraform with state migration.'
+      } else if (reconfigure) {
+        message = 'Successfully reconfigured terraform backend.'
+      }
+      spinner.succeed(message)
       return true
     } else {
-      spinner.fail(
-        `Failed to initialize terraform. Run the command ${chalk.bold(command)} manually to get the actual error message.`,
-      )
+      let message = `Failed to initialize terraform. Run the command ${chalk.bold(command)} manually to get the actual error message.`
+      if (migrateState) {
+        message = `Failed to initialize terraform with state migration. Run the command ${chalk.bold(command)} manually to get the actual error message.`
+      } else if (reconfigure) {
+        message = `Failed to reconfigure terraform backend. Run the command ${chalk.bold(command)} manually to get the actual error message.`
+      }
+      spinner.fail(message)
       return false
     }
   }

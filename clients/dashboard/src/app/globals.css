@@ -51,3 +51,44 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Custom Scrollbar Styling */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: rgb(248 250 252); /* slate-50 */
+  border-radius: 4px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: rgb(148 163 184); /* slate-400 */
+  border-radius: 4px;
+  border: 1px solid rgb(241 245 249); /* slate-100 */
+  transition: background-color 0.2s ease;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: rgb(100 116 139); /* slate-500 */
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:active {
+  background: rgb(79 70 229); /* indigo-600 */
+}
+
+.scrollbar-custom::-webkit-scrollbar-corner {
+  background: rgb(248 250 252); /* slate-50 */
+}
+
+/* Firefox scrollbar styling */
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(148 163 184) rgb(248 250 252); /* thumb track */
+}
+
+/* Hover state for Firefox */
+.scrollbar-custom:hover {
+  scrollbar-color: rgb(100 116 139) rgb(248 250 252);
+}

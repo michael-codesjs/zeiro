@@ -1,66 +1,88 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { type Database } from "../../hooks/use-data-sources";
+import { Input } from "../../components/ui";
 
-interface Database {
-  id: string;
-  name: string;
-  type: 'DynamoDB' | 'PostgreSQL' | 'MySQL' | 'MongoDB';
-  status: 'connected' | 'disconnected' | 'error';
-  lastAccessed: string;
-  tableCount: number;
-  region?: string;
-  accountId?: string;
+interface DataSourceSelectorProps {
+  dataSources: Database[];
+  selectedDataSource: Database | null;
+  onSelectDataSource: (dataSource: Database | null) => void;
 }
 
-interface DatabaseSelectorProps {
-  databases: Database[];
-  selectedDatabase: Database | null;
-  onSelectDatabase: (database: Database | null) => void;
-}
-
-export default function DatabaseSelector({ 
-  databases, 
-  selectedDatabase, 
-  onSelectDatabase 
-}: DatabaseSelectorProps) {
+export default function DataSourceSelector({ 
+  dataSources = [], 
+  selectedDataSource, 
+  onSelectDataSource 
+}: DataSourceSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [buttonRect, setButtonRect] = useState<DOMRect | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  // Close dropdown when clicking outside
+  // Filter data sources based on search query
+  const filteredDataSources = (dataSources || []).filter(dataSource =>
+    dataSource.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    dataSource.type.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Update button position when opening
+  const updateButtonPosition = () => {
+    if (buttonRef.current) {
+      setButtonRect(buttonRef.current.getBoundingClientRect());
+    }
+  };
+
+  // Close popover when clicking outside
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        // Check if the click is inside the popover (which is rendered in document.body)
+        const popoverElement = document.querySelector('[data-popover-content]');
+        if (popoverElement && popoverElement.contains(event.target as Node)) {
+          return; // Don't close if clicking inside popover
+        }
         setIsOpen(false);
         setSearchQuery("");
       }
-    }
+    };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Focus search input when dropdown opens
-  useEffect(() => {
-    if (isOpen && searchInputRef.current) {
-      searchInputRef.current.focus();
-    }
-  }, [isOpen]);
-
-  // Filter databases based on search query
-  const filteredDatabases = databases.filter(database =>
-    database.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    database.type.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const getDatabaseIcon = (type: Database['type']) => {
+  const getDataSourceIcon = (type: Database['type']) => {
     switch (type) {
       case 'DynamoDB':
         return (
-          <div className="w-6 h-6 bg-orange-100 rounded-md flex items-center justify-center">
-            <div className="w-3 h-3 bg-orange-500 rounded-sm"></div>
+          <div className="w-6 h-6 flex items-center justify-center">
+            <svg viewBox="0 0 80 80" className="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* AWS DynamoDB Official Icon */}
+              <g>
+                {/* Base cylinder */}
+                <ellipse cx="40" cy="65" rx="25" ry="8" fill="#FF9900"/>
+                <rect x="15" y="45" width="50" height="20" fill="#FF9900"/>
+                <ellipse cx="40" cy="45" rx="25" ry="8" fill="#FFB84D"/>
+                
+                {/* Middle cylinder */}
+                <ellipse cx="40" cy="45" rx="25" ry="8" fill="#FF9900"/>
+                <rect x="15" y="25" width="50" height="20" fill="#FF9900"/>
+                <ellipse cx="40" cy="25" rx="25" ry="8" fill="#FFB84D"/>
+                
+                {/* Top cylinder */}
+                <ellipse cx="40" cy="25" rx="25" ry="8" fill="#FF9900"/>
+                <rect x="15" y="5" width="50" height="20" fill="#FF9900"/>
+                <ellipse cx="40" cy="5" rx="25" ry="8" fill="#FFB84D"/>
+                
+                {/* Highlight lines */}
+                <path d="M15 15 L15 55 Q15 63 25 65 L55 65 Q65 63 65 55 L65 15" 
+                      stroke="#FF7700" strokeWidth="1" fill="none"/>
+                <path d="M15 35 L65 35" stroke="#FF7700" strokeWidth="1"/>
+                <path d="M15 55 L65 55" stroke="#FF7700" strokeWidth="1"/>
+              </g>
+            </svg>
           </div>
         );
       case 'PostgreSQL':
@@ -103,30 +125,58 @@ export default function DatabaseSelector({
     }
   };
 
+  const handleSelectDataSource = (dataSource: Database) => {
+    onSelectDataSource(dataSource);
+    setIsOpen(false);
+    setSearchQuery("");
+  };
+
+  const handleClearSelection = () => {
+    onSelectDataSource(null);
+    setIsOpen(false);
+    setSearchQuery("");
+  };
+
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div ref={containerRef} className="relative">
+      {/* Trigger Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex items-center justify-between min-w-52 px-4 py-2 bg-white rounded-lg text-sm font-medium text-slate-700 focus:outline-none transition-colors"
+        ref={buttonRef}
+        onClick={() => {
+          setIsOpen(!isOpen);
+          updateButtonPosition();
+        }}
+        className="inline-flex items-center justify-between min-w-52 px-4 py-3 bg-white rounded-lg text-sm font-medium text-slate-700 focus:outline-none transition-colors border border-slate-300"
       >
         <div className="flex items-center space-x-3">
-          {selectedDatabase ? (
+          {selectedDataSource ? (
             <>
-              {getDatabaseIcon(selectedDatabase.type)}
-              <div className="flex items-center space-x-2">
-                <span className="text-slate-900">{selectedDatabase.name}</span>
-                <div className={`w-2 h-2 rounded-full ${getStatusDot(selectedDatabase.status)}`}></div>
+              {getDataSourceIcon(selectedDataSource.type)}
+              <div className="flex flex-col items-start">
+                <div className="flex items-center space-x-2">
+                  <span className="text-slate-900 font-medium">{selectedDataSource.name}</span>
+                  <div className={`w-2 h-2 rounded-full ${getStatusDot(selectedDataSource.status)}`}></div>
+                </div>
+                <div className="flex items-center space-x-2 text-xs text-slate-500">
+                  <span>{selectedDataSource.type}</span>
+                  <span>•</span>
+                  <span>{(selectedDataSource.connection_config?.item_count || selectedDataSource.metadata?.item_count || 0).toLocaleString()} items</span>
+                  {selectedDataSource.connection_config?.region && (
+                    <>
+                      <span>•</span>
+                      <span>{selectedDataSource.connection_config.region}</span>
+                    </>
+                  )}
+                </div>
               </div>
             </>
           ) : (
-            <>
-              <span className="text-slate-500">No Database Selected</span>
-            </>
+            <span className="text-slate-500">Select a data source here</span>
           )}
         </div>
         
         <svg 
-          className={`w-4 h-4 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} 
+          className={`w-4 h-4 text-slate-400 ml-3 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none" 
           stroke="currentColor" 
           viewBox="0 0 24 24"
@@ -135,75 +185,75 @@ export default function DatabaseSelector({
         </svg>
       </button>
 
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white border border-slate-200 rounded-lg shadow-lg z-50">
-          <div className="p-3">
-            {/* Search Input */}
-            <div className="relative mb-3">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+      {/* Popover */}
+      {isOpen && buttonRect && createPortal(
+        <div 
+          className="bg-white rounded-lg shadow-xl border border-slate-200 z-[9999] w-96 max-h-80 overflow-hidden"
+          style={{
+            position: 'fixed',
+            top: `${buttonRect.bottom + 8}px`,
+            left: `${buttonRect.left}px`,
+            width: `${Math.max(buttonRect.width, 384)}px`, // Ensure minimum width
+          }}
+          data-popover-content
+        >
+          {/* Search Input */}
+          <div className="p-3 border-b border-slate-100">
+            <Input
+              type="text"
+              placeholder="Search data sources..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              leftIcon={
                 <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-              </div>
-              <input
-                ref={searchInputRef}
-                type="text"
-                placeholder="Search databases..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              />
-            </div>
+              }
+            />
+          </div>
 
-            {databases.length > 0 ? (
+          <div className="max-h-64 overflow-y-auto">
+            {dataSources.length > 0 ? (
               <>
-                {filteredDatabases.length > 0 ? (
-                  <>
-                    {filteredDatabases.map((database) => (
-                  <button
-                    key={database.id}
-                                          onClick={() => {
-                        onSelectDatabase(database);
-                        setIsOpen(false);
-                        setSearchQuery("");
-                      }}
-                    className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-left hover:bg-slate-50 transition-colors ${
-                      selectedDatabase?.id === database.id ? 'bg-indigo-50 border border-indigo-200' : ''
-                    }`}
-                  >
-                    {getDatabaseIcon(database.type)}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2">
-                        <p className="text-sm font-medium text-slate-900 truncate">
-                          {database.name}
-                        </p>
-                        <div className={`w-2 h-2 rounded-full ${getStatusDot(database.status)}`}></div>
-                      </div>
-                      <div className="flex items-center space-x-2 mt-1">
-                        <p className="text-xs text-slate-500">{database.type}</p>
-                        <span className="text-xs text-slate-400">•</span>
-                        <p className="text-xs text-slate-500">{database.tableCount} tables</p>
-                        {database.region && (
-                          <>
+                {filteredDataSources.length > 0 ? (
+                  <div className="p-2">
+                    {filteredDataSources.map((dataSource) => (
+                      <button
+                        key={dataSource.id}
+                        onClick={() => handleSelectDataSource(dataSource)}
+                        className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md text-left hover:bg-slate-50 transition-colors ${
+                          selectedDataSource?.id === dataSource.id ? 'bg-indigo-50 boarder border-indigo-200' : ''
+                        }`}
+                      >
+                        {getDataSourceIcon(dataSource.type)}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2">
+                            <p className="text-sm font-medium text-slate-900 truncate">
+                              {dataSource.name}
+                            </p>
+                            <div className={`w-2 h-2 rounded-full ${getStatusDot(dataSource.status)}`}></div>
+                          </div>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <p className="text-xs text-slate-500">{dataSource.type}</p>
                             <span className="text-xs text-slate-400">•</span>
-                            <p className="text-xs text-slate-500">{database.region}</p>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                                        </button>
+                            <p className="text-xs text-slate-500">{(dataSource.connection_config?.item_count || dataSource.metadata?.item_count || 0).toLocaleString()} items</p>
+                            {dataSource.connection_config?.region && (
+                              <>
+                                <span className="text-xs text-slate-400">•</span>
+                                <p className="text-xs text-slate-500">{dataSource.connection_config.region}</p>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </button>
                     ))}
                     
-                    {selectedDatabase && (
+                    {selectedDataSource && (
                       <>
                         <div className="border-t border-slate-100 my-2"></div>
                         <button
-                          onClick={() => {
-                            onSelectDatabase(null);
-                            setIsOpen(false);
-                            setSearchQuery("");
-                          }}
-                          className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left hover:bg-slate-50 transition-colors"
+                          onClick={handleClearSelection}
+                          className="w-full flex items-center space-x-3 px-3 py-2 rounded-md text-left hover:bg-slate-50 transition-colors"
                         >
                           <div className="w-6 h-6 bg-slate-100 rounded-md flex items-center justify-center">
                             <svg className="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -214,32 +264,33 @@ export default function DatabaseSelector({
                         </button>
                       </>
                     )}
-                  </>
+                  </div>
                 ) : (
-                  <div className="px-3 py-6 text-center">
-                    <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <div className="text-center py-6">
+                    <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-2">
                       <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                       </svg>
                     </div>
-                    <p className="text-sm text-slate-500 mb-1">No databases found</p>
+                    <p className="text-sm text-slate-500 mb-1">No data sources found</p>
                     <p className="text-xs text-slate-400">Try adjusting your search</p>
                   </div>
                 )}
               </>
             ) : (
-              <div className="px-3 py-6 text-center">
-                <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <div className="text-center py-6">
+                <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-2">
                   <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
                   </svg>
                 </div>
-                <p className="text-sm text-slate-500 mb-1">No databases available</p>
-                <p className="text-xs text-slate-400">Add a database to get started</p>
+                <p className="text-sm text-slate-500 mb-1">No data sources available</p>
+                <p className="text-xs text-slate-400">Add a data source to get started</p>
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -1,0 +1,26 @@
+import {
+  EventBridgeClient,
+  PutEventsCommand,
+} from '@aws-sdk/client-eventbridge'
+import { DomainEvent } from '@zeiro/sdk'
+import { configureEnviromentVariables } from '@zeiro/sdk'
+
+const { REGION, CENTRAL_EVENT_BUS_NAME } = configureEnviromentVariables()
+
+export class EventBridgeAdapter {
+  client = new EventBridgeClient({ region: REGION || 'eu-central-1' })
+
+  async publish(events: Array<DomainEvent>): Promise<void> {
+    const putEventsCommand: PutEventsCommand = new PutEventsCommand({
+      Entries: events.map((domainEvent) => ({
+        DetailType: domainEvent.name,
+        Detail: JSON.stringify(domainEvent),
+        Source: domainEvent.source,
+        EventBusName: CENTRAL_EVENT_BUS_NAME,
+        Time: domainEvent.date,
+      })),
+    })
+
+    await this.client.send(putEventsCommand)
+  }
+} 

@@ -1,11 +1,50 @@
 ---
 description: 
 globs: 
-alwaysApply: false
+alwaysApply: true
 ---
 # Infrastructure
 
 The `infrastructure/` directory contains configuration and code for deploying and managing the Zeiro platform.
+
+## Deployment Rules
+
+**ALWAYS use the Zeiro CLI for all deployments.** Never use direct Terraform, Serverless Framework, or other deployment tools manually.
+
+### Required Deployment Method
+
+All services and infrastructure must be deployed using the Zeiro CLI:
+
+```bash
+# Deploy both infrastructure and application (default)
+zeiro deploy
+
+# Deploy to specific stage
+zeiro deploy --stage prod
+
+# Deploy only infrastructure
+zeiro deploy --infra
+
+# Deploy only application
+zeiro deploy --app
+```
+
+### Why Use Zeiro CLI
+
+The Zeiro CLI provides:
+- Consistent deployment patterns across all services
+- Proper Terraform state management with remote backends
+- Automatic service detection and configuration
+- Integrated infrastructure and application deployment
+- Stage-specific environment variable management
+- Proper error handling and rollback capabilities
+
+### Installation
+
+Install the CLI locally in the project:
+```bash
+yarn install-cli
+```
 
 ## Network
 

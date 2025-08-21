@@ -1,0 +1,6 @@
+export { definition as getDataSources } from './get-data-sources/definition'
+export { definition as getDataSource } from './get-data-source/definition'
+export { definition as createDataSource } from './create-data-source/definition'
+export { definition as deleteDataSource } from './delete-data-source/definition'
+export { definition as getDynamodbDataSources } from './get-dynamodb-data-sources/definition'
+export { definition as getDataSourceInternal } from './get-data-source-internal/definition'

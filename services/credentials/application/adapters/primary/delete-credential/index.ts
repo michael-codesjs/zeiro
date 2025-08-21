@@ -1,0 +1,1 @@
+export { definition as deleteCredential } from './definition' 

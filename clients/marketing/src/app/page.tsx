@@ -1,5 +1,22 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { 
+  BsPlayFill as SaxPlay,
+  BsArrowRight as SaxArrowRight,
+  BsCheckLg as SaxTick,
+  BsDatabase as SaxData,
+  BsChatDots as SaxMessage,
+  BsLightning as SaxFlash,
+  BsBarChart as SaxChart,
+  BsStarFill as SaxStar,
+  BsDownload as SaxExport,
+  BsCode as SaxCode,
+  BsGear as SaxSetting,
+  BsShield as SaxShield,
+  BsDisplay as SaxMonitor,
+  BsArrowClockwise as SaxGlobalRefresh,
+  BsArrowClockwise as SaxRefresh
+} from 'react-icons/bs';
 
 export default function Home() {
   return (
@@ -56,7 +73,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
             <div className="md:col-span-6 text-center md:text-left">
               <div className="inline-flex items-center bg-indigo-400/10 px-4 py-1.5 rounded-full border border-indigo-300 text-indigo-700 text-sm font-medium mb-6">
-                <span className="animate-pulse mr-2">⚡</span>
+                <span className="animate-pulse mr-2"><SaxFlash className="w-4 h-4" /></span>
                 <span>Zero to Database Mastery</span>
               </div>
               
@@ -82,9 +99,7 @@ export default function Home() {
                 
                 <button className="flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-indigo-300 rounded-lg hover:bg-indigo-50 transition text-indigo-600 shadow-md font-medium">
                   <span className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                    </svg>
+                    <SaxPlay className="w-4 h-4 text-indigo-600" />
                   </span>
                   See Zero in Action
                 </button>
@@ -125,9 +140,7 @@ export default function Home() {
                   <div className="p-6">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="h-12 w-12 flex-shrink-0 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-indigo-500">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
-                        </svg>
+                        <SaxData className="w-6 h-6 text-indigo-500" />
                       </div>
                       <div>
                         <div className="text-lg font-semibold text-gray-900">ecommerce_data</div>
@@ -154,9 +167,7 @@ export default function Home() {
                           className="w-full border border-indigo-300 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white text-gray-700"
                         />
                         <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-500">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414-1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clipRule="evenodd" />
-                          </svg>
+                          <SaxArrowRight className="h-5 w-5" />
                         </div>
                       </div>
                       <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-indigo-200 rounded-full opacity-30"></div>
@@ -167,16 +178,11 @@ export default function Home() {
                         <div className="text-gray-900 text-sm font-medium">Your Results (0.3s)</div>
                         <div className="flex gap-2">
                           <button className="text-xs px-2 py-1 bg-indigo-100 text-indigo-700 rounded flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                              <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
-                              <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
-                            </svg>
+                            <SaxExport className="h-3 w-3" />
                             Export
                           </button>
                           <button className="text-xs px-2 py-1 bg-indigo-100 text-indigo-700 rounded flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                            </svg>
+                            <SaxCode className="h-3 w-3" />
                             View SQL
                           </button>
                         </div>
@@ -234,7 +240,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-20">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-100 rounded-full text-indigo-800 text-sm font-medium mb-4">
-              <span className="text-lg">⭐</span>
+              <SaxStar className="w-4 h-4" />
               <span>Why choose Zeiro?</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -254,9 +260,7 @@ export default function Home() {
               <div className="relative mb-8">
                 <div className="absolute -top-4 -left-4 w-16 h-16 bg-indigo-100 rounded-full"></div>
                 <div className="relative z-10 h-14 w-14 bg-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-400/20">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-7 h-7 text-white">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                  </svg>
+                  <SaxMessage className="w-7 h-7 text-white" />
                 </div>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
@@ -268,9 +272,7 @@ export default function Home() {
               <div className="pt-4 border-t border-indigo-100">
                 <a href="#" className="flex items-center gap-2 text-indigo-600 font-medium group">
                   <span>Learn more</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+                  <SaxArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
             </div>
@@ -280,9 +282,7 @@ export default function Home() {
               <div className="relative mb-8">
                 <div className="absolute -top-4 -left-4 w-16 h-16 bg-purple-100 rounded-full"></div>
                 <div className="relative z-10 h-14 w-14 bg-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-7 h-7 text-white">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
-                  </svg>
+                  <SaxChart className="w-7 h-7 text-white" />
                 </div>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
@@ -294,9 +294,7 @@ export default function Home() {
               <div className="pt-4 border-t border-indigo-100">
                 <a href="#" className="flex items-center gap-2 text-purple-600 font-medium group">
                   <span>Learn more</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+                  <SaxArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
             </div>
@@ -306,9 +304,7 @@ export default function Home() {
               <div className="relative mb-8">
                 <div className="absolute -top-4 -left-4 w-16 h-16 bg-blue-100 rounded-full"></div>
                 <div className="relative z-10 h-14 w-14 bg-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-7 h-7 text-white">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                  </svg>
+                  <SaxFlash className="w-7 h-7 text-white" />
                 </div>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
@@ -320,9 +316,7 @@ export default function Home() {
               <div className="pt-4 border-t border-indigo-100">
                 <a href="#" className="flex items-center gap-2 text-blue-600 font-medium group">
                   <span>Learn more</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+                  <SaxArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
             </div>
@@ -360,9 +354,7 @@ export default function Home() {
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <div className="h-6 w-6 rounded-full bg-indigo-100 flex-shrink-0 flex items-center justify-center text-indigo-600 mt-0.5">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
+                      <SaxTick className="h-4 w-4" />
                     </div>
                     <div>
                       <span className="font-medium text-gray-900">{item.name}</span>
@@ -374,9 +366,7 @@ export default function Home() {
               
               <button className="mt-8 inline-flex items-center gap-2 px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors font-medium shadow-lg shadow-indigo-300/30">
                 <span>Explore all features</span>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
+                <SaxArrowRight className="h-5 w-5" />
               </button>
             </div>
             
@@ -388,9 +378,7 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 border border-indigo-100">
                     <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center mb-5">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
-                      </svg>
+                      <SaxMonitor className="h-6 w-6 text-purple-600" />
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">Automatic Documentation</h3>
                     <p className="text-gray-600 text-sm">
@@ -400,9 +388,7 @@ export default function Home() {
                   
                   <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 border border-indigo-100 md:translate-y-8">
                     <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center mb-5">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
-                      </svg>
+                      <SaxSetting className="h-6 w-6 text-purple-600" />
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">Advanced Filters</h3>
                     <p className="text-gray-600 text-sm">
@@ -412,9 +398,7 @@ export default function Home() {
                   
                   <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 border border-indigo-100">
                     <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center mb-5">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.501 19.795l.75-1.3m7.5-12.99l.75-1.3M6 20.25l.75-1.3m7.5-12.99l.75-1.3" />
-                      </svg>
+                      <SaxGlobalRefresh className="h-6 w-6 text-purple-600" />
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">Performance Optimization</h3>
                     <p className="text-gray-600 text-sm">
@@ -424,9 +408,7 @@ export default function Home() {
                   
                   <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 border border-indigo-100 md:translate-y-8">
                     <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center mb-5">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
-                      </svg>
+                      <SaxMonitor className="h-6 w-6 text-purple-600" />
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">Multi-device Support</h3>
                     <p className="text-gray-600 text-sm">
@@ -453,7 +435,7 @@ export default function Home() {
         <div className="container mx-auto px-6 max-w-7xl relative z-10">
           <div className="text-center mb-20">
             <div className="inline-flex items-center gap-2 bg-indigo-100 px-4 py-1.5 rounded-full text-indigo-800 text-sm font-medium mb-4">
-              <span className="text-lg">⭐</span>
+              <SaxStar className="w-4 h-4" />
               <span>Trusted by thousands</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -472,9 +454,7 @@ export default function Home() {
                 <div className="mb-6">
                   <div className="flex gap-1 text-indigo-400">
                     {[1, 2, 3, 4, 5].map(star => (
-                      <svg key={star} xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
+                      <SaxStar key={star} className="h-6 w-6 fill-current" />
                     ))}
                   </div>
                 </div>
@@ -502,9 +482,7 @@ export default function Home() {
                 <div className="mb-6">
                   <div className="flex gap-1 text-indigo-400">
                     {[1, 2, 3, 4, 5].map(star => (
-                      <svg key={star} xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
+                      <SaxStar key={star} className="h-6 w-6 fill-current" />
                     ))}
                   </div>
                 </div>
@@ -532,9 +510,7 @@ export default function Home() {
                 <div className="mb-6">
                   <div className="flex gap-1 text-indigo-400">
                     {[1, 2, 3, 4, 5].map(star => (
-                      <svg key={star} xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
+                      <SaxStar key={star} className="h-6 w-6 fill-current" />
                     ))}
                   </div>
                 </div>
@@ -631,9 +607,7 @@ export default function Home() {
                       <a href="/auth/up" className="bg-white text-indigo-600 font-bold py-4 px-8 rounded-xl hover:bg-indigo-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 border border-white/80 group w-full sm:w-auto inline-flex items-center justify-center">
                         <span className="flex items-center justify-center gap-2">
                           Get Started Free
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                          </svg>
+                          <SaxArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                         </span>
                       </a>
                     </div>
@@ -692,9 +666,7 @@ export default function Home() {
                       <div className="space-y-2">
                         <div className="h-24 rounded-lg bg-gradient-to-r from-indigo-100 to-purple-100 animate-pulse border border-purple-200 flex items-center justify-center">
                           <div className="text-purple-500 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 animate-spin" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
-                            </svg>
+                            <SaxRefresh className="h-5 w-5 animate-spin" />
                             <span>Generating chart</span>
                           </div>
                         </div>
@@ -768,9 +740,7 @@ export default function Home() {
             <p className="text-gray-600 mb-6">And many other databases, data warehouses, and cloud providers</p>
             <a href="#" className="inline-flex items-center gap-2 text-indigo-600 font-medium hover:text-indigo-700 transition-colors">
               <span>View all supported databases</span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
+              <SaxArrowRight className="h-5 w-5" />
             </a>
           </div>
         </div>
@@ -819,9 +789,7 @@ export default function Home() {
                     "100 AI queries/month"
                   ].map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
+                      <SaxTick className="h-6 w-6 text-gray-600 flex-shrink-0" />
                       <span className="text-gray-800">{feature}</span>
                     </li>
                   ))}
@@ -855,9 +823,7 @@ export default function Home() {
                     "Priority support"
                   ].map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
+                      <SaxTick className="h-6 w-6 text-indigo-600 flex-shrink-0" />
                       <span className="text-gray-800">{feature}</span>
                     </li>
                   ))}
@@ -888,9 +854,7 @@ export default function Home() {
                     "On-premise deployment option"
                   ].map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
+                      <SaxTick className="h-6 w-6 text-gray-600 flex-shrink-0" />
                       <span className="text-gray-800">{feature}</span>
                     </li>
                   ))}
