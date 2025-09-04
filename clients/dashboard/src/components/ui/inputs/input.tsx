@@ -25,7 +25,7 @@ const inputVariants = cva(
         error: "border-red-300 focus:border-red-500 focus:ring-red-500",
         success: "border-green-300 focus:border-green-500 focus:ring-green-500",
       },
-      inputType: {
+      type: {
         text: "",
         password: "",
         number: "",
@@ -39,7 +39,7 @@ const inputVariants = cva(
       variant: "default",
       size: "md",
       state: "default",
-      inputType: "text",
+      type: "text",
     },
   }
 );
@@ -83,7 +83,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     variant, 
     size, 
     state,
-    inputType = "text",
+    type = "text",
     label,
     leftIcon,
     rightIcon,
@@ -126,9 +126,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const [showSuggestions, setShowSuggestions] = useState(false);
     
     const inputState = error ? "error" : state;
-    const isPassword = inputType === "password";
-    const isNumber = inputType === "number";
-    const isSearch = inputType === "search";
+    const isPassword = type === "password";
+    const isNumber = type === "number";
+    const isSearch = type === "search";
     
     // Debounced search effect
     useEffect(() => {
@@ -323,7 +323,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const getInputType = () => {
       if (isPassword) return isPasswordVisible ? "text" : "password";
       if (isNumber) return "text";
-      return inputType;
+      return type;
     };
 
     return (
@@ -372,7 +372,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             type={getInputType()}
             inputMode={isNumber ? "numeric" : undefined}
             className={cn(
-              inputVariants({ variant, size, state: inputState, inputType }),
+              inputVariants({ variant, size, state: inputState, type }),
               hasLeftIcon && "pl-10",
               (isNumber && prefix && !isFocused) && "pl-8",
               (isNumber && suffix && !isFocused) && "pr-8",

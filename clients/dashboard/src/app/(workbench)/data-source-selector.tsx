@@ -94,18 +94,6 @@ export default function DataSourceSelector({
     );
   };
 
-  const getStatusDot = (status: Database['status']) => {
-    switch (status) {
-      case 'connected':
-        return 'bg-green-500';
-      case 'disconnected':
-        return 'bg-yellow-500';
-      case 'error':
-        return 'bg-red-500';
-      default:
-        return 'bg-slate-500';
-    }
-  };
 
   const handleSelectDataSource = (dataSource: Database) => {
     onSelectDataSource(dataSource);
@@ -137,7 +125,6 @@ export default function DataSourceSelector({
               <div className="flex flex-col items-start">
                 <div className="flex items-center space-x-2">
                   <span className="text-slate-900 font-medium">{selectedDataSource.name}</span>
-                  <div className={`w-2 h-2 rounded-full ${getStatusDot(selectedDataSource.status)}`}></div>
                 </div>
                 <div className="flex items-center space-x-2 text-xs text-slate-500">
                   <span>{selectedDataSource.type}</span>
@@ -182,7 +169,7 @@ export default function DataSourceSelector({
           {/* Search Input */}
           <div className="p-3 border-b border-slate-100">
             <Input
-              type="text"
+              type="search"
               placeholder="Search data sources..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -213,7 +200,6 @@ export default function DataSourceSelector({
                             <p className="text-sm font-medium text-slate-900 truncate">
                               {dataSource.name}
                             </p>
-                            <div className={`w-2 h-2 rounded-full ${getStatusDot(dataSource.status)}`}></div>
                           </div>
                           <div className="flex items-center space-x-2 mt-1">
                             <p className="text-xs text-slate-500">{dataSource.type}</p>

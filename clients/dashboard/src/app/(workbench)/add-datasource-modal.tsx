@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react";
 import { Button, Select, Input, Textarea, type SelectOption, SidePanel, SidePanelHeader, SidePanelBody, SidePanelFooter } from "@/components/ui";
 import { useCredentials, type Credential } from "@/hooks/use-credentials";
-import { useCreateDatabase, useDiscoverDynamoDBDatabases, type CreateDatabaseInput, type DiscoveredDatabase } from "@/hooks/use-data-sources";
+import { useCreateDatabase, useDiscoverDynamoDBDatabases, type CreateDatabaseInput, type DiscoveredDatabase, type Database } from "@/hooks/use-data-sources";
 import { getDataSourceImageUrl, getDataSourceImageAlt } from "@/utils/data-source-utils";
 import Image from "next/image";
 
 interface AddDatasourceModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onDataSourceCreated?: (dataSource: Database) => void;
 }
 
 type DatasourceType = 'DynamoDB' | 'PostgreSQL' | 'MySQL' | 'MongoDB' | 'Redis' | 'Elasticsearch';
@@ -71,7 +72,7 @@ const DATASOURCE_OPTIONS = [
   }
 ];
 
-export default function AddDatasourceModal({ isOpen, onClose }: AddDatasourceModalProps) {
+export default function AddDatasourceModal({ isOpen, onClose, onDataSourceCreated }: AddDatasourceModalProps) {
   const [step, setStep] = useState<'select' | 'configure'>('select');
   const [selectedType, setSelectedType] = useState<DatasourceType | null>(null);
   const [selectedTable, setSelectedTable] = useState<string>('');
@@ -156,7 +157,11 @@ export default function AddDatasourceModal({ isOpen, onClose }: AddDatasourceMod
     };
 
     createDatabase(connectionData, {
-      onSuccess: () => {
+      onSuccess: (newDataSource) => {
+        // Call the callback to auto-select the new data source
+        if (onDataSourceCreated) {
+          onDataSourceCreated(newDataSource);
+        }
         handleClose();
       }
     });

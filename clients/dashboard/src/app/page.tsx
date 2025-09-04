@@ -7,7 +7,7 @@ import AddDatasourceModal from "./(workbench)/add-datasource-modal";
 import { Chat } from "../components/layout/chat";
 import { DataViewer } from "../components/layout/data-viewer";
 import { Button } from "../components/ui";
-import { type DataSource } from "../hooks/use-data-sources";
+import { useDataSources, type DataSource } from "../hooks/use-data-sources";
 import { type ChartData } from "../hooks/use-natural-language-query";
 import { useSelectedDataSourceStore } from "../hooks/use-selected-data-source-store";
 import { useDisclosure } from "@/hooks/use-disclosure";
@@ -16,6 +16,7 @@ export default function Dashboard() {
 
   const router = useRouter();
   const { selectedDataSource, setSelectedDataSource } = useSelectedDataSourceStore();
+  const { data: dataSources = [] } = useDataSources();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { isOpen: isChatCollapsed, onOpen: onChatOpen, onClose: onChatClose, onToggle: onChatToggle } = useDisclosure();
   const [chartData, setChartData] = useState<ChartData | null>(null);
@@ -29,6 +30,7 @@ export default function Dashboard() {
           {/* Left side - Data Source Selector */}
           <div className="flex items-center pt-4">
             <DataSourceSelector
+              dataSources={dataSources}
               selectedDataSource={selectedDataSource}
               onSelectDataSource={setSelectedDataSource}
             />
@@ -82,6 +84,7 @@ export default function Dashboard() {
         <AddDatasourceModal
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
+          onDataSourceCreated={setSelectedDataSource}
         />
       </div>
 
