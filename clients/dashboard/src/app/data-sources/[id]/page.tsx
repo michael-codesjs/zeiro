@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { FiArrowLeft, FiEdit, FiTrash2, FiRefreshCw, FiExternalLink, FiClock, FiDatabase, FiSettings, FiActivity, FiServer, FiLayers, FiBarChart2, FiShield, FiZap } from 'react-icons/fi';
 import { Button, useDisclosure, Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui';
 import { useDataSources, useDeleteDatabase, useTestDatabaseConnection, type Database } from '@/hooks/use-data-sources';
+import { getDataSourceImageUrl, getDataSourceImageAlt } from '@/utils/data-source-utils';
 import EditDataSourceModal from '../edit-data-source-modal';
 import QueryProvider from '@/providers/query-client-provider';
 
@@ -12,14 +13,7 @@ interface DataSourceDetailPageProps {
   params: { id: string };
 }
 
-const DATABASE_ICONS: Record<string, string> = {
-  DynamoDB: '/images/databases/dynamodb.png',
-  PostgreSQL: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
-  MySQL: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
-  MongoDB: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
-  Redis: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',
-  Elasticsearch: 'https://static-www.elastic.co/v3/assets/bltefdd0b53724fa2ce/blt6ae3d6980b5fd629/5bbca1d1af3a954c36f95ed3/logo-elastic-elasticsearch-lt.svg'
-};
+
 
 const STATUS_CONFIG = {
   connected: {
@@ -285,17 +279,15 @@ function DataSourceDetailContent({ params }: DataSourceDetailPageProps) {
         <div className="bg-white rounded-xl p-8 border border-slate-200 shadow-sm mb-8">
           <div className="flex items-start space-x-6">
             <div className="w-16 h-16 bg-slate-100 rounded-xl flex items-center justify-center flex-shrink-0">
-              {DATABASE_ICONS[dataSource.type] ? (
-                <img 
-                  src={DATABASE_ICONS[dataSource.type]} 
-                  alt={dataSource.type}
-                  className="w-10 h-10 object-contain"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                  }}
-                />
-              ) : null}
+              <img 
+                src={getDataSourceImageUrl(dataSource.type as any)} 
+                alt={getDataSourceImageAlt(dataSource.type as any)}
+                className="w-10 h-10 object-contain"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                }}
+              />
               <FiDatabase className="w-10 h-10 text-slate-500 hidden" />
             </div>
             

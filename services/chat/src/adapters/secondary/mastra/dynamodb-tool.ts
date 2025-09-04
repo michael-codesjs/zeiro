@@ -7,7 +7,7 @@ import {
   ScanCommand, 
   GetCommand 
 } from '@aws-sdk/lib-dynamodb'
-import { DatabaseSchema } from '@typings/query'
+import { DynamoDBDatabaseSchema } from '@typings/query'
 
 // Input schema for DynamoDB query parameters
 const dynamoQueryInputSchema = z.object({
@@ -45,7 +45,7 @@ export interface DynamoDBToolConfig {
     sessionToken?: string
   }
   region?: string
-  schema: DatabaseSchema
+  schema: DynamoDBDatabaseSchema
 }
 
 export function createDynamoDBTool(config: DynamoDBToolConfig) {

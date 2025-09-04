@@ -42,9 +42,9 @@ export interface ThreadManagementResponse {
   error?: string;
 }
 
-export interface AiChatProps {
+export type ChatProps = {
   isCollapsed?: boolean;
   onToggleCollapse?: () => void;
-  selectedDatabase?: Database | null;
+  selectedDataSource?: Database | null;
   onChartDataUpdate?: (chartData: ChartData | null) => void;
 } 

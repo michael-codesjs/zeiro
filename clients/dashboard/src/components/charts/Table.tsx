@@ -122,6 +122,13 @@ export const Table: React.FC<TableProps> = ({
     });
   }, [data]);
 
+  // Helper function to format field names for display
+  const formatFieldName = (fieldName: string): string => {
+    // For nested JSON fields like 'data.error', show only the last part 'error'
+    const parts = fieldName.split('.');
+    return parts[parts.length - 1];
+  };
+
   const formatValue = (value: any): string => {
     if (value === null || value === undefined) return '∅';
     if (typeof value === 'string') return value;
@@ -275,7 +282,9 @@ export const Table: React.FC<TableProps> = ({
                 {columns.map((column) => (
                   <th key={column.key} className="px-6 py-3 text-left border-b border-slate-200 min-w-[150px]">
                     <div className="text-xs font-semibold text-slate-700 text-left">
-                      {column.key}
+                      <span title={column.key !== formatFieldName(column.key) ? column.key : undefined}>
+                        {formatFieldName(column.key)}
+                      </span>
                       {column.isKey && (
                         <span className="ml-1 inline-flex items-center rounded bg-slate-100 px-1 py-0.5 text-xs font-medium text-slate-800">
                           PK

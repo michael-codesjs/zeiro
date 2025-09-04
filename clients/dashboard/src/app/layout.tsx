@@ -5,7 +5,7 @@ import "./globals.css";
 import ConfigureAmplifyClientSide from "./amplify.config";
 import { Toaster } from 'react-hot-toast';
 import QueryProvider from "../providers/query-client-provider";
-import { WebSocketConnection } from "@/components/websocket-connection";
+import { WebSocketConnection } from "@/providers/websocket-connection";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,10 +18,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Zeiro Dashboard - Make Data Simple As Zero",
-  description: "Zero coding. Zero complexity. Zero learning curve. Query your data with natural language and transform your database experience instantly.",
+  title: "Zeiro",
+  description: "Make Data Simple As Zero",
   keywords: ["database", "dashboard", "data management", "SQL", "analytics", "zeiro"],
-  authors: [{ name: "Zeiro Team" }],
+  authors: [{ name: "zeiro" }],
   viewport: "width=device-width, initial-scale=1",
 };
 

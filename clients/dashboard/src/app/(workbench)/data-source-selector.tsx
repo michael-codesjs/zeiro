@@ -2,23 +2,20 @@
 
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { type Database } from "../../hooks/use-data-sources";
-import { Input } from "../../components/ui";
+import { type Database } from "@/hooks/use-data-sources";
+import { Input } from "@/components/ui";
+import Image from "next/image";
 
 interface DataSourceSelectorProps {
   dataSources: Database[];
   selectedDataSource: Database | null;
   onSelectDataSource: (dataSource: Database | null) => void;
-  triggerOpen?: boolean;
-  onOpenChange?: (isOpen: boolean) => void;
 }
 
 export default function DataSourceSelector({ 
   dataSources = [], 
   selectedDataSource, 
-  onSelectDataSource,
-  triggerOpen = false,
-  onOpenChange
+  onSelectDataSource 
 }: DataSourceSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -39,19 +36,6 @@ export default function DataSourceSelector({
     }
   };
 
-  // Handle external trigger
-  useEffect(() => {
-    if (triggerOpen && !isOpen) {
-      setIsOpen(true);
-      updateButtonPosition();
-    }
-  }, [triggerOpen, isOpen]);
-
-  // Notify parent when open state changes
-  useEffect(() => {
-    onOpenChange?.(isOpen);
-  }, [isOpen, onOpenChange]);
-
   // Close popover when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -71,62 +55,43 @@ export default function DataSourceSelector({
   }, []);
 
   const getDataSourceIcon = (type: Database['type']) => {
-    switch (type) {
-      case 'DynamoDB':
-        return (
-          <div className="w-6 h-6 flex items-center justify-center">
-            <svg viewBox="0 0 80 80" className="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* AWS DynamoDB Official Icon */}
-              <g>
-                {/* Base cylinder */}
-                <ellipse cx="40" cy="65" rx="25" ry="8" fill="#FF9900"/>
-                <rect x="15" y="45" width="50" height="20" fill="#FF9900"/>
-                <ellipse cx="40" cy="45" rx="25" ry="8" fill="#FFB84D"/>
-                
-                {/* Middle cylinder */}
-                <ellipse cx="40" cy="45" rx="25" ry="8" fill="#FF9900"/>
-                <rect x="15" y="25" width="50" height="20" fill="#FF9900"/>
-                <ellipse cx="40" cy="25" rx="25" ry="8" fill="#FFB84D"/>
-                
-                {/* Top cylinder */}
-                <ellipse cx="40" cy="25" rx="25" ry="8" fill="#FF9900"/>
-                <rect x="15" y="5" width="50" height="20" fill="#FF9900"/>
-                <ellipse cx="40" cy="5" rx="25" ry="8" fill="#FFB84D"/>
-                
-                {/* Highlight lines */}
-                <path d="M15 15 L15 55 Q15 63 25 65 L55 65 Q65 63 65 55 L65 15" 
-                      stroke="#FF7700" strokeWidth="1" fill="none"/>
-                <path d="M15 35 L65 35" stroke="#FF7700" strokeWidth="1"/>
-                <path d="M15 55 L65 55" stroke="#FF7700" strokeWidth="1"/>
-              </g>
-            </svg>
-          </div>
-        );
-      case 'PostgreSQL':
-        return (
-          <div className="w-6 h-6 bg-blue-100 rounded-md flex items-center justify-center">
-            <div className="w-3 h-3 bg-blue-500 rounded-sm"></div>
-          </div>
-        );
-      case 'MySQL':
-        return (
-          <div className="w-6 h-6 bg-indigo-100 rounded-md flex items-center justify-center">
-            <div className="w-3 h-3 bg-indigo-500 rounded-sm"></div>
-          </div>
-        );
-      case 'MongoDB':
-        return (
-          <div className="w-6 h-6 bg-green-100 rounded-md flex items-center justify-center">
-            <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
-          </div>
-        );
-      default:
-        return (
-          <div className="w-6 h-6 bg-slate-100 rounded-md flex items-center justify-center">
-            <div className="w-3 h-3 bg-slate-500 rounded-sm"></div>
-          </div>
-        );
+    const getImagePath = (dbType: string) => {
+      switch (dbType.toLowerCase()) {
+        case 'dynamodb':
+          return '/images/data-sources/dynamodb.png';
+        case 'postgresql':
+          return '/images/data-sources/postgres.png';
+        case 'mysql':
+          return '/images/data-sources/mysql.png';
+        case 'mongodb':
+          return '/images/data-sources/mongo.png';
+        default:
+          return null;
+      }
+    };
+
+    const imagePath = getImagePath(type);
+    
+    if (imagePath) {
+      return (
+        <div className="w-6 h-6 flex items-center justify-center">
+          <Image
+            src={imagePath}
+            alt={`${type} logo`}
+            width={24}
+            height={24}
+            className="w-6 h-6 object-contain"
+          />
+        </div>
+      );
     }
+
+    // Fallback for unknown types
+    return (
+      <div className="w-6 h-6 bg-slate-100 rounded-md flex items-center justify-center">
+        <div className="w-3 h-3 bg-slate-500 rounded-sm"></div>
+      </div>
+    );
   };
 
   const getStatusDot = (status: Database['status']) => {
@@ -163,14 +128,30 @@ export default function DataSourceSelector({
           setIsOpen(!isOpen);
           updateButtonPosition();
         }}
-        className="inline-flex items-center justify-between min-w-52 bg-white rounded-lg border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
+        className="inline-flex items-center justify-between min-w-52 px-4 py-3 bg-white rounded-lg text-sm font-medium text-slate-700 focus:outline-none transition-colors border border-slate-300"
       >
         <div className="flex items-center space-x-3">
           {selectedDataSource ? (
-            <div className="flex items-center space-x-2">
-              <span className="text-slate-900 font-medium">{selectedDataSource.name}</span>
-              <div className={`w-2 h-2 rounded-full ${getStatusDot(selectedDataSource.status)}`}></div>
-            </div>
+            <>
+              {getDataSourceIcon(selectedDataSource.type)}
+              <div className="flex flex-col items-start">
+                <div className="flex items-center space-x-2">
+                  <span className="text-slate-900 font-medium">{selectedDataSource.name}</span>
+                  <div className={`w-2 h-2 rounded-full ${getStatusDot(selectedDataSource.status)}`}></div>
+                </div>
+                <div className="flex items-center space-x-2 text-xs text-slate-500">
+                  <span>{selectedDataSource.type}</span>
+                  <span>•</span>
+                  <span>{(selectedDataSource.connection_config?.item_count || selectedDataSource.metadata?.item_count || 0).toLocaleString()} items</span>
+                  {selectedDataSource.connection_config?.region && (
+                    <>
+                      <span>•</span>
+                      <span>{selectedDataSource.connection_config.region}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+            </>
           ) : (
             <span className="text-slate-500">Select a data source here</span>
           )}
@@ -223,7 +204,7 @@ export default function DataSourceSelector({
                         key={dataSource.id}
                         onClick={() => handleSelectDataSource(dataSource)}
                         className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md text-left hover:bg-slate-50 transition-colors ${
-                          selectedDataSource?.id === dataSource.id ? 'bg-indigo-50 border border-indigo-200' : ''
+                          selectedDataSource?.id === dataSource.id ? 'bg-indigo-50 boarder border-indigo-200' : ''
                         }`}
                       >
                         {getDataSourceIcon(dataSource.type)}

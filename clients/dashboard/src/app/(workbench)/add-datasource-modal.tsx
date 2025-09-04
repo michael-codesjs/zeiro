@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button, Select, Input, Textarea, type SelectOption, SidePanel, SidePanelHeader, SidePanelBody, SidePanelFooter } from "@/components/ui";
 import { useCredentials, type Credential } from "@/hooks/use-credentials";
 import { useCreateDatabase, useDiscoverDynamoDBDatabases, type CreateDatabaseInput, type DiscoveredDatabase } from "@/hooks/use-data-sources";
+import { getDataSourceImageUrl, getDataSourceImageAlt } from "@/utils/data-source-utils";
 import Image from "next/image";
 
 interface AddDatasourceModalProps {
@@ -18,7 +19,6 @@ const DATASOURCE_OPTIONS = [
     id: 'DynamoDB',
     name: 'Amazon DynamoDB',
     description: 'NoSQL database service for any scale',
-    logo: '/images/databases/dynamodb.png',
     category: 'NoSQL',
     available: true,
     color: 'bg-orange-50 border-orange-200',
@@ -28,7 +28,6 @@ const DATASOURCE_OPTIONS = [
     id: 'PostgreSQL',
     name: 'PostgreSQL',
     description: 'Advanced open source relational database',
-    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
     category: 'SQL',
     available: false,
     color: 'bg-blue-50 border-blue-200',
@@ -38,7 +37,6 @@ const DATASOURCE_OPTIONS = [
     id: 'MySQL',
     name: 'MySQL',
     description: 'The world\'s most popular open source database',
-    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
     category: 'SQL',
     available: false,
     color: 'bg-blue-50 border-blue-200',
@@ -48,7 +46,6 @@ const DATASOURCE_OPTIONS = [
     id: 'MongoDB',
     name: 'MongoDB',
     description: 'Document database for modern applications',
-    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
     category: 'NoSQL',
     available: false,
     color: 'bg-green-50 border-green-200',
@@ -58,7 +55,6 @@ const DATASOURCE_OPTIONS = [
     id: 'Redis',
     name: 'Redis',
     description: 'In-memory data structure store',
-    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',
     category: 'Cache',
     available: false,
     color: 'bg-red-50 border-red-200',
@@ -68,7 +64,6 @@ const DATASOURCE_OPTIONS = [
     id: 'Elasticsearch',
     name: 'Elasticsearch',
     description: 'Distributed search and analytics engine',
-    logo: 'https://static-www.elastic.co/v3/assets/bltefdd0b53724fa2ce/blt6ae3d6980b5fd629/5bbca1d1af3a954c36f95ed3/logo-elastic-elasticsearch-lt.svg',
     category: 'Search',
     available: false,
     color: 'bg-yellow-50 border-yellow-200',
@@ -282,8 +277,8 @@ export default function AddDatasourceModal({ isOpen, onClose }: AddDatasourceMod
                   <div className="flex items-center space-x-3">
                     <div className="flex-shrink-0 w-10 h-10 bg-white rounded-lg p-2 shadow-sm">
                       <Image
-                        src={option.logo}
-                        alt={`${option.name} logo`}
+                        src={getDataSourceImageUrl(option.id as DatasourceType)}
+                        alt={getDataSourceImageAlt(option.id as DatasourceType)}
                         width={24}
                         height={24}
                         className="w-6 h-6 object-contain"

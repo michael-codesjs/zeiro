@@ -52,7 +52,7 @@ export type QueryHistory = {
   last_query_at: string
 }
 
-export type DatabaseSchema = {
+export type DynamoDBDatabaseSchema = {
   table_name: string
   primary_key: {
     partition_key: string
@@ -72,5 +72,7 @@ export type DatabaseSchema = {
     type: 'S' | 'N' | 'B' | 'SS' | 'NS' | 'BS' | 'M' | 'L' | 'NULL' | 'BOOL'
     description?: string
   }>
-  sample_data?: any[]
+  table_size_bytes?: number
+  item_count?: number
+  table_status?: string
 } 

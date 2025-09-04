@@ -6,7 +6,7 @@ import { SidebarLeft } from "iconsax-reactjs";
 import NavItems from "./nav-items";
 import ColorModeSwitcher from "./color-mode-switcher";
 import UserSummary from "./user-summary";
-import RecentDatabaseConnections from "./recent-connections";
+import RecentDatabaseConnections from "./recent-data-sources";
 import { type Database } from "@/hooks/use-data-sources";
 
 export default function Navigation() {
@@ -53,7 +53,7 @@ export default function Navigation() {
         <div className="mt-3 flex-1">
           <RecentDatabaseConnections 
             sidebarCollapsed={sidebarCollapsed}
-            onDatabaseSelect={(database: Database) => {
+            onDataSourceSelect={(database: Database) => {
               // Navigate to workbench with selected database
               router.push('/');
               // TODO: You might want to emit an event or use a context to pass the selected database to the workbench

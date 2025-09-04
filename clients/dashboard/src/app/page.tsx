@@ -4,37 +4,21 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import DataSourceSelector from "./(workbench)/data-source-selector";
 import AddDatasourceModal from "./(workbench)/add-datasource-modal";
-import AiChat from "./(workbench)/ai-chat";
+import { Chat } from "../components/layout/chat";
 import { DataViewer } from "../components/layout/data-viewer";
 import { Button } from "../components/ui";
-import { useDatabases, type Database } from "../hooks/use-data-sources";
+import { type DataSource } from "../hooks/use-data-sources";
 import { type ChartData } from "../hooks/use-natural-language-query";
 import { useSelectedDataSourceStore } from "../hooks/use-selected-data-source-store";
+import { useDisclosure } from "@/hooks/use-disclosure";
 
 export default function Dashboard() {
+
   const router = useRouter();
   const { selectedDataSource, setSelectedDataSource } = useSelectedDataSourceStore();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isChatCollapsed, setIsChatCollapsed] = useState(false);
+  const { isOpen: isChatCollapsed, onOpen: onChatOpen, onClose: onChatClose, onToggle: onChatToggle } = useDisclosure();
   const [chartData, setChartData] = useState<ChartData | null>(null);
-  
-  // Fetch data sources from API
-  const { data: dataSources = [], isLoading: dataSourcesLoading, error } = useDatabases();
-
-  // Validate and sync persisted data source with API data
-  useEffect(() => {
-    if (dataSources.length > 0 && selectedDataSource) {
-      // Check if the persisted data source still exists in the API data
-      const currentDataSource = dataSources.find(ds => ds.id === selectedDataSource.id);
-      if (currentDataSource) {
-        // Update with fresh data from API (in case connection status, metadata, etc. changed)
-        setSelectedDataSource(currentDataSource);
-      } else {
-        // Data source no longer exists, clear the selection
-        setSelectedDataSource(null);
-      }
-    }
-  }, [dataSources, selectedDataSource, setSelectedDataSource]);
 
   return (
     <div className="flex h-screen w-full overflow-hidden">
@@ -45,7 +29,6 @@ export default function Dashboard() {
           {/* Left side - Data Source Selector */}
           <div className="flex items-center pt-4">
             <DataSourceSelector
-              dataSources={dataSources}
               selectedDataSource={selectedDataSource}
               onSelectDataSource={setSelectedDataSource}
             />
@@ -79,7 +62,7 @@ export default function Dashboard() {
           {selectedDataSource ? (
             // Data Source Selected State - Show table viewer
             <div className="w-full h-full overflow-x-hidden">
-              <DataViewer database={selectedDataSource} chartData={chartData} />
+              <DataViewer chartData={chartData} />
             </div>
           ) : (
             // Empty State - No Data Source Selected (clean text only)
@@ -103,10 +86,10 @@ export default function Dashboard() {
       </div>
 
       {/* AI Chat */}
-      <AiChat 
+      <Chat 
         isCollapsed={isChatCollapsed}
-        onToggleCollapse={() => setIsChatCollapsed(!isChatCollapsed)}
-        selectedDatabase={selectedDataSource}
+        onToggleCollapse={onChatToggle}
+        selectedDataSource={selectedDataSource}
         onChartDataUpdate={setChartData}
       />
     </div>

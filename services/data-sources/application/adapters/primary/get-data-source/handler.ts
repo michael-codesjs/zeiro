@@ -3,6 +3,7 @@ import { dataSources } from '@adapters/secondary/one-table'
 import { DataSource } from '@typings/data-source'
 import { DynamoDBClient, DescribeTableCommand } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb'
+import { apiGatewaySignedFetch } from '@zeiro/sdk'
 
 // Schema discovery types
 type TableSchema = {
@@ -286,8 +287,8 @@ const handler = async (
     // If this is a DynamoDB data source, discover the schema
     if (dataSource.type === 'DynamoDB') {
       try {
-        // Fetch credentials for the data source
-        const credentialsResponse = await fetch(
+        // Fetch credentials for the data source using signed request
+        const credentialsResponse = await apiGatewaySignedFetch(
           `${process.env.CREDENTIALS_SERVICE_URL}/credentials/${dataSource.credential_id}/secure?user_id=${user_id}`,
           {
             method: 'GET',

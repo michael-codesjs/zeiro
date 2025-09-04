@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { FiMoreVertical, FiEdit, FiTrash2, FiRefreshCw, FiExternalLink, FiDatabase, FiEye } from 'react-icons/fi';
 import { Button, useDisclosure } from '@/components/ui';
 import { useDeleteDatabase, useTestDatabaseConnection } from '@/hooks/use-data-sources';
+import { getDataSourceImageUrl, getDataSourceImageAlt } from '@/utils/data-source-utils';
 import type { Database } from '@/hooks/use-data-sources';
 import EditDataSourceModal from './edit-data-source-modal';
 
@@ -15,87 +16,19 @@ interface DataSourceCardProps {
   onSelect?: () => void;
 }
 
-const DATABASE_ICONS: Record<string, string> = {
-  PostgreSQL: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
-  MySQL: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
-  MongoDB: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
-  Redis: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',
-  Elasticsearch: 'https://static-www.elastic.co/v3/assets/bltefdd0b53724fa2ce/blt6ae3d6980b5fd629/5bbca1d1af3a954c36f95ed3/logo-elastic-elasticsearch-lt.svg'
-};
-
 const getDatabaseIcon = (type: string, name: string) => {
-  // For DynamoDB, use the actual DynamoDB logo
-  if (type === 'DynamoDB') {
-    return (
-      <div className="w-14 h-14 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl flex items-center justify-center p-2 shadow-sm">
-        <svg viewBox="0 0 256 289" className="w-10 h-10">
-          <defs>
-            <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="Gradient-0">
-              <stop stopColor="#2E27AD" offset="0%"></stop>
-              <stop stopColor="#527FFF" offset="100%"></stop>
-            </linearGradient>
-            <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="Gradient-1">
-              <stop stopColor="#F58536" offset="0%"></stop>
-              <stop stopColor="#F58536" offset="100%"></stop>
-            </linearGradient>
-          </defs>
-          <path fill="url(#Gradient-0)" d="M165,0 L256,50 L256,100 L165,150 L74,100 L74,50 L165,0 Z"></path>
-          <path fill="url(#Gradient-1)" d="M165,72 L256,122 L256,172 L165,222 L74,172 L74,122 L165,72 Z"></path>
-          <path fill="url(#Gradient-0)" d="M165,144 L256,194 L256,244 L165,294 L74,244 L74,194 L165,144 Z"></path>
-        </svg>
-      </div>
-    );
-  }
-
-  // For other database types with external icons, use the image
-  if (DATABASE_ICONS[type]) {
-    return (
-      <div className="w-14 h-14 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-        <img 
-          src={DATABASE_ICONS[type]} 
-          alt={type}
-          className="w-9 h-9 object-contain"
-          onError={(e) => {
-            e.currentTarget.style.display = 'none';
-            e.currentTarget.nextElementSibling?.classList.remove('hidden');
-          }}
-        />
-        <FiDatabase className="w-8 h-8 text-slate-500 hidden" />
-      </div>
-    );
-  }
-
-  // For other database types, generate initials with colors
-  const initials = name
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase())
-    .join('')
-    .slice(0, 2);
-
-  const getColorClass = (type: string) => {
-    switch (type) {
-      case 'PostgreSQL':
-        return 'from-blue-50 to-blue-100 text-blue-600';
-      case 'MySQL':
-        return 'from-green-50 to-green-100 text-green-600';
-      case 'MongoDB':
-        return 'from-green-50 to-green-100 text-green-600';
-      case 'Redis':
-        return 'from-red-50 to-red-100 text-red-600';
-      case 'Cassandra':
-        return 'from-purple-50 to-purple-100 text-purple-600';
-      case 'InfluxDB':
-        return 'from-indigo-50 to-indigo-100 text-indigo-600';
-      case 'Elasticsearch':
-        return 'from-yellow-50 to-yellow-100 text-yellow-600';
-      default:
-        return 'from-gray-50 to-gray-100 text-gray-600';
-    }
-  };
-
   return (
-    <div className={`w-14 h-14 bg-gradient-to-br ${getColorClass(type)} rounded-xl flex items-center justify-center shadow-sm`}>
-      <span className="text-lg font-bold">{initials}</span>
+    <div className="w-14 h-14 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+      <img 
+        src={getDataSourceImageUrl(type as any)} 
+        alt={getDataSourceImageAlt(type as any)}
+        className="w-9 h-9 object-contain"
+        onError={(e) => {
+          e.currentTarget.style.display = 'none';
+          e.currentTarget.nextElementSibling?.classList.remove('hidden');
+        }}
+      />
+      <FiDatabase className="w-8 h-8 text-slate-500 hidden" />
     </div>
   );
 };

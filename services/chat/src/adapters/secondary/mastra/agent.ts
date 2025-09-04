@@ -1,7 +1,7 @@
 import { Agent } from '@mastra/core/agent'
 import { openai } from '@ai-sdk/openai'
 import { createDynamoDBTool, DynamoDBToolConfig } from './dynamodb-tool'
-import { DatabaseSchema } from '@typings/query'
+import { DynamoDBDatabaseSchema } from '@typings/query'
 
 export interface QueryAgentConfig {
   credentials: {
@@ -9,7 +9,7 @@ export interface QueryAgentConfig {
     secretAccessKey: string
     sessionToken?: string
   }
-  schema: DatabaseSchema
+  schema: DynamoDBDatabaseSchema
   region?: string
 }
 

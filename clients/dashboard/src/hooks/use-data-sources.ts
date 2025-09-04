@@ -2,11 +2,11 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { get, post, del } from 'aws-amplify/api';
 import { toast } from 'react-hot-toast';
 
-export type DatabaseType = 'DynamoDB' | 'PostgreSQL' | 'MySQL' | 'MongoDB' | 'Redis' | 'Cassandra' | 'InfluxDB' | 'Elasticsearch';
-export type DatabaseStatus = 'connected' | 'disconnected' | 'error' | 'connecting';
-export type DatabaseEnvironment = 'development' | 'staging' | 'production';
+export type DataSourceType = 'DynamoDB' | 'PostgreSQL' | 'MySQL' | 'MongoDB' | 'Redis' | 'Cassandra' | 'InfluxDB' | 'Elasticsearch';
+export type DataSourceStatus = 'connected' | 'disconnected' | 'error' | 'connecting';
+export type DataSourceEnvironment = 'development' | 'staging' | 'production';
 
-export type DatabaseConnectionConfig = {
+export type DataSourceConnectionConfig = {
   // DynamoDB specific
   region?: string;
   account_id?: string;
@@ -57,7 +57,7 @@ export type DiscoveredTableInfo = {
   last_analyzed: string;
 };
 
-export type DatabaseMetadata = {
+export type DataSourceMetadata = {
   table_count?: number;
   collection_count?: number;
   size_bytes?: number;
@@ -78,29 +78,29 @@ export type DatabaseMetadata = {
   [key: string]: any;
 };
 
-export type Database = {
+export type DataSource = {
   id: string;
   user_id: string;
   name: string;
   description?: string;
-  type: DatabaseType;
-  status: DatabaseStatus;
-  environment: DatabaseEnvironment;
+  type: DataSourceType;
+  status: DataSourceStatus;
+  environment: DataSourceEnvironment;
   credential_id: string;
-  connection_config: DatabaseConnectionConfig;
+  connection_config: DataSourceConnectionConfig;
   auto_connect: boolean;
   created_at: string;
   updated_at: string;
   last_accessed?: string;
-  metadata?: DatabaseMetadata;
+  metadata?: DataSourceMetadata;
 };
 
-export type CreateDatabaseInput = Omit<Database, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'last_accessed' | 'metadata'>;
+export type CreateDataSourceInput = Omit<DataSource, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'last_accessed' | 'metadata'>;
 
 const DATA_SOURCES_QUERY_KEY = ['data-sources'];
 
-// Fetch databases
-const fetchDatabases = async (): Promise<Database[]> => {
+// Fetch data sources
+const fetchDataSources = async (): Promise<DataSource[]> => {
   const restOperation = get({
     apiName: 'zeiro-api',
     path: '/data-sources',
@@ -113,7 +113,7 @@ const fetchDatabases = async (): Promise<Database[]> => {
   });
   
   const response = await restOperation.response;
-  const data = await response.body.json() as unknown as { dataSources: Database[] };
+  const data = await response.body.json() as unknown as { dataSources: DataSource[] };
   return data.dataSources;
 };
 
@@ -162,53 +162,53 @@ export type TableSchema = {
   };
 };
 
-export type DataSourceWithSchema = {
-  dataSource: Database;
+export type DataSourceWithData = {
+  dataSource: DataSource;
   schema: TableSchema | null;
 };
 
-// Fetch individual data source with schema
-const fetchDataSourceWithSchema = async (id: string): Promise<DataSourceWithSchema> => {
+// Fetch individual data source with data
+const fetchDataSourceWithData = async (id: string): Promise<DataSourceWithData> => {
   const restOperation = get({
     apiName: 'zeiro-api',
     path: `/data-sources/${id}`,
   });
   
   const response = await restOperation.response;
-  const data = await response.body.json() as unknown as DataSourceWithSchema;
+  const data = await response.body.json() as unknown as DataSourceWithData;
   return data;
 };
 
-// Create database
-const createDatabase = async (newDatabase: CreateDatabaseInput): Promise<Database> => {
+// Create data source
+const createDataSource = async (newDataSource: CreateDataSourceInput): Promise<DataSource> => {
   const restOperation = post({
     apiName: 'zeiro-api',
     path: '/data-sources',
     options: {
-      body: newDatabase
+      body: newDataSource
     }
   });
   
   const response = await restOperation.response;
-  return await response.body.json() as unknown as Database;
+  return await response.body.json() as unknown as DataSource;
 };
 
-// Update database
-const updateDatabase = async (id: string, updatedDatabase: Partial<CreateDatabaseInput>): Promise<Database> => {
+// Update data source
+const updateDataSource = async (id: string, updatedDataSource: Partial<CreateDataSourceInput>): Promise<DataSource> => {
   const restOperation = post({
     apiName: 'zeiro-api',
     path: `/data-sources/${id}`,
     options: {
-      body: updatedDatabase
+      body: updatedDataSource
     }
   });
   
   const response = await restOperation.response;
-  return await response.body.json() as unknown as Database;
+  return await response.body.json() as unknown as DataSource;
 };
 
-// Delete database
-const deleteDatabase = async (id: string): Promise<void> => {
+// Delete data source
+const deleteDataSource = async (id: string): Promise<void> => {
   const restOperation = del({
     apiName: 'zeiro-api',
     path: `/data-sources/${id}`,
@@ -217,8 +217,8 @@ const deleteDatabase = async (id: string): Promise<void> => {
   await restOperation.response;
 };
 
-// Test database connection
-const testDatabaseConnection = async (id: string): Promise<{ success: boolean; message: string; latency?: number }> => {
+// Test data source connection
+const testDataSourceConnection = async (id: string): Promise<{ success: boolean; message: string; latency?: number }> => {
   const restOperation = post({
     apiName: 'zeiro-api',
     path: `/data-sources/${id}/test`,
@@ -235,90 +235,81 @@ const testDatabaseConnection = async (id: string): Promise<{ success: boolean; m
 export const useDataSources = () => {
   return useQuery({
     queryKey: DATA_SOURCES_QUERY_KEY,
-    queryFn: fetchDatabases,
+    queryFn: fetchDataSources,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
 
-// Alias for backwards compatibility
-export const useDatabases = () => {
+// Hook to fetch individual data source with data
+export const useDataSourceWithData = (id: string | null) => {
   return useQuery({
-    queryKey: DATA_SOURCES_QUERY_KEY,
-    queryFn: fetchDatabases,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  });
-};
-
-// Hook to fetch individual data source with schema
-export const useDataSourceWithSchema = (id: string | null) => {
-  return useQuery({
-    queryKey: ['data-source-with-schema', id],
-    queryFn: () => fetchDataSourceWithSchema(id!),
+    queryKey: ['data-source-fetch', id],
+    queryFn: () => fetchDataSourceWithData(id!),
     enabled: !!id,
-    staleTime: 2 * 60 * 1000, // 2 minutes (shorter than list since schema can change)
+    staleTime: 2 * 60 * 1000, // 2 minutes (shorter than list since data can change)
   });
 };
 
-export const useCreateDatabase = () => {
+export const useCreateDataSource = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: createDatabase,
-    onSuccess: (newDatabase) => {
+    mutationFn: createDataSource,
+    onSuccess: (newDataSource) => {
       // Optimistically update the cache
-      queryClient.setQueryData<Database[]>(DATA_SOURCES_QUERY_KEY, (old) => 
-        old ? [...old, newDatabase] : [newDatabase]
+      queryClient.setQueryData<DataSource[]>(DATA_SOURCES_QUERY_KEY, (old) => 
+        old ? [...old, newDataSource] : [newDataSource]
       );
       toast.success('Data source created successfully');
     },
     onError: (error) => {
-      console.error('Error creating database:', error);
-      toast.error('Failed to create database');
+      console.error('Error creating data source:', error);
+      toast.error('Failed to create data source');
     },
   });
 };
 
-export const useUpdateDatabase = () => {
+export const useUpdateDataSource = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<CreateDatabaseInput> }) => updateDatabase(id, data),
-    onSuccess: (updatedDatabase) => {
+    mutationFn: ({ id, data }: { id: string; data: Partial<CreateDataSourceInput> }) => updateDataSource(id, data),
+    onSuccess: (updatedDataSource) => {
       // Optimistically update the cache
-      queryClient.setQueryData<Database[]>(DATA_SOURCES_QUERY_KEY, (old) => 
-        old ? old.map(d => d.id === updatedDatabase.id ? updatedDatabase : d) : [updatedDatabase]
+      queryClient.setQueryData<DataSource[]>(DATA_SOURCES_QUERY_KEY, (old) => 
+        old ? old.map(d => d.id === updatedDataSource.id ? updatedDataSource : d) : [updatedDataSource]
       );
       toast.success('Data source updated successfully');
     },
     onError: (error) => {
-      console.error('Error updating database:', error);
+      console.error('Error updating data source:', error);
       toast.error('Failed to update data source');
     },
   });
 };
 
-export const useDeleteDatabase = () => {
+export const useDeleteDataSource = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: deleteDatabase,
+    mutationFn: deleteDataSource,
     onSuccess: (_, deletedId) => {
       // Optimistically update the cache
-      queryClient.setQueryData<Database[]>(DATA_SOURCES_QUERY_KEY, (old) => 
+      queryClient.setQueryData<DataSource[]>(DATA_SOURCES_QUERY_KEY, (old) => 
         old ? old.filter(d => d.id !== deletedId) : []
       );
       toast.success('Data source deleted successfully');
     },
     onError: (error) => {
-      console.error('Error deleting database:', error);
+      console.error('Error deleting data source:', error);
       toast.error('Failed to delete data source');
     },
   });
 };
 
-export const useTestDatabaseConnection = () => {
+export const useTestDataSourceConnection = () => {
   return useMutation({
-    mutationFn: testDatabaseConnection,
+    mutationFn: testDataSourceConnection,
     onSuccess: (result) => {
       if (result.success) {
         toast.success(`Connection successful${result.latency ? ` (${result.latency}ms)` : ''}`);
@@ -334,7 +325,7 @@ export const useTestDatabaseConnection = () => {
 };
 
 // Types for DynamoDB discovery
-export type DiscoveredDatabase = {
+export type DiscoveredDataSource = {
   name: string;
   arn?: string;
   status: string;
@@ -352,8 +343,8 @@ export type DiscoverDynamoDBInput = {
 };
 
 export type DiscoverDynamoDBResponse = {
-  databases: DiscoveredDatabase[];
-  dataSources: DiscoveredDatabase[];
+  databases: DiscoveredDataSource[];
+  dataSources: DiscoveredDataSource[];
   summary: {
     total_tables: number;
     described_tables: number;
@@ -365,7 +356,7 @@ export type DiscoverDynamoDBResponse = {
 };
 
 // Discover DynamoDB tables
-const discoverDynamoDBDatabases = async (input: DiscoverDynamoDBInput): Promise<DiscoverDynamoDBResponse> => {
+const discoverDynamoDBDataSources = async (input: DiscoverDynamoDBInput): Promise<DiscoverDynamoDBResponse> => {
   const restOperation = post({
     apiName: 'zeiro-api',
     path: '/data-sources/discover/dynamodb',
@@ -378,12 +369,32 @@ const discoverDynamoDBDatabases = async (input: DiscoverDynamoDBInput): Promise<
   return await response.body.json() as unknown as DiscoverDynamoDBResponse;
 };
 
-export const useDiscoverDynamoDBDatabases = () => {
+export const useDiscoverDynamoDBDataSources = () => {
   return useMutation({
-    mutationFn: discoverDynamoDBDatabases,
+    mutationFn: discoverDynamoDBDataSources,
     onError: (error) => {
-      console.error('Error discovering DynamoDB databases:', error);
-      toast.error('Failed to discover databases');
+      console.error('Error discovering DynamoDB data sources:', error);
+      toast.error('Failed to discover data sources');
     },
   });
-}; 
+};
+
+// Backward compatibility aliases
+export const useDatabases = useDataSources;
+export const useCreateDatabase = useCreateDataSource;
+export const useUpdateDatabase = useUpdateDataSource;
+export const useDeleteDatabase = useDeleteDataSource;
+export const useTestDatabaseConnection = useTestDataSourceConnection;
+export const useDiscoverDynamoDBDatabases = useDiscoverDynamoDBDataSources;
+export const useDataSourceWithSchema = useDataSourceWithData;
+
+// Type aliases for backward compatibility
+export type DatabaseType = DataSourceType;
+export type DatabaseStatus = DataSourceStatus;
+export type DatabaseEnvironment = DataSourceEnvironment;
+export type DatabaseConnectionConfig = DataSourceConnectionConfig;
+export type DatabaseMetadata = DataSourceMetadata;
+export type Database = DataSource;
+export type CreateDatabaseInput = CreateDataSourceInput;
+export type DiscoveredDatabase = DiscoveredDataSource;
+export type DataSourceWithSchema = DataSourceWithData; 

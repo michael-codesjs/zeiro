@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { CHAT_CONFIG } from '../constants';
+import React, { useEffect } from 'react';
+import { TypeAnimation } from 'react-type-animation';
 
 interface TypingAnimationProps {
   text: string;
@@ -7,28 +7,29 @@ interface TypingAnimationProps {
 }
 
 export const TypingAnimation: React.FC<TypingAnimationProps> = ({ text, onComplete }) => {
-  const [displayedText, setDisplayedText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // Calculate typing duration based on text length (roughly 50ms per character)
+  const typingDuration = text.length * 50;
 
   useEffect(() => {
-    if (currentIndex < text.length) {
+    if (onComplete) {
       const timer = setTimeout(() => {
-        setDisplayedText(prev => prev + text[currentIndex]);
-        setCurrentIndex(prev => prev + 1);
-      }, CHAT_CONFIG.TYPING_SPEED);
+        onComplete();
+      }, typingDuration + 500); // Add small buffer after typing completes
 
       return () => clearTimeout(timer);
-    } else if (onComplete) {
-      onComplete();
     }
-  }, [currentIndex, text, onComplete]);
+  }, [onComplete, typingDuration]);
 
   return (
     <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
-      {displayedText}
-      {currentIndex < text.length && (
-        <span className="animate-pulse">|</span>
-      )}
+      <TypeAnimation
+        sequence={[text]}
+        wrapper="span"
+        speed={50}
+        style={{ display: 'inline-block' }}
+        cursor={true}
+        repeat={0}
+      />
     </div>
   );
 }; 

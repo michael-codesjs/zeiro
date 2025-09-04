@@ -1,5 +1,7 @@
 export { TypingAnimation } from './TypingAnimation';
-export { QueryResultDisplay } from './QueryResultDisplay';
-export { ModelSelector } from './ModelSelector';
 export { ThreadSelector } from './ThreadSelector';
-export { ChatMessage } from './ChatMessage'; 
+export { ChatInput } from './chat-input';
+export { Messages } from './messages';
+export { ChatMessage } from './chat-message';
+export { ChatHeader } from './chat-header';
+export { ModelSelector } from './model-selector';

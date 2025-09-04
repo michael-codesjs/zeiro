@@ -1,7 +1,7 @@
 // Re-export main types used by the query service
 export type { DynamoDBAgentConfig } from '../mastra/agents/dynamodb-agent-old'
 export type { DynamoDBToolConfig, DynamoQueryParams, DynamoQueryResult } from '../mastra/tools/dynamodb-tool'
-export type { Database, DatabaseSchema, SecureCredential } from '../adapters/secondary/integration/services'
+export type { Database, DynamoDBDatabaseSchema, SecureCredential } from '../adapters/secondary/integration/services'
 
 // Main query interfaces
 export interface QueryInput {

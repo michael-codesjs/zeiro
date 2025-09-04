@@ -1,4 +1,4 @@
-import { DatabaseSchema } from '../../../types/query'
+import { DynamoDBDatabaseSchema } from '../../../types/query'
 import { apiGatewaySignedFetch } from '@zeiro/sdk'
 
 export interface SecureCredential {
@@ -105,7 +105,7 @@ export class DatabasesService {
     }
   }
 
-  async getDatabaseSchema(database: Database, credentials: any): Promise<DatabaseSchema> {
+  async getDatabaseSchema(database: Database, credentials: any): Promise<DynamoDBDatabaseSchema> {
     // In a real implementation, this would introspect the DynamoDB table
     // For now, we'll return a basic schema structure
     
@@ -154,7 +154,7 @@ export class IntegrationService {
       sessionToken?: string
       region?: string
     }
-    schema: DatabaseSchema
+    schema: DynamoDBDatabaseSchema
   }> {
     // Get database information
     const database = await this.databasesService.getDatabase(databaseId, userId)
