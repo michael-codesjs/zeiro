@@ -25,7 +25,7 @@ export const definition: AWS.ServerlessLambdaFunction = {
         'dynamodb:Query',
       ],
       Resource: [
-        '${ssm:/zeiro/${self:custom.stage}/domain/user/users/infrastructure/storage/zeiro-users-table/arn}',
+        '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}',
       ],
     },
     {
@@ -37,6 +37,6 @@ export const definition: AWS.ServerlessLambdaFunction = {
   ],
   environment: {
     USERS_DYNAMODB_TABLE_NAME:
-      '${ssm:/zeiro/${self:custom.stage}/domain/user/users/infrastructure/storage/zeiro-users-table/name}',
+      '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/name}',
   },
 }

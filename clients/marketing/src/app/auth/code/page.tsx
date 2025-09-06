@@ -5,9 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { resendSignUpCode } from 'aws-amplify/auth';
 
-import FormContainer from '@/components/FormContainer';
 import PinInput from '@/components/PinInput';
-import Button from '@/components/Button';
+import Button from '@/components/button';
 import { useAuth } from '@/hooks/useAuth';
 
 // Create a client component that safely uses useSearchParams
@@ -105,52 +104,55 @@ function VerificationCodeContent() {
 
   return (
     <div className={`w-full transition-all duration-1000 ease-out ${animateIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          Verify your account
+        </h1>
+        <p className="text-xl text-gray-400">
+          Enter the verification code sent to your email
+        </p>
+      </div>
+
       <div className="max-w-md mx-auto">
-        <FormContainer
-          title="Verify your account"
-          subtitle="Enter the verification code sent to your email"
-          onSubmit={handleVerify}
-          showBorder={true}
-          background="primary"
-        >
-          {/* Default Code Indicator */}
-          <div className="mb-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <div className="flex items-center">
-              <div className="shrink-0 mr-3">
-                <div className="bg-yellow-100 rounded-full p-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-600" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              </div>
-              <div>
-                <div className="text-sm text-yellow-800 font-medium">Default Verification Code</div>
-                <div className="text-yellow-700">Use code: <span className="font-mono font-bold">{defaultDevCode}</span></div>
+        {/* Default Code Indicator */}
+        <div className="mb-8 bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
+          <div className="flex items-center">
+            <div className="shrink-0 mr-3">
+              <div className="bg-yellow-500/20 rounded-full p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
               </div>
             </div>
-          </div>
-
-          {/* Email information */}
-          <div className="mb-8 bg-indigo-50 rounded-lg p-4 border border-indigo-100">
-            <div className="flex items-center">
-              <div className="shrink-0 mr-3">
-                <div className="bg-indigo-100 rounded-full p-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                </div>
-              </div>
-              <div>
-                <div className="text-sm text-indigo-800 font-medium">Verification code sent to:</div>
-                <div className="text-indigo-700">{username || 'your email address'}</div>
-              </div>
+            <div>
+              <div className="text-sm text-yellow-300 font-medium">Default Verification Code</div>
+              <div className="text-yellow-400">Use code: <span className="font-mono font-bold">{defaultDevCode}</span></div>
             </div>
           </div>
+        </div>
 
+        {/* Email information */}
+        <div className="mb-8 bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+          <div className="flex items-center">
+            <div className="shrink-0 mr-3">
+              <div className="bg-gray-700 rounded-full p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                </svg>
+              </div>
+            </div>
+            <div>
+              <div className="text-sm text-gray-300 font-medium">Verification code sent to:</div>
+              <div className="text-white">{username || 'your email address'}</div>
+            </div>
+          </div>
+        </div>
+
+        <form onSubmit={handleVerify} className="space-y-6">
           {/* Pin Input */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-4">
               Verification Code
             </label>
             <PinInput
@@ -162,10 +164,10 @@ function VerificationCodeContent() {
             />
           </div>
 
-          <div className="flex justify-center mt-2 mb-6">
+          <div className="flex justify-center">
             <button
               type="button"
-              className={`text-sm text-indigo-600 hover:text-indigo-800 transition-colors font-medium ${isActionInProgress ? 'pointer-events-none opacity-50' : ''}`}
+              className={`text-sm text-gray-400 hover:text-white transition-colors ${isActionInProgress ? 'pointer-events-none opacity-50' : ''}`}
               onClick={handleResend}
               disabled={isActionInProgress}
             >
@@ -173,20 +175,23 @@ function VerificationCodeContent() {
             </button>
           </div>
 
-          <Button
-            type="submit"
-            variant="primary"
-            fullWidth
-            isLoading={isLoading}
-            loadingText="Verifying..."
-            disabled={isResending}
-          >
-            Verify Account
-          </Button>
-        </FormContainer>
+          <div className="pt-4">
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              fullWidth
+              disabled={isLoading || isResending}
+              isLoading={isLoading}
+              loadingText="Verifying..."
+            >
+              Verify Account
+            </Button>
+          </div>
+        </form>
 
-        <p className="text-center text-xs text-white mt-6">
-          Having trouble? Contact <a href="mailto:support@zeiro.com" className="text-white/90 hover:text-white underline">support@zeiro.com</a>
+        <p className="text-center text-xs text-gray-500 mt-8">
+          Having trouble? Contact <a href="mailto:support@zeiro.com" className="text-gray-400 hover:text-white underline transition-colors">support@zeiro.com</a>
         </p>
       </div>
     </div>

@@ -1,37 +1,41 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "../globals.css";
-import ZeroBackground from "@/components/ZeroBackground";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Link from 'next/link';
+import { ArrowLeft } from 'iconsax-react';
 
 export const metadata: Metadata = {
-  title: "Zeiro - AI Powered Database Client",
-  description: "A modern database client that leverages AI to simplify database interactions",
+  title: "Zeiro - Authentication",
+  description: "Sign in or create your Zeiro account to get started with AI-powered data analysis",
 };
 
-export default function RootLayout({
+export default function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ZeroBackground>
+    <div className="min-h-screen bg-black text-white">
+      {/* Header */}
+      <header className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center">
+            <Link href="/" className="text-xl font-bold text-white hover:text-gray-300 transition-colors">
+              zeiro
+            </Link>
+          </div>
+          
+          <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+            <ArrowLeft size={16} color="currentColor" variant="Outline" />
+            <span>Back to home</span>
+          </Link>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="pt-24 pb-16 px-6">
+        <div className="max-w-md mx-auto">
           {children}
-        </ZeroBackground>
-      </body>
-    </html>
+        </div>
+      </main>
+    </div>
   );
 }

@@ -20,8 +20,6 @@ export default function DataViewer({ chartData }: DataViewerProps) {
   // Fetch data for the selected data source
   const { data: dataSourceData, isLoading: loading, error } = useDataSourceWithData(selectedDataSource?.id || null);
 
-
-  
   // Use the fetched data source - no fallback to store
   const database = dataSourceData?.dataSource;
 

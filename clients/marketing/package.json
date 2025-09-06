@@ -13,6 +13,7 @@
     "@hookform/resolvers": "^3.3.2",
     "aws-amplify": "^6.0.27",
     "class-variance-authority": "^0.7.0",
+    "iconsax-react": "^0.0.8",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

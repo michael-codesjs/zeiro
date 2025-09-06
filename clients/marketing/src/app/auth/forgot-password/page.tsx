@@ -8,9 +8,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-hot-toast';
 import { z } from 'zod';
 
-import FormContainer from '@/components/FormContainer';
-import FormInput from '@/components/FormInput';
-import Button from '@/components/Button';
+import Input from '@/components/input';
+import Button from '@/components/button';
+import FormCard from '@/components/form-card';
 
 // Forgot password form schema
 const forgotPasswordSchema = z.object({
@@ -64,78 +64,82 @@ export default function ForgotPassword() {
 
   return (
     <div className={`w-full transition-all duration-1000 ease-out ${animateIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          Reset your password
+        </h1>
+        <p className="text-xl text-gray-400">
+          {isSubmitted ? "Check your email" : "We'll send you instructions to reset your password"}
+        </p>
+      </div>
+
       <div className="max-w-md mx-auto">
-        <FormContainer
-          title="Reset your password"
-          subtitle={isSubmitted ? "Check your email" : "We'll send you instructions to reset your password"}
-          onSubmit={handleSubmit(onSubmit)}
-          showBorder={true}
-        >
-          {!isSubmitted ? (
-            <>
-              <FormInput
+        {!isSubmitted ? (
+          <FormCard variant="subtle" size="lg" spacing="normal">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <Input
                 id="email"
                 type="email"
-                placeholder="you@company.com"
                 label="Email"
-                required
+                placeholder="you@company.com"
                 autoComplete="email"
+                variant="minimal"
+                labelVariant="bold"
+                size="lg"
+                disabled={isLoading}
                 error={errors.email?.message}
                 {...register('email')}
-                disabled={isLoading}
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                }
               />
 
-              <Button
-                type="submit"
-                variant="primary"
-                fullWidth
-                isLoading={isLoading}
-                loadingText="Sending Reset Instructions..."
-                className="mt-6"
-              >
-                Send Reset Instructions
-              </Button>
-            </>
-          ) : (
-            <div className="text-center py-6">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
+              <div className="pt-4">
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  disabled={isLoading}
+                  isLoading={isLoading}
+                  loadingText="Sending Reset Instructions..."
+                >
+                  Send Reset Instructions
+                </Button>
               </div>
-              <p className="text-gray-700 mb-6">
-                We've sent reset instructions to <strong>{email}</strong>. Please check your email and follow the instructions to reset your password.
-              </p>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => router.push('/auth/in')}
-              >
-                Back to Sign In
-              </Button>
+            </form>
+          </FormCard>
+        ) : (
+          <div className="text-center py-8">
+            <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
             </div>
-          )}
-
-          <div className="mt-6 pt-4 border-t border-gray-200 text-center">
-            <p className="text-gray-600 text-sm">
-              Remember your password?{' '}
-              <Link 
-                href="/auth/in" 
-                className={`font-medium text-indigo-600 hover:text-indigo-700 transition-colors ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
-                tabIndex={isLoading ? -1 : 0}
-                aria-disabled={isLoading}
-              >
-                Sign in
-              </Link>
+            <p className="text-gray-300 mb-8 text-lg">
+              We've sent reset instructions to <strong className="text-white">{email}</strong>. Please check your email and follow the instructions to reset your password.
             </p>
+            <CtaButton
+              type="button"
+              variant="primary"
+              size="md"
+              onClick={() => router.push('/auth/in')}
+            >
+              Back to Sign In
+            </CtaButton>
           </div>
-        </FormContainer>
+        )}
+
+        <div className="mt-8 pt-6 border-t border-gray-800 text-center">
+          <p className="text-gray-400 text-sm">
+            Remember your password?{' '}
+            <Link 
+              href="/auth/in" 
+              className={`text-white hover:text-gray-300 transition-colors font-medium ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
+              tabIndex={isLoading ? -1 : 0}
+              aria-disabled={isLoading}
+            >
+              Sign in
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

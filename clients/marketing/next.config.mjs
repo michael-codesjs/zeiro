@@ -15,6 +15,16 @@ const nextConfig = {
     disableStaticImages: true,
     disableOptimizedLoading: true,
   },
+  // Configure external image domains
+  images: {
+    domains: [
+      'upload.wikimedia.org',
+      'assets-global.website-files.com',
+      'seeklogo.com',
+      'cdn.zapier.com',
+      'cdn-icons-png.flaticon.com'
+    ],
+  },
   // Keep any existing configuration
   // Conditionally enable static export for production builds
 };

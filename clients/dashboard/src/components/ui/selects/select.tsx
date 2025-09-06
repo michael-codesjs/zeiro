@@ -183,7 +183,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 
             {/* Dropdown */}
             {isOpen && !loading && (
-              <div className="absolute z-50 min-w-full w-max max-w-2xl mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-80 overflow-hidden">
+              <div className="absolute z-50 min-w-full w-max max-w-2xl mt-1 border border-slate-200 rounded-lg shadow-lg max-h-80 overflow-hidden">
                 {/* Search Input */}
                 {searchable && (
                   <div className="p-2 border-b border-slate-100">

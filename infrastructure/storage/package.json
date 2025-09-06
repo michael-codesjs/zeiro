@@ -1,0 +1,14 @@
+{
+  "name": "@zeiro/storage-infrastructure",
+  "version": "1.0.0",
+  "description": "zeiro storage infrastructure",
+  "main": "serverless.ts",
+  "repository": "https://github.com/michael-codesjs/zeiro",
+  "author": "Michael Phiri(github@michael-codesjs)",
+  "license": "MIT",
+  "scripts": {
+    "deploy": "zeiro deploy -i"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

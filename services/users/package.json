@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@zeiro/sdk": "*",
+    "@zeiro/domain": "*",
     "validator": "^13.9.0",
     "@middy/core": "^4.2.6",
     "@middy/input-output-logger": "^4.2.6",

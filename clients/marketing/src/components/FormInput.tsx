@@ -6,13 +6,52 @@ const iconContainerVariants = cva(
   'absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none transition-colors duration-200',
   {
     variants: {
+      theme: {
+        light: '',
+        dark: '',
+      },
       state: {
-        error: 'text-red-400',
-        focused: 'text-indigo-500',
-        default: 'text-gray-400',
+        error: '',
+        focused: '',
+        default: '',
       },
     },
+    compoundVariants: [
+      // Light theme variants
+      {
+        theme: 'light',
+        state: 'error',
+        class: 'text-red-400',
+      },
+      {
+        theme: 'light',
+        state: 'focused',
+        class: 'text-indigo-500',
+      },
+      {
+        theme: 'light',
+        state: 'default',
+        class: 'text-gray-400',
+      },
+      // Dark theme variants
+      {
+        theme: 'dark',
+        state: 'error',
+        class: 'text-red-400',
+      },
+      {
+        theme: 'dark',
+        state: 'focused',
+        class: 'text-blue-400',
+      },
+      {
+        theme: 'dark',
+        state: 'default',
+        class: 'text-gray-500',
+      },
+    ],
     defaultVariants: {
+      theme: 'light',
       state: 'default',
     },
   }
@@ -20,20 +59,59 @@ const iconContainerVariants = cva(
 
 // Input field variant
 const inputVariants = cva(
-  'w-full px-4 py-3 rounded-lg border shadow-sm outline-none transition-all duration-200 text-gray-600',
+  'w-full px-4 py-3 rounded-lg border shadow-sm outline-none transition-all duration-200',
   {
     variants: {
+      theme: {
+        light: 'text-gray-600',
+        dark: 'text-white',
+      },
       state: {
-        error: 'border-red-400 bg-red-50/80 text-red-800 placeholder-red-300 focus:border-red-500 focus:ring-red-500/30',
-        focused: 'border-indigo-500 ring-2 ring-indigo-500/20',
-        default: 'border-gray-200 bg-white/90 text-gray-700 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20',
+        error: '',
+        focused: '',
+        default: '',
       },
       hasIcon: {
         true: 'pl-11',
         false: '',
       },
     },
+    compoundVariants: [
+      // Light theme variants
+      {
+        theme: 'light',
+        state: 'error',
+        class: 'border-red-400 bg-red-50/80 text-red-800 placeholder-red-300 focus:border-red-500 focus:ring-red-500/30',
+      },
+      {
+        theme: 'light',
+        state: 'focused',
+        class: 'border-indigo-500 ring-2 ring-indigo-500/20 bg-white/90',
+      },
+      {
+        theme: 'light',
+        state: 'default',
+        class: 'border-gray-200 bg-white/90 text-gray-700 hover:border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20',
+      },
+      // Dark theme variants
+      {
+        theme: 'dark',
+        state: 'error',
+        class: 'border-red-500 bg-red-900/20 text-red-200 placeholder-red-400 focus:border-red-400 focus:ring-red-500/30',
+      },
+      {
+        theme: 'dark',
+        state: 'focused',
+        class: 'border-blue-500 ring-2 ring-blue-500/20 bg-gray-800/50',
+      },
+      {
+        theme: 'dark',
+        state: 'default',
+        class: 'border-gray-700 bg-gray-800/50 text-white placeholder-gray-400 hover:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20',
+      },
+    ],
     defaultVariants: {
+      theme: 'light',
       state: 'default',
       hasIcon: false,
     },
@@ -63,6 +141,7 @@ const FormInput: React.FC<FormInputProps> = ({
   icon,
   onBlur,
   hint,
+  theme = 'light',
   className,
   ...props
 }) => {
@@ -80,7 +159,7 @@ const FormInput: React.FC<FormInputProps> = ({
       {label && (
         <label 
           htmlFor={id} 
-          className="block text-sm font-medium text-gray-700 mb-1.5"
+          className={`block text-sm font-medium mb-1.5 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}
         >
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
@@ -88,7 +167,7 @@ const FormInput: React.FC<FormInputProps> = ({
       )}
       <div className="relative">
         {icon && (
-          <div className={iconContainerVariants({ state: inputState })}>
+          <div className={iconContainerVariants({ theme, state: inputState })}>
             {icon}
           </div>
         )}
@@ -106,6 +185,7 @@ const FormInput: React.FC<FormInputProps> = ({
           }}
           onFocus={() => setIsFocused(true)}
           className={inputVariants({ 
+            theme,
             state: inputState,
             hasIcon: !!icon,
             className,
@@ -117,7 +197,11 @@ const FormInput: React.FC<FormInputProps> = ({
         {type === 'password' && (
           <button
             type="button"
-            className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-indigo-600 transition-colors"
+            className={`absolute inset-y-0 right-0 flex items-center pr-3 transition-colors ${
+              theme === 'dark' 
+                ? 'text-gray-400 hover:text-blue-400' 
+                : 'text-gray-500 hover:text-indigo-600'
+            }`}
             onClick={() => setShowPassword(!showPassword)}
             tabIndex={-1}
             aria-label={showPassword ? "Hide password" : "Show password"}
@@ -151,14 +235,14 @@ const FormInput: React.FC<FormInputProps> = ({
         ) : null}
       </div>
       {error ? (
-        <p className="mt-1.5 text-sm text-red-600 flex items-center">
+        <p className={`mt-1.5 text-sm flex items-center ${theme === 'dark' ? 'text-red-400' : 'text-red-600'}`}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zm-1 9a1 1 0 01-1-1v-4a1 1 0 112 0v4a1 1 0 01-1 1z" clipRule="evenodd" />
           </svg>
           {error}
         </p>
       ) : hint ? (
-        <p className="mt-1.5 text-xs text-gray-500 ml-1">{hint}</p>
+        <p className={`mt-1.5 text-xs ml-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{hint}</p>
       ) : null}
     </div>
   );

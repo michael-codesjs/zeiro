@@ -3,7 +3,7 @@ import * as functions from '@adapters/primary'
 
 /** Serverless configuration for the 'user' service. */
 const serverlessConfiguration: AWS.Service = {
-  service: 'zeiro-user',
+  service: 'zeiro-user-${self:custom.stage}',
   frameworkVersion: '3',
 
   provider: {
@@ -41,7 +41,7 @@ const serverlessConfiguration: AWS.Service = {
       bundle: true,
       minify: false,
       sourcemap: true,
-      exclude: ['aws-sdk'],
+      exclude: ['aws-sdk', '@aws-sdk/*'],
       target: 'node18',
       define: { 'require.resolve': undefined },
       platform: 'node',

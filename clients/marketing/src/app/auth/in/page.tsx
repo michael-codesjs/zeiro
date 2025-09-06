@@ -8,9 +8,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-hot-toast';
 import { z } from 'zod';
 
-import FormContainer from '@/components/FormContainer';
-import FormInput from '@/components/FormInput';
-import Button from '@/components/Button';
+import Input from '@/components/input';
+import Button from '@/components/button';
+import FormCard from '@/components/form-card';
 import { useAuth } from '@/hooks/useAuth';
 
 // Sign-in form schema
@@ -19,7 +19,10 @@ const signInSchema = z.object({
   password: z.string().min(1, { message: 'Password is required' })
 });
 
-type SignInFormData = z.infer<typeof signInSchema>;
+interface SignInFormData {
+  email: string;
+  password: string;
+}
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
@@ -65,85 +68,86 @@ export default function SignIn() {
 
   return (
     <div className={`w-full transition-all duration-1000 ease-out ${animateIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-      <div className="max-w-md mx-auto">
-        <FormContainer
-          title="Welcome back"
-          subtitle="Sign in to your Zeiro account"
-          onSubmit={handleSubmit(onSubmit)}
-          showBorder={true}
-        >
-          <FormInput
-            id="email"
-            type="email"
-            placeholder="you@company.com"
-            label="Email"
-            required
-            autoComplete="email"
-            error={errors.email?.message}
-            {...register('email')}
-            disabled={isLoading}
-            icon={
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-              </svg>
-            }
-          />
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          Welcome back
+        </h1>
+        <p className="text-xl text-gray-400">
+          Sign in to your Zeiro account
+        </p>
+      </div>
 
-          <div className="mt-6 mb-2">
-            <FormInput
+      <div className="max-w-md mx-auto">
+        <FormCard variant="glass" size="lg" spacing="normal">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <Input
+              id="email"
+              type="email"
+              label="Email"
+              placeholder="you@company.com"
+              autoComplete="email"
+              variant="modern"
+              labelVariant="bold"
+              size="lg"
+              disabled={isLoading}
+              error={errors.email?.message}
+              {...register('email')}
+            />
+
+            <Input
               id="password"
               type="password"
-              placeholder="••••••••"
               label="Password"
-              required
+              placeholder="••••••••"
               autoComplete="current-password"
+              variant="modern"
+              labelVariant="bold"
+              size="lg"
+              disabled={isLoading}
               error={errors.password?.message}
               {...register('password')}
-              disabled={isLoading}
-              icon={
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                </svg>
-              }
             />
-          </div>
 
-          <div className="flex justify-end mt-2 mb-6">
-            <Link 
-              href="/auth/forgot-password" 
-              className={`text-sm text-indigo-600 hover:text-indigo-800 transition-colors font-medium ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
-              tabIndex={isLoading ? -1 : 0}
-              aria-disabled={isLoading}
-            >
-              Forgot password?
-            </Link>
-          </div>
-
-          <Button
-            type="submit"
-            variant="primary"
-            fullWidth
-            isLoading={isLoading}
-            loadingText="Signing In..."
-          >
-            Sign In
-          </Button>
-
-          <div className="mt-6 pt-4 border-t border-gray-200 text-center">
-            <p className="text-gray-600 text-sm">
-              Don&apos;t have an account?{' '}
+            <div className="flex justify-end">
               <Link 
-                href="/auth/up" 
-                className={`font-medium text-indigo-600 hover:text-indigo-700 transition-colors ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
+                href="/auth/forgot-password" 
+                className={`text-sm text-gray-400 hover:text-white transition-colors ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
                 tabIndex={isLoading ? -1 : 0}
                 aria-disabled={isLoading}
               >
-                Sign up
+                Forgot password?
               </Link>
-            </p>
-          </div>
-        </FormContainer>
+            </div>
+
+            <div className="">
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                fullWidth
+                disabled={isLoading}
+                isLoading={isLoading}
+                loadingText="Signing In..."
+              >
+                Sign In
+              </Button>
+            </div>
+          </form>
+        </FormCard>
+
+        <div className="pt-6 text-center">
+          <p className="text-gray-400 text-sm">
+            Don&apos;t have an account?{' '}
+            <Link 
+              href="/auth/up" 
+              className={`text-white hover:text-gray-300 transition-colors font-medium ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
+              tabIndex={isLoading ? -1 : 0}
+              aria-disabled={isLoading}
+            >
+              Sign up
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
