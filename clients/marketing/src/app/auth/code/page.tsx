@@ -4,9 +4,8 @@ import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { resendSignUpCode } from 'aws-amplify/auth';
-
 import PinInput from '@/components/PinInput';
-import Button from '../../../components/button';
+import Button from '@/components/button';
 import { useAuth } from '@/hooks/useAuth';
 
 // Create a client component that safely uses useSearchParams

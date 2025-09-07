@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast';
 import { z } from 'zod';
 
 import Input from '@/components/input';
-import Button from '../../../components/button';
+import Button from '@/components/button';
 import FormCard from '@/components/form-card';
 
 // Forgot password form schema
@@ -116,14 +116,14 @@ export default function ForgotPassword() {
             <p className="text-gray-300 mb-8 text-lg">
               We've sent reset instructions to <strong className="text-white">{email}</strong>. Please check your email and follow the instructions to reset your password.
             </p>
-            <CtaButton
+            <Button
               type="button"
               variant="primary"
               size="md"
               onClick={() => router.push('/auth/in')}
             >
               Back to Sign In
-            </CtaButton>
+            </Button>
           </div>
         )}
 
