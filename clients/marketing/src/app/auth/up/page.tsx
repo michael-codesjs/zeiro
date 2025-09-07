@@ -9,16 +9,26 @@ import { toast } from 'react-hot-toast';
 
 import Input from '@/components/input';
 import Select from '@/components/select';
-import Button from '../../../components/button';
+import Button from '@/components/button';
 import FormCard from '@/components/form-card';
 import { useAuth } from '@/hooks/useAuth';
 import {
   signUpStep1Schema,
-  signUpStep2Schema,
-  SignUpStep1FormData,
-  SignUpStep2FormData,
-  SignUpFormData
+  signUpStep2Schema
 } from '@/schemas/auth';
+
+interface SignUpStep1FormData {
+  name: string;
+  email: string;
+  password: string;
+}
+
+interface SignUpStep2FormData {
+  role: string;
+  usageIntent: string;
+}
+
+interface SignUpFormData extends SignUpStep1FormData, SignUpStep2FormData {}
 
 export default function Signup() {
   const [step, setStep] = useState(1);
@@ -29,7 +39,6 @@ export default function Signup() {
   
   // Form for step 1
   const step1Form = useForm<SignUpStep1FormData>({
-    resolver: zodResolver(signUpStep1Schema),
     mode: 'onBlur',
     defaultValues: {
       name: '',
@@ -40,7 +49,6 @@ export default function Signup() {
   
   // Form for step 2
   const step2Form = useForm<SignUpStep2FormData>({
-    resolver: zodResolver(signUpStep2Schema),
     mode: 'onBlur',
     defaultValues: {
       role: '',
