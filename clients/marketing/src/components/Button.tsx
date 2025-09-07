@@ -77,7 +77,7 @@ interface ButtonProps
   href?: string; // For link-style buttons
 }
 
-const Button: React.FC<ButtonProps> = ({
+const Button = ({
   children,
   variant,
   size,
@@ -90,7 +90,7 @@ const Button: React.FC<ButtonProps> = ({
   className,
   href,
   ...props
-}) => {
+}: ButtonProps) => {
   const getLoadingSpinner = () => {
     const spinnerClass = variant === 'primary' 
       ? 'border-black/30 border-t-black' 
@@ -168,5 +168,5 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export { Button, buttonVariants };
 export default Button;
+export { Button, buttonVariants };
