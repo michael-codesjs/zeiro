@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast';
 
 import Input from '@/components/input';
 import Select from '@/components/select';
-import Button from '../../components/button';
+import Button from '../../../components/button';
 import FormCard from '@/components/form-card';
 import { useAuth } from '@/hooks/useAuth';
 import {
