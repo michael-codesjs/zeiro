@@ -1,4 +1,8 @@
+'use client';
+
 import Link from 'next/link';
+import FloatingElements from '@/components/floating-elements';
+import { motion } from 'framer-motion';
 import { 
   ArrowLeft,
   ArrowRight,
@@ -16,41 +20,72 @@ export default function PricingPage() {
     <>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="flex justify-center mb-8">
+      <section className="pt-32 pb-16 px-6 relative overflow-hidden">
+        <FloatingElements variant="default" colors={['blue', 'green', 'purple', 'orange']} />
+        
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex justify-center mb-8"
+          >
             <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
               <ArrowLeft size={16} color="currentColor" variant="Outline" />
               <span>Back to home</span>
             </Link>
-          </div>
+          </motion.div>
           
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          <motion.h1 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-5xl md:text-6xl font-bold mb-6 leading-tight"
+          >
             Simple pricing for
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
               every team
             </span>
-          </h1>
+          </motion.h1>
           
-          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed"
+          >
             Start free and scale as you grow. No hidden fees, no surprises.
-          </p>
+          </motion.p>
           
-          <div className="inline-flex items-center gap-2 text-sm text-gray-400 bg-gray-900/50 border border-gray-800 rounded-full px-4 py-2">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="inline-flex items-center gap-2 text-sm text-gray-400 bg-gray-900/50 border border-gray-800 rounded-full px-4 py-2"
+          >
             <Lightning size={16} color="#facc15" variant="Outline" />
             <span>14-day free trial • No credit card required</span>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Pricing Cards */}
-      <section className="pb-20 px-6">
-        <div className="max-w-6xl mx-auto">
+      <section className="pb-20 px-6 relative">
+        <FloatingElements variant="sparse" colors={['emerald', 'blue', 'violet']} />
+        
+        <div className="max-w-6xl mx-auto relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             {/* Starter Plan */}
-            <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.02, y: -5 }}
+              className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+            >
               <div className="mb-8">
                 <h3 className="text-2xl font-bold text-white mb-2">Starter</h3>
                 <p className="text-gray-400 mb-6">Perfect for individuals and small teams getting started</p>
@@ -95,10 +130,17 @@ export default function PricingPage() {
                   <span className="text-gray-500">Custom integrations</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Pro Plan - Most Popular */}
-            <div className="bg-gray-900/50 border-2 border-white/20 rounded-2xl p-8 hover:bg-gray-900/80 hover:border-white/30 transition-all duration-300 relative">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.02, y: -5 }}
+              className="bg-gray-900/50 border-2 border-white/20 rounded-2xl p-8 hover:bg-gray-900/80 hover:border-white/30 transition-all duration-300 relative"
+            >
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                 <div className="bg-white text-black px-4 py-1 rounded-full text-sm font-medium flex items-center gap-1">
                   <Star size={12} color="currentColor" variant="Outline" />
@@ -154,10 +196,17 @@ export default function PricingPage() {
                   <span className="text-gray-300">Custom themes</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Ultra Plan */}
-            <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.02, y: -5 }}
+              className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+            >
               <div className="mb-8">
                 <h3 className="text-2xl font-bold text-white mb-2">Ultra</h3>
                 <p className="text-gray-400 mb-6">For power users who need maximum performance and advanced features</p>
@@ -206,7 +255,7 @@ export default function PricingPage() {
                   <span className="text-gray-300">Priority feature requests</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -268,64 +317,120 @@ export default function PricingPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
+      <section className="py-20 px-6 relative">
+        <FloatingElements variant="minimal" colors={['teal', 'orange']} />
+        
+        <div className="max-w-4xl mx-auto relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
             <h2 className="text-4xl font-bold text-white mb-4">Frequently asked questions</h2>
             <p className="text-xl text-gray-400">Everything you need to know about our pricing</p>
-          </div>
+          </motion.div>
           
           <div className="space-y-8">
-            <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.01 }}
+              className="bg-gray-900/50 border border-gray-800 rounded-xl p-8"
+            >
               <h3 className="text-xl font-semibold text-white mb-3">Can I change plans anytime?</h3>
               <p className="text-gray-400 leading-relaxed">
                 Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately, and we'll prorate any billing differences.
               </p>
-            </div>
+            </motion.div>
             
-            <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.01 }}
+              className="bg-gray-900/50 border border-gray-800 rounded-xl p-8"
+            >
               <h3 className="text-xl font-semibold text-white mb-3">What happens after my free trial?</h3>
               <p className="text-gray-400 leading-relaxed">
                 After your 14-day free trial, you can choose to continue with a paid plan or downgrade to our free Starter plan. No credit card required for the trial.
               </p>
-            </div>
+            </motion.div>
             
-            <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.01 }}
+              className="bg-gray-900/50 border border-gray-800 rounded-xl p-8"
+            >
               <h3 className="text-xl font-semibold text-white mb-3">Do you offer discounts for annual billing?</h3>
               <p className="text-gray-400 leading-relaxed">
                 Yes, we offer a 20% discount when you pay annually. Contact our sales team for more information about annual plans.
               </p>
-            </div>
+            </motion.div>
             
-            <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.01 }}
+              className="bg-gray-900/50 border border-gray-800 rounded-xl p-8"
+            >
               <h3 className="text-xl font-semibold text-white mb-3">Is my data secure?</h3>
               <p className="text-gray-400 leading-relaxed">
                 Absolutely. We use enterprise-grade encryption, SOC 2 compliance, and follow industry best practices to keep your data secure.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-gray-900/50">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">
+      <section className="py-20 px-6 relative">
+        <FloatingElements variant="sparse" colors={['blue', 'green', 'purple']} />
+        
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <motion.h2 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-4xl font-bold text-white mb-6"
+          >
             Ready to get started?
-          </h2>
-          <p className="text-xl text-gray-400 mb-10">
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="text-xl text-gray-400 mb-10"
+          >
             Join thousands of teams already using Zeiro to make data simple.
-          </p>
+          </motion.p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/auth/up" className="bg-white text-black px-8 py-4 rounded-lg hover:bg-gray-100 transition-colors font-semibold inline-flex items-center gap-2">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          >
+            <Link href="/auth/up" className="bg-white text-black px-8 py-4 rounded-lg hover:bg-gray-100 hover:scale-105 transition-all duration-300 font-semibold inline-flex items-center gap-2">
               Start free trial
               <ArrowRight size={16} color="currentColor" variant="Outline" />
             </Link>
-            <Link href="#" className="text-gray-300 hover:text-white transition-colors px-8 py-4">
+            <Link href="#" className="text-gray-300 hover:text-white hover:scale-105 transition-all duration-300 px-8 py-4">
               Contact sales
             </Link>
-          </div>
+          </motion.div>
         </div>
       </section>
 

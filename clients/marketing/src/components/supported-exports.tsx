@@ -5,47 +5,39 @@ import Image from 'next/image';
 import { BsSearch as Search } from 'react-icons/bs';
 import Marquee from 'react-fast-marquee';
 
-interface DataSource {
+interface ExportIntegration {
   name: string;
   image: string;
-  category: 'database' | 'warehouse' | 'cache' | 'search' | 'graph' | 'document';
+  category: 'communication' | 'productivity' | 'automation' | 'storage';
 }
 
-const dataSources: DataSource[] = [
-  // Only data sources we have images for
-  { name: 'PostgreSQL', image: '/images/databases/postgres.png', category: 'database' },
-  { name: 'MySQL', image: '/images/databases/mysql.png', category: 'database' },
-  { name: 'MongoDB', image: '/images/databases/mongo.png', category: 'document' },
-  { name: 'DynamoDB', image: '/images/databases/dynamodb.png', category: 'database' },
-  { name: 'Redis', image: '/images/databases/redis.png', category: 'cache' },
-  { name: 'SQLite', image: '/images/databases/sqlite.png', category: 'database' },
-  { name: 'MariaDB', image: '/images/databases/mariadb.png', category: 'database' },
-  { name: 'Elasticsearch', image: '/images/databases/elasticsearch.png', category: 'search' },
-  { name: 'Cassandra', image: '/images/databases/cassandra.png', category: 'database' },
-  { name: 'Neo4j', image: '/images/databases/neo4j.png', category: 'graph' },
-  // { name: 'Oracle', image: '/images/databases/oracle.png', category: 'database' },
-  { name: 'SQL Server', image: '/images/databases/mssql.png', category: 'database' },
-  { name: 'Microsoft Excel', image: '/images/databases/excel.png', category: 'document' },
-  // { name: 'Google Sheets', image: '/images/databases/sheets.png', category: 'document' },
+const exportIntegrations: ExportIntegration[] = [
+  { name: 'Microsoft Excel', image: '/images/integrations/excel.png', category: 'productivity' },
+  { name: 'Gmail', image: '/images/integrations/gmail.png', category: 'communication' },
+  { name: 'HubSpot', image: '/images/integrations/hubspot.png', category: 'productivity' },
+  { name: 'Salesforce', image: '/images/integrations/salesforce.png', category: 'productivity' },
+  { name: 'Slack', image: '/images/integrations/slack.png', category: 'communication' },
+  { name: 'Microsoft Teams', image: '/images/integrations/teams.png', category: 'communication' },
+  { name: 'WhatsApp', image: '/images/integrations/whatsapp.png', category: 'communication' },
 ];
 
-interface SupportedDataSourcesProps {
+interface SupportedExportsProps {
   variant?: 'scroll' | 'grid' | 'marquee';
   title?: string;
   subtitle?: string;
   showSearch?: boolean;
 }
 
-export default function SupportedDataSources({ 
-  variant = 'scroll', 
-  title = 'Connect to any data source',
-  subtitle = 'From databases to spreadsheets, we support all your favorite tools',
+export default function SupportedExports({ 
+  variant = 'grid', 
+  title = 'Export to your favorite tools',
+  subtitle = 'Send insights and reports to the tools your team already uses',
   showSearch = false
-}: SupportedDataSourcesProps) {
+}: SupportedExportsProps) {
   const [searchTerm, setSearchTerm] = useState('');
   
-  const filteredDataSources = dataSources
-    .filter(source => source.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredExports = exportIntegrations
+    .filter(integration => integration.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   if (variant === 'grid') {
     return (
@@ -62,7 +54,7 @@ export default function SupportedDataSources({
                 </div>
                 <input
                   type="text"
-                  placeholder="Search data sources..."
+                  placeholder="Search integrations..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-transparent"
@@ -72,34 +64,34 @@ export default function SupportedDataSources({
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-            {filteredDataSources.map((source) => (
-              <div key={source.name} className="flex items-center justify-center hover:opacity-80 transition-opacity duration-300">
+            {filteredExports.map((integration) => (
+              <div key={integration.name} className="flex items-center justify-center hover:opacity-80 transition-opacity duration-300">
                 <div className="text-center">
                   <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3">
                     <Image 
-                      src={source.image} 
-                      alt={source.name} 
+                      src={integration.image} 
+                      alt={integration.name} 
                       width={64} 
                       height={64}
                       className="object-contain"
                     />
                   </div>
-                  <span className="text-white font-medium text-sm">{source.name}</span>
+                  <span className="text-white font-medium text-sm">{integration.name}</span>
                 </div>
               </div>
             ))}
           </div>
           
-          {showSearch && filteredDataSources.length === 0 && (
+          {showSearch && filteredExports.length === 0 && (
             <div className="text-center mt-12">
-              <p className="text-gray-400">No data sources found matching "{searchTerm}"</p>
-              <p className="text-gray-500 text-sm mt-2">Don't see your data source? <span className="text-white hover:text-gray-300 cursor-pointer">Contact us</span> and we'll add it.</p>
+              <p className="text-gray-400">No integrations found matching "{searchTerm}"</p>
+              <p className="text-gray-500 text-sm mt-2">Need a custom integration? <span className="text-white hover:text-gray-300 cursor-pointer">Contact us</span> and we'll build it.</p>
             </div>
           )}
           
-          {showSearch && filteredDataSources.length > 0 && searchTerm && (
+          {showSearch && filteredExports.length > 0 && searchTerm && (
             <div className="text-center mt-12">
-              <p className="text-gray-400">Found {filteredDataSources.length} data source{filteredDataSources.length !== 1 ? 's' : ''}</p>
+              <p className="text-gray-400">Found {filteredExports.length} integration{filteredExports.length !== 1 ? 's' : ''}</p>
             </div>
           )}
         </div>
@@ -119,19 +111,19 @@ export default function SupportedDataSources({
         {/* Marquee Container */}
         <div className="max-w-6xl mx-auto">
           <Marquee speed={50} gradient={false} pauseOnHover={true}>
-            {dataSources.map((source, index) => (
+            {exportIntegrations.map((integration, index) => (
               <div key={index} className="flex items-center justify-center min-w-[140px] mx-6 hover:opacity-80 transition-opacity duration-300">
                 <div className="text-center">
                   <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3">
                     <Image 
-                      src={source.image} 
-                      alt={source.name} 
+                      src={integration.image} 
+                      alt={integration.name} 
                       width={64} 
                       height={64}
                       className="object-contain"
                     />
                   </div>
-                  <span className="text-white font-medium">{source.name}</span>
+                  <span className="text-white font-medium">{integration.name}</span>
                 </div>
               </div>
             ))}
@@ -141,31 +133,31 @@ export default function SupportedDataSources({
     );
   }
 
-  // Scroll variant (default)
+  // Scroll variant
   return (
-    <section className="py-20 px-6">
+    <section className=" px-6">
       <div className="max-w-4xl mx-auto text-center mb-16">
         <h2 className="text-4xl font-bold text-white mb-4">{title}</h2>
         <p className="text-xl text-gray-400">{subtitle}</p>
       </div>
       
-      {/* Scrollable Database Grid */}
+      {/* Scrollable Integration Grid */}
       <div className="max-w-6xl mx-auto">
         <div className="overflow-x-auto pb-4">
           <div className="flex gap-12 min-w-max px-4">
-            {dataSources.map((source) => (
-              <div key={source.name} className="flex items-center justify-center min-w-[140px] hover:opacity-80 transition-opacity duration-300">
+            {exportIntegrations.map((integration) => (
+              <div key={integration.name} className="flex items-center justify-center min-w-[140px] hover:opacity-80 transition-opacity duration-300">
                 <div className="text-center">
                   <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3">
                     <Image 
-                      src={source.image} 
-                      alt={source.name} 
+                      src={integration.image} 
+                      alt={integration.name} 
                       width={64} 
                       height={64}
                       className="object-contain"
                     />
                   </div>
-                  <span className="text-white font-medium">{source.name}</span>
+                  <span className="text-white font-medium">{integration.name}</span>
                 </div>
               </div>
             ))}
@@ -174,7 +166,7 @@ export default function SupportedDataSources({
         
         {/* Scroll indicator */}
         <div className="flex justify-center mt-8">
-          <p className="text-sm text-gray-500">← Scroll to see more data sources →</p>
+          <p className="text-sm text-gray-500">← Scroll to see more integrations →</p>
         </div>
       </div>
     </section>

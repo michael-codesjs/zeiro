@@ -281,9 +281,17 @@ body {
   }
 }
 
-/* Marquee Animation */
+/* Marquee Animation - Same speed for all */
 .animate-marquee {
-  animation: marquee 30s linear infinite;
+  animation: marquee 60s linear infinite;
+}
+
+.animate-marquee-ds {
+  animation: marquee 60s linear infinite;
+}
+
+.animate-marquee-int {
+  animation: marquee 60s linear infinite;
 }
 
 @keyframes marquee {
@@ -292,5 +300,50 @@ body {
   }
   100% {
     transform: translateX(-50%);
+  }
+}
+
+/* Custom animations for moving dots in integration flow */
+.animate-flowDot1 {
+  animation: flowDot1 4s ease-in-out infinite;
+}
+
+.animate-flowDot2 {
+  animation: flowDot2 4s ease-in-out infinite 2s;
+}
+
+@keyframes flowDot1 {
+  0% {
+    left: calc(33.333% + 2rem);
+    opacity: 1;
+  }
+  50% {
+    left: calc(66.666% + 2rem);
+    opacity: 1;
+  }
+  51% {
+    opacity: 0;
+  }
+  100% {
+    left: calc(33.333% + 2rem);
+    opacity: 0;
+  }
+}
+
+@keyframes flowDot2 {
+  0% {
+    left: calc(66.666% + 2rem);
+    opacity: 1;
+  }
+  50% {
+    left: calc(100% - 2rem);
+    opacity: 1;
+  }
+  51% {
+    opacity: 0;
+  }
+  100% {
+    left: calc(66.666% + 2rem);
+    opacity: 0;
   }
 }

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import SupportedDataSources from '@/components/supported-data-sources';
+import SupportedExports from '@/components/supported-exports';
 import { 
   ArrowLeft,
   ArrowRight,
@@ -23,11 +23,7 @@ export default function IntegrationsPage() {
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            Connect to
-            <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
-              everything
-            </span>
+            Connect to everything
           </h1>
           
           <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
@@ -48,12 +44,11 @@ export default function IntegrationsPage() {
       </section>
 
       {/* Output Integrations Only */}
-      <SupportedDataSources 
+      <SupportedExports 
         variant="grid" 
         title="Send insights everywhere"
         subtitle="Push reports, alerts, and data to your favorite tools and platforms"
         showSearch={true}
-        filterType="output"
       />
 
       {/* Integration Types */}

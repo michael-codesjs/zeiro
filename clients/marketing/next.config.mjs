@@ -10,19 +10,13 @@ const nextConfig = {
   },
   // Disable strict rendering mode
   reactStrictMode: false,
-  // Disable partial static generation so we can build with client components that don't use Suspense
-  experimental: {
-    disableStaticImages: true,
-    disableOptimizedLoading: true,
-  },
   // Configure external image domains
   images: {
-    domains: [
-      'upload.wikimedia.org',
-      'assets-global.website-files.com',
-      'seeklogo.com',
-      'cdn.zapier.com',
-      'cdn-icons-png.flaticon.com'
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
     ],
   },
   // Keep any existing configuration
