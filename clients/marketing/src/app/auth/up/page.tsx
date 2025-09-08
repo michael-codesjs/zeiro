@@ -9,7 +9,6 @@ import { toast } from 'react-hot-toast';
 
 import Input from '@/components/input';
 import Select from '@/components/select';
-import Button from '@/components/button';
 import FormCard from '@/components/form-card';
 import { useAuth } from '@/hooks/useAuth';
 import {
@@ -230,28 +229,22 @@ export default function Signup() {
 
             {/* Buttons */}
             <div className="flex flex-col gap-3">
-              <Button
+              <button
                 type="submit"
-                variant="primary"
-                size="lg"
-                fullWidth
                 disabled={isLoading}
-                isLoading={isLoading}
-                loadingText={step === 1 ? 'Creating...' : 'Setting up...'}
+                className="w-full bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
               >
-                {step === 1 ? 'Continue' : 'Create account'}
-              </Button>
+                {isLoading ? (step === 1 ? 'Creating...' : 'Setting up...') : (step === 1 ? 'Continue' : 'Create account')}
+              </button>
               
               {step > 1 && (
-                <Button
+                <button
                   type="button"
-                  variant="outline"
-                  size="md"
-                  fullWidth
                   onClick={() => setStep(1)}
+                  className="w-full bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors font-medium border border-gray-700"
                 >
                   Back
-                </Button>
+                </button>
               )}
             </div>
           </form>

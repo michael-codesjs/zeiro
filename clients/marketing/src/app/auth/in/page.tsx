@@ -9,7 +9,6 @@ import { toast } from 'react-hot-toast';
 import { z } from 'zod';
 
 import Input from '@/components/input';
-import Button from '@/components/button';
 import FormCard from '@/components/form-card';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -120,17 +119,13 @@ export default function SignIn() {
             </div>
 
             <div className="">
-              <Button
+              <button
                 type="submit"
-                variant="primary"
-                size="lg"
-                fullWidth
                 disabled={isLoading}
-                isLoading={isLoading}
-                loadingText="Signing In..."
+                className="w-full bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
               >
-                Sign In
-              </Button>
+                {isLoading ? 'Signing In...' : 'Sign In'}
+              </button>
             </div>
           </form>
         </FormCard>

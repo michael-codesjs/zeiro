@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { resendSignUpCode } from 'aws-amplify/auth';
 import PinInput from '@/components/PinInput';
-import Button from '@/components/button';
 import { useAuth } from '@/hooks/useAuth';
 
 // Create a client component that safely uses useSearchParams
@@ -175,17 +174,13 @@ function VerificationCodeContent() {
           </div>
 
           <div className="pt-4">
-            <Button
+            <button
               type="submit"
-              variant="primary"
-              size="lg"
-              fullWidth
               disabled={isLoading || isResending}
-              isLoading={isLoading}
-              loadingText="Verifying..."
+              className="w-full bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
             >
-              Verify Account
-            </Button>
+              {isLoading ? 'Verifying...' : 'Verify Account'}
+            </button>
           </div>
         </form>
 

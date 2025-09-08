@@ -9,7 +9,6 @@ import { toast } from 'react-hot-toast';
 import { z } from 'zod';
 
 import Input from '@/components/input';
-import Button from '@/components/button';
 import FormCard from '@/components/form-card';
 
 // Forgot password form schema
@@ -92,17 +91,13 @@ export default function ForgotPassword() {
               />
 
               <div className="pt-4">
-                <Button
+                <button
                   type="submit"
-                  variant="primary"
-                  size="lg"
-                  fullWidth
                   disabled={isLoading}
-                  isLoading={isLoading}
-                  loadingText="Sending Reset Instructions..."
+                  className="w-full bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                 >
-                  Send Reset Instructions
-                </Button>
+                  {isLoading ? 'Sending Reset Instructions...' : 'Send Reset Instructions'}
+                </button>
               </div>
             </form>
           </FormCard>
@@ -116,14 +111,13 @@ export default function ForgotPassword() {
             <p className="text-gray-300 mb-8 text-lg">
               We've sent reset instructions to <strong className="text-white">{email}</strong>. Please check your email and follow the instructions to reset your password.
             </p>
-            <Button
+            <button
               type="button"
-              variant="primary"
-              size="md"
               onClick={() => router.push('/auth/in')}
+              className="bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors font-medium"
             >
               Back to Sign In
-            </Button>
+            </button>
           </div>
         )}
 
