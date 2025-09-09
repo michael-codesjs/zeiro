@@ -40,6 +40,8 @@ yarn-error.log*
 *.pem
 
 .terraform
+.terraform.lock.hcl
+terraform.tfstate
 .serverless
 .esbuild
 *.env
