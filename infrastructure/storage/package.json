@@ -7,8 +7,10 @@
   "author": "Michael Phiri(github@michael-codesjs)",
   "license": "MIT",
   "scripts": {
-    "deploy": "zeiro deploy -i"
+    "deploy": "npx zeiro deploy --infra --stage ${STAGE:-dev}"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@zeiro/network-infrastructure": "*"
+  },
   "devDependencies": {}
 }

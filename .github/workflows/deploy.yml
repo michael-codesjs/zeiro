@@ -90,9 +90,8 @@ jobs:
 
       - name: Deploy Infrastructure
         run: |
-          # Deploy network infrastructure
-          cd infrastructure/network
-          npx zeiro deploy --infra --stage ${{ env.STAGE }}
+          # Deploy infrastructure in dependency order using turbo
+          STAGE=${{ env.STAGE }} yarn turbo run deploy --filter='./infrastructure/*'
 
       - name: Deploy Services
         run: |
