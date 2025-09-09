@@ -26,7 +26,16 @@ interface ServiceConfig {
 
 const execAsync = (command: string, options: any = {}) =>
   new Promise<boolean>((resolve) => {
-    exec(command, options, (error) => {
+    // Ensure AWS credentials are passed to child processes
+    const env = {
+      ...process.env,
+      AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+      AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+      AWS_REGION: process.env.AWS_REGION,
+      ...options.env
+    }
+    
+    exec(command, { ...options, env }, (error) => {
       if (error) console.log(error)
       resolve(error === null)
     })
@@ -119,9 +128,26 @@ export const deployService = async (options: DeployOptions) => {
     ),
   )
 
+  // Debug: Check if AWS credentials are available
+  console.log(chalk.blue('Checking AWS credentials...'))
+  console.log(`AWS_REGION: ${process.env.AWS_REGION || 'eu-central-1'}`)
+  console.log(`AWS_ACCESS_KEY_ID: ${process.env.AWS_ACCESS_KEY_ID ? '[SET]' : '[NOT SET]'}`)
+  console.log(`AWS_SECRET_ACCESS_KEY: ${process.env.AWS_SECRET_ACCESS_KEY ? '[SET]' : '[NOT SET]'}`)
+
   const ssmClient = new SSMClient({
     region: process.env.AWS_REGION || 'eu-central-1',
   })
+
+  // Test AWS credentials by trying to call STS
+  try {
+    const { STSClient, GetCallerIdentityCommand } = await import('@aws-sdk/client-sts')
+    const stsClient = new STSClient({ region: process.env.AWS_REGION || 'eu-central-1' })
+    const identity = await stsClient.send(new GetCallerIdentityCommand({}))
+    console.log(chalk.green(`✓ AWS credentials verified. Account: ${identity.Account}`))
+  } catch (error) {
+    console.error(chalk.red(`✗ AWS credentials test failed: ${error.message}`))
+    process.exit(1)
+  }
 
   // Create paths
   const terraformStatePath = `.terraform`
