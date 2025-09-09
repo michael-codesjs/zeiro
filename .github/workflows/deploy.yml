@@ -98,4 +98,4 @@ jobs:
         run: |
           # Deploy services in dependency order using turbo
           # This will respect the dependency chain defined in turbo.json
-          yarn turbo run deploy --filter='./services/*' --stage ${{ env.STAGE }}
+          STAGE=${{ env.STAGE }} yarn turbo run deploy --filter='./services/*'

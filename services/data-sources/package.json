@@ -7,7 +7,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "deploy": "npx zeiro deploy",
+    "deploy": "npx zeiro deploy --stage ${STAGE:-dev}",
     "deploy:dev": "npx zeiro deploy --stage dev",
     "deploy:prod": "npx zeiro deploy --stage prod",
     "remove": "sls remove",
