@@ -66,6 +66,16 @@ jobs:
       - name: Build CLI
         run: yarn install-cli
 
+      - name: Set environment variables
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "STAGE=prod" >> $GITHUB_ENV
+            echo "ENV_NAME=production" >> $GITHUB_ENV
+          else
+            echo "STAGE=dev" >> $GITHUB_ENV
+            echo "ENV_NAME=development" >> $GITHUB_ENV
+          fi
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -78,20 +88,8 @@ jobs:
         with:
           terraform_version: "~1.0"
 
-      - name: Set environment variables
-        run: |
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            echo "STAGE=prod" >> $GITHUB_ENV
-            echo "ENV_NAME=production" >> $GITHUB_ENV
-          else
-            echo "STAGE=dev" >> $GITHUB_ENV
-            echo "ENV_NAME=development" >> $GITHUB_ENV
-          fi
-
       - name: Deploy Infrastructure
-        run: |
-          # Deploy infrastructure in dependency order using turbo (excluding platform)
-          STAGE=${{ env.STAGE }} yarn turbo run deploy --filter='./infrastructure/network' --filter='./infrastructure/storage'
+        run: STAGE=${{ env.STAGE }} yarn turbo run deploy --filter='./infrastructure/network' --filter='./infrastructure/storage'
 
       - name: Deploy Services
         run: |
