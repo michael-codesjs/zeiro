@@ -1,6 +1,12 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
+  "globalEnv": [
+    "AWS_ACCESS_KEY_ID",
+    "AWS_SECRET_ACCESS_KEY", 
+    "AWS_REGION",
+    "STAGE"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -19,7 +25,13 @@
     },
     "deploy": {
       "dependsOn": ["^deploy"],
-      "cache": false
+      "cache": false,
+      "env": [
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "AWS_REGION", 
+        "STAGE"
+      ]
     }
   }
 }
