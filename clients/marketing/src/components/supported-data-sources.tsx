@@ -1,33 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { BsSearch as Search } from 'react-icons/bs';
 import Marquee from 'react-fast-marquee';
+import { getAllDataSources } from '@/data/data-sources';
 
-interface DataSource {
-  name: string;
-  image: string;
-  category: 'database' | 'warehouse' | 'cache' | 'search' | 'graph' | 'document';
-}
-
-const dataSources: DataSource[] = [
-  // Only data sources we have images for
-  { name: 'PostgreSQL', image: '/images/databases/postgres.png', category: 'database' },
-  { name: 'MySQL', image: '/images/databases/mysql.png', category: 'database' },
-  { name: 'MongoDB', image: '/images/databases/mongo.png', category: 'document' },
-  { name: 'DynamoDB', image: '/images/databases/dynamodb.png', category: 'database' },
-  { name: 'Redis', image: '/images/databases/redis.png', category: 'cache' },
-  { name: 'SQLite', image: '/images/databases/sqlite.png', category: 'database' },
-  { name: 'MariaDB', image: '/images/databases/mariadb.png', category: 'database' },
-  { name: 'Elasticsearch', image: '/images/databases/elasticsearch.png', category: 'search' },
-  { name: 'Cassandra', image: '/images/databases/cassandra.png', category: 'database' },
-  { name: 'Neo4j', image: '/images/databases/neo4j.png', category: 'graph' },
-  // { name: 'Oracle', image: '/images/databases/oracle.png', category: 'database' },
-  { name: 'SQL Server', image: '/images/databases/mssql.png', category: 'database' },
-  { name: 'Microsoft Excel', image: '/images/databases/excel.png', category: 'document' },
-  // { name: 'Google Sheets', image: '/images/databases/sheets.png', category: 'document' },
-];
+const dataSources = getAllDataSources();
 
 interface SupportedDataSourcesProps {
   variant?: 'scroll' | 'grid' | 'marquee';
@@ -73,20 +53,24 @@ export default function SupportedDataSources({
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
             {filteredDataSources.map((source) => (
-              <div key={source.name} className="flex items-center justify-center hover:opacity-80 transition-opacity duration-300">
+              <Link 
+                key={source.name} 
+                href={`/data-source/${source.slug}`}
+                className="flex items-center justify-center hover:opacity-80 hover:scale-105 transition-all duration-300 group"
+              >
                 <div className="text-center">
-                  <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                  <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3 bg-gray-900/50 border border-gray-800 rounded-xl group-hover:bg-gray-900/80 group-hover:border-gray-700 transition-all duration-300">
                     <Image 
                       src={source.image} 
                       alt={source.name} 
-                      width={64} 
-                      height={64}
+                      width={40} 
+                      height={40}
                       className="object-contain"
                     />
                   </div>
-                  <span className="text-white font-medium text-sm">{source.name}</span>
+                  <span className="text-white font-medium text-sm group-hover:text-gray-300 transition-colors">{source.name}</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
           
@@ -124,7 +108,7 @@ export default function SupportedDataSources({
                 <div className="text-center">
                   <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3">
                     <Image 
-                      src={source.image} 
+                      src={source.logo} 
                       alt={source.name} 
                       width={64} 
                       height={64}
@@ -158,7 +142,7 @@ export default function SupportedDataSources({
                 <div className="text-center">
                   <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3">
                     <Image 
-                      src={source.image} 
+                      src={source.logo} 
                       alt={source.name} 
                       width={64} 
                       height={64}

@@ -3,7 +3,7 @@ import * as functions from '@adapters/primary'
 
 /** Serverless configuration for the 'user' service. */
 const serverlessConfiguration: AWS.Service = {
-  service: 'zeiro-user-${self:custom.stage}',
+  service: 'zeiro-user',
   frameworkVersion: '3',
 
   provider: {

@@ -2,24 +2,12 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { BsSearch as Search } from 'react-icons/bs';
 import Marquee from 'react-fast-marquee';
+import { getAllIntegrations } from '@/data/integrations';
 
-interface ExportIntegration {
-  name: string;
-  image: string;
-  category: 'communication' | 'productivity' | 'automation' | 'storage';
-}
-
-const exportIntegrations: ExportIntegration[] = [
-  { name: 'Microsoft Excel', image: '/images/integrations/excel.png', category: 'productivity' },
-  { name: 'Gmail', image: '/images/integrations/gmail.png', category: 'communication' },
-  { name: 'HubSpot', image: '/images/integrations/hubspot.png', category: 'productivity' },
-  { name: 'Salesforce', image: '/images/integrations/salesforce.png', category: 'productivity' },
-  { name: 'Slack', image: '/images/integrations/slack.png', category: 'communication' },
-  { name: 'Microsoft Teams', image: '/images/integrations/teams.png', category: 'communication' },
-  { name: 'WhatsApp', image: '/images/integrations/whatsapp.png', category: 'communication' },
-];
+const exportIntegrations = getAllIntegrations();
 
 interface SupportedExportsProps {
   variant?: 'scroll' | 'grid' | 'marquee';
@@ -65,11 +53,15 @@ export default function SupportedExports({
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
             {filteredExports.map((integration) => (
-              <div key={integration.name} className="flex items-center justify-center hover:opacity-80 transition-opacity duration-300">
+              <Link 
+                key={integration.name} 
+                href={`/integrations/${integration.slug}`}
+                className="flex items-center justify-center hover:opacity-80 hover:scale-105 transition-all duration-300"
+              >
                 <div className="text-center">
                   <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3">
                     <Image 
-                      src={integration.image} 
+                      src={integration.logo} 
                       alt={integration.name} 
                       width={64} 
                       height={64}
@@ -78,7 +70,7 @@ export default function SupportedExports({
                   </div>
                   <span className="text-white font-medium text-sm">{integration.name}</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
           
@@ -112,11 +104,15 @@ export default function SupportedExports({
         <div className="max-w-6xl mx-auto">
           <Marquee speed={50} gradient={false} pauseOnHover={true}>
             {exportIntegrations.map((integration, index) => (
-              <div key={index} className="flex items-center justify-center min-w-[140px] mx-6 hover:opacity-80 transition-opacity duration-300">
+              <Link 
+                key={index} 
+                href={`/integrations/${integration.slug}`}
+                className="flex items-center justify-center min-w-[140px] mx-6 hover:opacity-80 hover:scale-105 transition-all duration-300"
+              >
                 <div className="text-center">
                   <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3">
                     <Image 
-                      src={integration.image} 
+                      src={integration.logo} 
                       alt={integration.name} 
                       width={64} 
                       height={64}
@@ -125,7 +121,7 @@ export default function SupportedExports({
                   </div>
                   <span className="text-white font-medium">{integration.name}</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </Marquee>
         </div>
@@ -146,11 +142,15 @@ export default function SupportedExports({
         <div className="overflow-x-auto pb-4">
           <div className="flex gap-12 min-w-max px-4">
             {exportIntegrations.map((integration) => (
-              <div key={integration.name} className="flex items-center justify-center min-w-[140px] hover:opacity-80 transition-opacity duration-300">
+              <Link 
+                key={integration.name} 
+                href={`/integrations/${integration.slug}`}
+                className="flex items-center justify-center min-w-[140px] hover:opacity-80 hover:scale-105 transition-all duration-300"
+              >
                 <div className="text-center">
                   <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3">
                     <Image 
-                      src={integration.image} 
+                      src={integration.logo} 
                       alt={integration.name} 
                       width={64} 
                       height={64}
@@ -159,7 +159,7 @@ export default function SupportedExports({
                   </div>
                   <span className="text-white font-medium">{integration.name}</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
