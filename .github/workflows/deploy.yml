@@ -86,7 +86,8 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: "~1.0"
+          terraform_version: "1.13.1"
+          terraform_wrapper: false
 
       - name: Deploy Infrastructure
         env:
