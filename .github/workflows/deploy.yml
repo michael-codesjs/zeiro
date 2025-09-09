@@ -90,8 +90,8 @@ jobs:
 
       - name: Deploy Infrastructure
         run: |
-          # Deploy infrastructure in dependency order using turbo
-          STAGE=${{ env.STAGE }} yarn turbo run deploy --filter='./infrastructure/*'
+          # Deploy infrastructure in dependency order using turbo (excluding platform)
+          STAGE=${{ env.STAGE }} yarn turbo run deploy --filter='./infrastructure/network' --filter='./infrastructure/storage'
 
       - name: Deploy Services
         run: |
