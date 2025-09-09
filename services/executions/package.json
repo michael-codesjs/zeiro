@@ -5,11 +5,14 @@
   "main": "serverless.ts",
   "scripts": {
     "test": "jest",
-    "deploy": "sls deploy",
+    "deploy": "npx zeiro deploy",
     "remove": "sls remove"
   },
   "dependencies": {
     "@zeiro/sdk": "*",
+    "@zeiro/authentication": "*",
+    "@zeiro/credentials": "*",
+    "@zeiro/data-sources": "*",
     "uuid": "^9.0.0",
     "dynamodb-onetable": "^2.7.0"
   },

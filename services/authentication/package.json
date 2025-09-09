@@ -7,7 +7,7 @@
   "author": "Michael Phiri(github@michael-codesjs)",
   "license": "MIT",
   "scripts": {
-    "deploy": "sls deploy",
+    "deploy": "npx zeiro deploy",
     "destroy": "sls remove",
     "generate-env": "ts-node scripts/generate-env.ts",
     "test": "jest --silent"

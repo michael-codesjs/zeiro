@@ -7,7 +7,7 @@
   "author": "Michael Phiri(github@michael-codesjs)",
   "license": "MIT",
   "scripts": {
-    "deploy": "ts-node scripts/deploy-infrastructure.ts",
+    "deploy": "npx zeiro deploy",
     "deploy:application": "sls deploy",
     "destroy": "sls remove && cd infrastructure && terraform init && terraform destroy -auto-approve",
     "generate-env": "ts-node scripts/generate-env.ts",
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@zeiro/sdk": "*",
+    "@zeiro/authentication": "*",
     "validator": "^13.9.0",
     "@middy/core": "^4.2.6",
     "@middy/input-output-logger": "^4.2.6",

@@ -61,7 +61,7 @@ export default function SupportedDataSources({
                 <div className="text-center">
                   <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3 bg-gray-900/50 border border-gray-800 rounded-xl group-hover:bg-gray-900/80 group-hover:border-gray-700 transition-all duration-300">
                     <Image 
-                      src={source.image} 
+                      src={source.logo} 
                       alt={source.name} 
                       width={40} 
                       height={40}

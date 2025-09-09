@@ -4,17 +4,17 @@ import {
   CommonInputHandler,
 } from '@zeiro/sdk'
 import { User } from '@typings/user'
-import { users } from '@adapters/secondary/one-table'
+import { users } from '@zeiro/domain'
 
 const inputMapper = async (
   input: User,
-): Promise<User> => {
+): Promise<boolean> => {
   const user = await users.update(input as never)
-  return user
+  return true
 }
 
 /** 'createUser' lambda function handler. */
-export const handler: CommonInputHandler<User, User> =
+export const handler: CommonInputHandler<User, boolean> =
   withCommonInput(inputMapper, {
     singular: true as true,
   })
