@@ -207,8 +207,8 @@ export const deployService = async (options: DeployOptions) => {
     // Determine the init command based on options
     let command
     if (migrateState) {
-      // For migrate-state, we need to auto-answer "yes" to the prompt
-      command = `cd ${infrastructurePath} && echo "yes" | terraform init -migrate-state -input=false ${backendConfig}`
+      // For migrate-state, we need to auto-answer "yes" to the prompt (remove -input=false to allow migration prompts)
+      command = `cd ${infrastructurePath} && echo "yes" | terraform init -migrate-state ${backendConfig}`
     } else if (reconfigure) {
       // For reconfigure, no prompts needed
       command = `cd ${infrastructurePath} && terraform init -reconfigure ${backendConfig}`

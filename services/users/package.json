@@ -7,7 +7,7 @@
   "author": "Michael Phiri(github@michael-codesjs)",
   "license": "MIT",
   "scripts": {
-    "deploy": "npx zeiro deploy --stage ${STAGE:-dev} --force-init --migrate-state",
+    "deploy": "npx zeiro deploy --stage ${STAGE:-dev} --force-init --reconfigure",
     "deploy:application": "sls deploy",
     "destroy": "sls remove && cd infrastructure && terraform init && terraform destroy -auto-approve",
     "generate-env": "ts-node scripts/generate-env.ts",
