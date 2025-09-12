@@ -58,17 +58,14 @@ export default function SupportedExports({
                 href={`/integrations/${integration.slug}`}
                 className="flex items-center justify-center hover:opacity-80 hover:scale-105 transition-all duration-300"
               >
-                <div className="text-center">
-                  <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3">
-                    <Image 
-                      src={integration.logo} 
-                      alt={integration.name} 
-                      width={64} 
-                      height={64}
-                      className="object-contain"
-                    />
-                  </div>
-                  <span className="text-white font-medium text-sm">{integration.name}</span>
+                <div className="w-16 h-16 flex items-center justify-center">
+                  <Image 
+                    src={integration.logo} 
+                    alt={integration.name} 
+                    width={64} 
+                    height={64}
+                    className="object-contain"
+                  />
                 </div>
               </Link>
             ))}
@@ -107,19 +104,16 @@ export default function SupportedExports({
               <Link 
                 key={index} 
                 href={`/integrations/${integration.slug}`}
-                className="flex items-center justify-center min-w-[140px] mx-6 hover:opacity-80 hover:scale-105 transition-all duration-300"
+                className="flex items-center justify-center min-w-[80px] mx-6 hover:opacity-80 hover:scale-105 transition-all duration-300"
               >
-                <div className="text-center">
-                  <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3">
-                    <Image 
-                      src={integration.logo} 
-                      alt={integration.name} 
-                      width={64} 
-                      height={64}
-                      className="object-contain"
-                    />
-                  </div>
-                  <span className="text-white font-medium">{integration.name}</span>
+                <div className="w-16 h-16 flex items-center justify-center">
+                  <Image 
+                    src={integration.logo} 
+                    alt={integration.name} 
+                    width={64} 
+                    height={64}
+                    className="object-contain"
+                  />
                 </div>
               </Link>
             ))}
@@ -145,19 +139,16 @@ export default function SupportedExports({
               <Link 
                 key={integration.name} 
                 href={`/integrations/${integration.slug}`}
-                className="flex items-center justify-center min-w-[140px] hover:opacity-80 hover:scale-105 transition-all duration-300"
+                className="flex items-center justify-center min-w-[80px] hover:opacity-80 hover:scale-105 transition-all duration-300"
               >
-                <div className="text-center">
-                  <div className="w-16 h-16 flex items-center justify-center mx-auto mb-3">
-                    <Image 
-                      src={integration.logo} 
-                      alt={integration.name} 
-                      width={64} 
-                      height={64}
-                      className="object-contain"
-                    />
-                  </div>
-                  <span className="text-white font-medium">{integration.name}</span>
+                <div className="w-16 h-16 flex items-center justify-center">
+                  <Image 
+                    src={integration.logo} 
+                    alt={integration.name} 
+                    width={64} 
+                    height={64}
+                    className="object-contain"
+                  />
                 </div>
               </Link>
             ))}

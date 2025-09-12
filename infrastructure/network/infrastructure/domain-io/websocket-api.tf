@@ -33,9 +33,10 @@ resource "aws_apigatewayv2_stage" "central_websocket_stage" {
 
 # SSM Parameters for Central WebSocket API
 resource "aws_ssm_parameter" "central_websocket_api_id" {
-  name  = "/zeiro/${var.stage}/infrastructure/io/central/websocket/api/id"
-  type  = "SecureString"
-  value = aws_apigatewayv2_api.central_websocket_api.id
+  name      = "/zeiro/${var.stage}/infrastructure/io/central/websocket/api/id"
+  type      = "SecureString"
+  value     = aws_apigatewayv2_api.central_websocket_api.id
+  overwrite = true
 
   tags = {
     Application = "zeiro"
@@ -44,9 +45,10 @@ resource "aws_ssm_parameter" "central_websocket_api_id" {
 }
 
 resource "aws_ssm_parameter" "central_websocket_api_endpoint" {
-  name  = "/zeiro/${var.stage}/infrastructure/io/central/websocket/api/endpoint"
-  type  = "SecureString"
-  value = aws_apigatewayv2_api.central_websocket_api.api_endpoint
+  name      = "/zeiro/${var.stage}/infrastructure/io/central/websocket/api/endpoint"
+  type      = "SecureString"
+  value     = aws_apigatewayv2_api.central_websocket_api.api_endpoint
+  overwrite = true
 
   tags = {
     Application = "zeiro"
@@ -55,9 +57,10 @@ resource "aws_ssm_parameter" "central_websocket_api_endpoint" {
 }
 
 resource "aws_ssm_parameter" "central_websocket_api_execution_arn" {
-  name  = "/zeiro/${var.stage}/infrastructure/io/central/websocket/api/execution-arn"
-  type  = "SecureString"
-  value = aws_apigatewayv2_api.central_websocket_api.execution_arn
+  name      = "/zeiro/${var.stage}/infrastructure/io/central/websocket/api/execution-arn"
+  type      = "SecureString"
+  value     = aws_apigatewayv2_api.central_websocket_api.execution_arn
+  overwrite = true
 
   tags = {
     Application = "zeiro"
@@ -66,9 +69,10 @@ resource "aws_ssm_parameter" "central_websocket_api_execution_arn" {
 }
 
 resource "aws_ssm_parameter" "central_websocket_stage_url" {
-  name  = "/zeiro/${var.stage}/infrastructure/io/central/websocket/api/stage-url"
-  type  = "SecureString"
-  value = "wss://${aws_apigatewayv2_api.central_websocket_api.id}.execute-api.${var.region}.amazonaws.com/${var.stage}"
+  name      = "/zeiro/${var.stage}/infrastructure/io/central/websocket/api/stage-url"
+  type      = "SecureString"
+  value     = "wss://${aws_apigatewayv2_api.central_websocket_api.id}.execute-api.${var.region}.amazonaws.com/${var.stage}"
+  overwrite = true
 
   tags = {
     Application = "zeiro"

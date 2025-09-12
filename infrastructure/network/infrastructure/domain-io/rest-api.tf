@@ -9,7 +9,7 @@ resource "aws_api_gateway_rest_api" "central_api" {
 
   tags = {
     Application = "zeiro"
-    Enviroment  = var.stage
+    Environment = var.stage
     Description = "zeiro central REST API."
   }
 
@@ -54,31 +54,61 @@ resource "aws_api_gateway_deployment" "central_api_deployment" {
 }
 
 resource "aws_ssm_parameter" "central_api_id" {
-  name  = "/zeiro/${var.stage}/infrastructure/io/central/api/id"
-  type  = "SecureString"
-  value = aws_api_gateway_rest_api.central_api.id
+  name      = "/zeiro/${var.stage}/infrastructure/io/central/api/id"
+  type      = "SecureString"
+  value     = aws_api_gateway_rest_api.central_api.id
+  overwrite = true
+
+  tags = {
+    Application = "zeiro"
+    Environment = var.stage
+  }
 }
 
 resource "aws_ssm_parameter" "central_api_root_resource_id" {
-  name  = "/zeiro/${var.stage}/infrastructure/io/central/api/root-resource-id"
-  type  = "SecureString"
-  value = aws_api_gateway_rest_api.central_api.root_resource_id
+  name      = "/zeiro/${var.stage}/infrastructure/io/central/api/root-resource-id"
+  type      = "SecureString"
+  value     = aws_api_gateway_rest_api.central_api.root_resource_id
+  overwrite = true
+
+  tags = {
+    Application = "zeiro"
+    Environment = var.stage
+  }
 }
 
 resource "aws_ssm_parameter" "central_api_arn" {
-  name  = "/zeiro/${var.stage}/infrastructure/io/central/api/arn"
-  type  = "SecureString"
-  value = aws_api_gateway_rest_api.central_api.arn
+  name      = "/zeiro/${var.stage}/infrastructure/io/central/api/arn"
+  type      = "SecureString"
+  value     = aws_api_gateway_rest_api.central_api.arn
+  overwrite = true
+
+  tags = {
+    Application = "zeiro"
+    Environment = var.stage
+  }
 }
 
 resource "aws_ssm_parameter" "central_api_execution_arn" {
-  name  = "/zeiro/${var.stage}/infrastructure/io/central/api/api_execution_arn"
-  type  = "SecureString"
-  value = aws_api_gateway_rest_api.central_api.execution_arn
+  name      = "/zeiro/${var.stage}/infrastructure/io/central/api/api_execution_arn"
+  type      = "SecureString"
+  value     = aws_api_gateway_rest_api.central_api.execution_arn
+  overwrite = true
+
+  tags = {
+    Application = "zeiro"
+    Environment = var.stage
+  }
 }
 
 resource "aws_ssm_parameter" "central_api_url" {
-  name  = "/zeiro/${var.stage}/infrastructure/io/central/api/url"
-  type  = "SecureString"
-  value = aws_api_gateway_deployment.central_api_deployment.invoke_url
+  name      = "/zeiro/${var.stage}/infrastructure/io/central/api/url"
+  type      = "SecureString"
+  value     = aws_api_gateway_deployment.central_api_deployment.invoke_url
+  overwrite = true
+
+  tags = {
+    Application = "zeiro"
+    Environment = var.stage
+  }
 }

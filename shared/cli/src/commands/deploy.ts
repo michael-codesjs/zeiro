@@ -54,7 +54,6 @@ export const deployService = async (options: DeployOptions) => {
 
   // Get the current working directory
   const cwd = process.cwd()
-
   // Check if config.zero exists
   const configPath = path.join(cwd, 'config.zero')
   if (!existsSync(configPath)) {
@@ -128,12 +127,6 @@ export const deployService = async (options: DeployOptions) => {
     ),
   )
 
-  // Debug: Check if AWS credentials are available
-  console.log(chalk.blue('Checking AWS credentials...'))
-  console.log(`AWS_REGION: ${process.env.AWS_REGION || 'eu-central-1'}`)
-  console.log(`AWS_ACCESS_KEY_ID: ${process.env.AWS_ACCESS_KEY_ID ? '[SET]' : '[NOT SET]'}`)
-  console.log(`AWS_SECRET_ACCESS_KEY: ${process.env.AWS_SECRET_ACCESS_KEY ? '[SET]' : '[NOT SET]'}`)
-
   const ssmClient = new SSMClient({
     region: process.env.AWS_REGION || 'eu-central-1',
   })
@@ -142,8 +135,8 @@ export const deployService = async (options: DeployOptions) => {
   try {
     const { STSClient, GetCallerIdentityCommand } = await import('@aws-sdk/client-sts')
     const stsClient = new STSClient({ region: process.env.AWS_REGION || 'eu-central-1' })
-    const identity = await stsClient.send(new GetCallerIdentityCommand({}))
-    console.log(chalk.green(`✓ AWS credentials verified. Account: ${identity.Account}`))
+    await stsClient.send(new GetCallerIdentityCommand({}))
+    console.log(chalk.green(`✓ AWS credentials verified.`))
   } catch (error) {
     console.error(chalk.red(`✗ AWS credentials test failed: ${error.message}`))
     process.exit(1)
@@ -160,37 +153,13 @@ export const deployService = async (options: DeployOptions) => {
     if (!hasInfrastructure) {
       return true
     }
-
-    // Get environment state bucket name
-    const getParameterCommand = new GetParameterCommand({
-      Name: `/zeiro/${stage}/cicd/state-bucket/name`,
-      WithDecryption: true,
-    })
-
-    const stateBucketResponse = await ssmClient.send(getParameterCommand)
-    const stateBucketName = stateBucketResponse.Parameter?.Value
+    const stateBucketName = 'zeiro-state-bucket' as const
     const lockDynamoDbTableName = 'zeiro-terraform-locks' as const
 
     const stateFileKey =
       layer === 'domain' && domain
-        ? `domain/${domain}/${serviceName}/infrastructure/terraform.tfstate`
-        : `${layer}/${serviceName}/infrastructure/terraform.tfstate`
-
-    // Force unlock if requested
-    if (forceUnlock) {
-      const unlockSpinner = ora('Force unlocking terraform state.').start()
-      
-      // We need to get the lock ID from the error, but for now let's try a generic approach
-      const unlockCommand = `cd ${infrastructurePath} && terraform force-unlock -force 71adabba-62d8-9fc8-7ec0-1a642aeec737`
-      
-      const unlockSuccess = await execAsync(unlockCommand, { stdio: 'pipe' })
-      
-      if (unlockSuccess) {
-        unlockSpinner.succeed('Successfully force unlocked terraform state.')
-      } else {
-        unlockSpinner.fail('Failed to force unlock terraform state. Continuing with initialization...')
-      }
-    }
+        ? `${stage}/domain/${domain}/${serviceName}/infrastructure/terraform.tfstate`
+        : `${stage}/${layer}/${serviceName}/infrastructure/terraform.tfstate`
 
     // Terraform init
     const spinner = ora('Initializing terraform.').start()
@@ -205,15 +174,16 @@ export const deployService = async (options: DeployOptions) => {
     ].join(' ')
 
     // Determine the init command based on options
-    let command
+    let command: string = ''
+    const baseInitCommand = `cd ${infrastructurePath} && terraform init`
     if (migrateState) {
       // For migrate-state, we need to auto-answer "yes" to the prompt (remove -input=false to allow migration prompts)
-      command = `cd ${infrastructurePath} && echo "yes" | terraform init -migrate-state ${backendConfig}`
+      command = `${baseInitCommand} -migrate-state ${backendConfig}`
     } else if (reconfigure) {
       // For reconfigure, no prompts needed
-      command = `cd ${infrastructurePath} && terraform init -reconfigure ${backendConfig}`
+      command = `${baseInitCommand} -reconfigure ${backendConfig}`
     } else {
-      command = `cd ${infrastructurePath} && terraform init ${backendConfig}`
+      command = `${baseInitCommand} ${backendConfig}`
     }
 
     const success = await execAsync(command, { stdio: 'pipe' })

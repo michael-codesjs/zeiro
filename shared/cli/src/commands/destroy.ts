@@ -171,8 +171,8 @@ export const destroyService = async (options: DestroyOptions) => {
 
     const stateFileKey =
       layer === 'domain' && domain
-        ? `domain/${domain}/${serviceName}/infrastructure/terraform.tfstate`
-        : `${layer}/${serviceName}/infrastructure/terraform.tfstate`
+        ? `${stage}/domain/${domain}/${serviceName}/infrastructure/terraform.tfstate`
+        : `${stage}/${layer}/${serviceName}/infrastructure/terraform.tfstate`
 
     // Force unlock if requested
     if (forceUnlock) {

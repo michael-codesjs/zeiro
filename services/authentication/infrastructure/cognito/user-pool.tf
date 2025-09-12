@@ -98,18 +98,21 @@ resource "aws_ssm_parameter" "userPoolName" {
   name  = "/zeiro/${var.stage}/infrastructure/authentication/user-pool/name"
   type  = "SecureString"
   value = aws_cognito_user_pool.user_pool.name
+  overwrite = true
 }
 
 resource "aws_ssm_parameter" "userPoolId" {
   name  = "/zeiro/${var.stage}/infrastructure/authentication/user-pool/id"
   type  = "SecureString"
   value = aws_cognito_user_pool.user_pool.id
+  overwrite = true
 }
 
 resource "aws_ssm_parameter" "userPoolARN" {
   name  = "/zeiro/${var.stage}/infrastructure/authentication/user-pool/arn"
   type  = "SecureString"
   value = aws_cognito_user_pool.user_pool.arn
+  overwrite = true
 }
 
 output "cognito_user_pool_id" {

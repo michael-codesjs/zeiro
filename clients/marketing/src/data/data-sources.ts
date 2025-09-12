@@ -515,6 +515,88 @@ export const dataSources: DataSource[] = [
     documentation: 'https://support.microsoft.com/excel',
     pricing: 'Paid',
     popularity: 5
+  },
+  {
+    slug: 'hubspot',
+    name: 'HubSpot CRM',
+    description: 'HubSpot is a comprehensive CRM platform that helps businesses grow by providing tools for marketing, sales, and customer service.',
+    logo: '/images/databases/hubspot.png',
+    category: 'Cloud Database',
+    features: [
+      'Contact management',
+      'Deal tracking',
+      'Marketing automation',
+      'Sales pipeline',
+      'Customer service tools',
+      'Analytics and reporting'
+    ],
+    benefits: [
+      'Connect to HubSpot CRM data instantly',
+      'Analyze sales performance with natural language',
+      'Track marketing campaign effectiveness',
+      'Monitor customer lifecycle and engagement',
+      'Generate insights from contact interactions',
+      'Real-time CRM analytics and reporting'
+    ],
+    setupSteps: [
+      {
+        title: 'HubSpot API Access',
+        description: 'Configure your HubSpot API credentials in Zeiro',
+        code: 'API Key: your-hubspot-api-key\nPortal ID: your-portal-id\nScopes: contacts, deals, companies, tickets'
+      },
+      {
+        title: 'Data Discovery',
+        description: 'Zeiro discovers your HubSpot objects and properties automatically'
+      },
+      {
+        title: 'CRM Analytics',
+        description: 'Start analyzing your CRM data with questions like "Show me deals closed this month"'
+      }
+    ],
+    documentation: 'https://developers.hubspot.com/docs/api/overview',
+    pricing: 'Freemium',
+    popularity: 4
+  },
+  {
+    slug: 'salesforce',
+    name: 'Salesforce CRM',
+    description: 'Salesforce is the world\'s leading customer relationship management (CRM) platform, helping businesses connect with customers.',
+    logo: '/images/databases/salesforce.png',
+    category: 'Cloud Database',
+    features: [
+      'Lead and opportunity management',
+      'Account and contact tracking',
+      'Sales forecasting',
+      'Workflow automation',
+      'Custom objects and fields',
+      'Advanced reporting and dashboards'
+    ],
+    benefits: [
+      'Direct Salesforce data integration with Zeiro',
+      'Natural language queries for CRM data',
+      'Advanced sales performance analytics',
+      'Customer journey and pipeline insights',
+      'Automated report generation',
+      'Real-time Salesforce data synchronization'
+    ],
+    setupSteps: [
+      {
+        title: 'Salesforce Authentication',
+        description: 'Connect using OAuth or API credentials',
+        code: 'Username: your-salesforce-username\nPassword + Security Token: your-password-and-token\nInstance URL: https://your-instance.salesforce.com'
+      },
+      {
+        title: 'Object Discovery',
+        description: 'Zeiro discovers your Salesforce objects, fields, and relationships'
+      },
+      {
+        title: 'CRM Intelligence',
+        description: 'Query your Salesforce data like "What are my top opportunities this quarter?"'
+      }
+    ],
+    documentation: 'https://developer.salesforce.com/docs/',
+    pricing: 'Paid',
+    popularity: 4
   }
 ];
 

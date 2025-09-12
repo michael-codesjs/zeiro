@@ -29,6 +29,14 @@ variable "organisation" {
   description = "Organisation or Username."
 }
 
+module "state_buckets" {
+  source = "./state-bucket"
+}
+
+module "locks" {
+  source = "./locks"
+}
+
 # module "roles" {
 #   source          = "./roles"
 #   repository      = var.repository
@@ -36,14 +44,6 @@ variable "organisation" {
 #   prod_bucket_arn = module.state_buckets.prod_bucket_arn
 #   dev_bucket_arn  = module.state_buckets.dev_bucket_arn
 # }
-
-module "state_buckets" {
-  source = "./state-buckets"
-}
-
-module "locks" {
-  source = "./locks"
-}
 
 # resource "local_file" "export" {
 

@@ -5,7 +5,6 @@
   "main": "serverless.ts",
   "scripts": {
     "test": "jest",
-    "deploy": "npx zeiro deploy --stage ${STAGE:-dev} --force-init --reconfigure",
     "remove": "sls remove"
   },
   "dependencies": {
