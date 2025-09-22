@@ -41,16 +41,25 @@ resource "aws_api_gateway_deployment" "central_api_deployment" {
     aws_api_gateway_method.central_api_index_resource_method,
   ]
 
-  stage_name = var.stage
   rest_api_id = aws_api_gateway_rest_api.central_api.id
-
-  stage_description = timestamp()                  # forces to create a new deployment on each run https://github.com/hashicorp/terraform/issues/6613#issuecomment-289799360
-  description       = "Deployed at ${timestamp()}" # just some comment field which can be seen in deployment history
+  description = "Deployed at ${timestamp()}" # just some comment field which can be seen in deployment history
 
   lifecycle {
     create_before_destroy = true
   }
 
+}
+
+resource "aws_api_gateway_stage" "central_api_stage" {
+  deployment_id = aws_api_gateway_deployment.central_api_deployment.id
+  rest_api_id   = aws_api_gateway_rest_api.central_api.id
+  stage_name    = var.stage
+  description   = timestamp() # forces to create a new deployment on each run
+
+  tags = {
+    Application = "zeiro"
+    Environment = var.stage
+  }
 }
 
 resource "aws_ssm_parameter" "central_api_id" {
@@ -104,7 +113,7 @@ resource "aws_ssm_parameter" "central_api_execution_arn" {
 resource "aws_ssm_parameter" "central_api_url" {
   name      = "/zeiro/${var.stage}/infrastructure/io/central/api/url"
   type      = "SecureString"
-  value     = aws_api_gateway_deployment.central_api_deployment.invoke_url
+  value     = aws_api_gateway_stage.central_api_stage.invoke_url
   overwrite = true
 
   tags = {
