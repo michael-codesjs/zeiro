@@ -11,6 +11,7 @@ import Input from '@/components/input';
 import Select from '@/components/select';
 import FormCard from '@/components/form-card';
 import { useAuth } from '@/hooks/useAuth';
+import { buttonVariants } from '@/components/button';
 import {
   signUpStep1Schema,
   signUpStep2Schema
@@ -232,7 +233,7 @@ export default function Signup() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                className={buttonVariants({ variant: "primary", className: "w-full" })}
               >
                 {isLoading ? (step === 1 ? 'Creating...' : 'Setting up...') : (step === 1 ? 'Continue' : 'Create account')}
               </button>
@@ -241,7 +242,7 @@ export default function Signup() {
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="w-full bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors font-medium border border-gray-700"
+                  className={buttonVariants({ variant: "secondary", className: "w-full" })}
                 >
                   Back
                 </button>

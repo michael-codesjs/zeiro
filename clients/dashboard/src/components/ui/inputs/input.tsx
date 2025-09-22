@@ -5,7 +5,7 @@ import { cn } from "@/utils/cn";
 import { forwardRef, useState, useEffect } from "react";
 
 const inputVariants = cva(
-  "w-full border rounded-lg bg-white px-3 py-2 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 transition-colors text-slate-800",
+  "w-full border rounded-lg bg-white px-3 py-2 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:cursor-not-allowed disabled:opacity-50 transition-colors text-slate-800",
   {
     variants: {
       variant: {
@@ -158,14 +158,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       if (score === 0) return { label: '', color: '' };
       if (score <= 2) return { label: 'Weak', color: 'text-red-600' };
       if (score <= 3) return { label: 'Fair', color: 'text-yellow-600' };
-      if (score <= 4) return { label: 'Good', color: 'text-blue-600' };
+      if (score <= 4) return { label: 'Good', color: 'text-gray-600' };
       return { label: 'Strong', color: 'text-green-600' };
     };
 
     const getStrengthColor = (score: number) => {
       if (score <= 2) return 'bg-red-500';
       if (score <= 3) return 'bg-yellow-500';
-      if (score <= 4) return 'bg-blue-500';
+      if (score <= 4) return 'bg-gray-500';
       return 'bg-green-500';
     };
 
@@ -349,7 +349,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
               {leftIcon || (isSearch && (
                 loading ? (
-                  <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-gray-500 border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />

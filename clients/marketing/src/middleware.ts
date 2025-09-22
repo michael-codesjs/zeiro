@@ -24,9 +24,9 @@ export async function middleware(request: NextRequest) {
   const isAuthenticated = !!user
 
   // Marketing paths are only accessible to none authenticated users
-  // if (isAuthenticated) {
-  //   return NextResponse.redirect(new URL('/', NEXT_PUBLIC_DASHBOARD_CLIENT_URL))
-  // }
+  if (isAuthenticated) {
+    return NextResponse.redirect(new URL('/', NEXT_PUBLIC_DASHBOARD_CLIENT_URL))
+  }
 
   // Default behavior for unspecified paths
   return response

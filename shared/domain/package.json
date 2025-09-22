@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/michael-codesjs/zeiro#readme",
   "dependencies": {
-    "dynamodb-onetable": "^2.7.0",
-     "@aws-sdk/client-dynamodb": "^3.287.0"
+    "@aws-sdk/client-dynamodb": "^3.287.0",
+    "electrodb": "^3.4.5"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",

@@ -10,7 +10,8 @@ import {
   Data, 
   Setting2,
   ChartSquare,
-  Box1
+  Box1,
+  People
 } from "iconsax-reactjs";
 
 interface NavItemsProps {
@@ -25,8 +26,6 @@ export default function NavItems({ sidebarCollapsed }: NavItemsProps) {
     { id: "data-sources", label: "Data Sources", path: "/data-sources", icon: Box1, enabled: true },
     { id: "credentials", label: "Credentials", path: "/credentials", icon: KeySquare, enabled: true },
     { id: "dashboards", label: "Dashboards", path: "/dashboards", icon: ChartSquare, enabled: false },
-    // { id: "performance", label: "Performance", path: "/performance", icon: Activity, enabled: false },
-    // { id: "monitoring", label: "Monitoring", path: "/monitoring", icon: MonitorRecorder, enabled: false },
     { id: "migration-agent", label: "Migration Agent", path: "/migration-agent", icon: Data, enabled: false },
     { id: "settings", label: "Settings", path: "/settings", icon: Setting2, enabled: true },
   ];
@@ -39,15 +38,15 @@ export default function NavItems({ sidebarCollapsed }: NavItemsProps) {
   };
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-0.5">
       {navigationItems.map((item) => (
         <div key={item.id} className="relative group">
           {item.enabled ? (
             <Link
               href={item.path}
-              className={`w-full flex items-center h-11 px-3 py-2.5 font-medium text-sm rounded-xl transition-all duration-200 ${
+              className={`w-full flex items-center h-11 px-2 py-2.5 font-medium text-sm rounded-xl transition-all duration-200 ${
                 isActive(item.path)
-                  ? 'text-indigo-700 dark:text-indigo-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  ? 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-900/40'
                   : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800'
               } ${sidebarCollapsed ? 'justify-center px-2' : 'justify-start'}`}
             >

@@ -46,7 +46,7 @@ function Tabs({ value, onValueChange, children, className }: TabsProps) {
 function TabsList({ children, className }: TabsListProps) {
   return (
     <div className={cn(
-      "flex h-10 items-center rounded-lg bg-slate-100 p-1 text-slate-500",
+      "flex items-center space-x-1 p-1 bg-gray-100 rounded-lg w-fit",
       className
     )}>
       {children}
@@ -67,10 +67,10 @@ function TabsTrigger({ value, children, className, icon }: TabsTriggerProps) {
     <button
       onClick={() => onTabChange(value)}
       className={cn(
-        "flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium ring-offset-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+        "relative inline-flex items-center justify-center whitespace-nowrap px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
         isActive
-          ? "bg-white text-slate-950 shadow-sm"
-          : "text-slate-500 hover:text-slate-900",
+          ? "bg-white text-slate-900 shadow-sm"
+          : "text-slate-600 hover:text-slate-900 hover:bg-white/60",
         className
       )}
     >
@@ -93,7 +93,7 @@ function TabsContent({ value, children, className }: TabsContentProps) {
   }
 
   return (
-    <div className={cn("mt-6 ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2", className)}>
+    <div className={cn("mt-6 ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2", className)}>
       {children}
     </div>
   );

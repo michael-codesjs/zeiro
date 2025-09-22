@@ -14,7 +14,7 @@ cognitoUserPoolsTokenProvider.setKeyValueStorage(
     domain: env === 'prod' ? '.usezeiro.com' : 'localhost',
     path: '/',
     expires: 365,
-    sameSite: env === 'prod' ? 'strict' : 'lax',
+    sameSite: 'lax',
     secure: env === 'prod',
   }),
 )

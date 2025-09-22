@@ -1,6 +1,9 @@
 resource "aws_s3_bucket" "bucket" {
     bucket = "zeiro-state-bucket"
 
+    lifecycle {
+      prevent_destroy = true
+    }
     tags = {
         Name = "zeiro-state-bucket"
         Application = "zeiro"

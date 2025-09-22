@@ -10,8 +10,8 @@
   "scripts": {
     "build": "tsc",
     "postbuild": "npm link && chmod +x ./dist/index.js",
-    "postbuild:watch": "npm link && chmod +x ./dist/index.js",
-    "build:watch": "tsc --watch"
+    "build:watch": "tsc --watch",
+    "postbuild:watch": "npm link && chmod +x ./dist/index.js"
   },
   "repository": {
     "type": "git",

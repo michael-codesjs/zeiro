@@ -6,7 +6,7 @@ import { forwardRef, useState, useRef, useEffect } from "react";
 import { useDisclosure } from "@/hooks/use-disclosure";
 
 const selectVariants = cva(
-  "w-full border rounded-lg bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 transition-colors appearance-none font-medium antialiased",
+  "w-full border rounded-lg bg-white px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:cursor-not-allowed disabled:opacity-50 transition-colors appearance-none font-medium antialiased",
   {
     variants: {
       variant: {
@@ -142,7 +142,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                 selectVariants({ variant, size, state: selectState }),
                 "cursor-pointer text-left flex items-center justify-between",
                 (disabled || loading) && "cursor-not-allowed",
-                !noFocusStyles && isOpen && "ring-2 ring-indigo-500 border-indigo-500",
+                !noFocusStyles && isOpen && "ring-2 ring-gray-500 border-gray-500",
                 noFocusStyles && "focus:!outline-none focus:!ring-0 focus:!border-slate-300",
                 className
               )}
@@ -164,7 +164,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                   <span>{selectedOption.rightIcon}</span>
                 )}
                 {loading ? (
-                  <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-gray-500 border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <svg 
                     className={cn(
@@ -183,7 +183,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 
             {/* Dropdown */}
             {isOpen && !loading && (
-              <div className="absolute z-50 min-w-full w-max max-w-2xl mt-1 border border-slate-200 rounded-lg shadow-lg max-h-80 overflow-hidden">
+              <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-80 overflow-hidden">
                 {/* Search Input */}
                 {searchable && (
                   <div className="p-2 border-b border-slate-100">
@@ -192,7 +192,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                       placeholder="Search options..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full px-3 py-2 text-sm border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-slate-500"
+                      className="w-full px-3 py-2 text-sm border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500 text-slate-500"
                     />
                   </div>
                 )}
@@ -211,20 +211,20 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                         onClick={() => !option.disabled && handleSelect(option.value)}
                         disabled={option.disabled}
                         className={cn(
-                          "w-full px-4 py-3 text-left hover:bg-slate-50 focus:outline-none focus:bg-slate-50 transition-colors flex items-center space-x-3 min-w-0",
+                          "w-full px-3 py-2 text-left hover:bg-slate-50 focus:outline-none focus:bg-slate-50 transition-colors flex items-center space-x-2 min-w-0",
                           option.disabled && "opacity-50 cursor-not-allowed",
-                          value === option.value && "bg-indigo-50 text-indigo-900"
+                          value === option.value && "bg-gray-50 text-gray-900"
                         )}
                       >
                         {option.leftIcon && (
                           <span className="flex-shrink-0">{option.leftIcon}</span>
                         )}
                         <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium text-slate-900 whitespace-nowrap">
+                          <div className="text-sm font-medium text-slate-900">
                             {option.label}
                           </div>
                           {option.description && (
-                            <div className="text-xs text-slate-500 whitespace-nowrap">
+                            <div className="text-xs text-slate-500 mt-0.5">
                               {option.description}
                             </div>
                           )}
@@ -233,7 +233,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                           <span className="flex-shrink-0">{option.rightIcon}</span>
                         )}
                         {value === option.value && (
-                          <svg className="w-4 h-4 text-indigo-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         )}

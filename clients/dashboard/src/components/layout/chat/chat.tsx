@@ -105,7 +105,7 @@ export default function Chat({
         </Button>
         
         {/* Notification dot for new messages */}
-        <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 animate-pulse"></div>
+        <div className="w-2 h-2 bg-gray-500 rounded-full mt-2 animate-pulse"></div>
       </div>
     );
   }
@@ -120,9 +120,9 @@ export default function Chat({
       <div
         ref={resizeRef}
         onMouseDown={handleMouseDown}
-        className="absolute left-0 top-0 w-1 h-full cursor-col-resize hover:bg-indigo-500 transition-colors z-10 group"
+        className="absolute left-0 top-0 w-1 h-full cursor-col-resize hover:bg-gray-500 transition-colors z-10 group"
       >
-        <div className="w-1 h-full bg-transparent group-hover:bg-indigo-500 transition-colors"></div>
+        <div className="w-1 h-full bg-transparent group-hover:bg-gray-500 transition-colors"></div>
       </div>
 
       <ChatHeader

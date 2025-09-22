@@ -1,0 +1,6 @@
+{
+  "type": "service",
+  "layer": "domain",
+  "domain": "workspace",
+  "name": "workspaces"
+}

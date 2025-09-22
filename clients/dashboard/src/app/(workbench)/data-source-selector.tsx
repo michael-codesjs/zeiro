@@ -191,7 +191,7 @@ export default function DataSourceSelector({
                         key={dataSource.id}
                         onClick={() => handleSelectDataSource(dataSource)}
                         className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md text-left hover:bg-slate-50 transition-colors ${
-                          selectedDataSource?.id === dataSource.id ? 'bg-indigo-50 boarder border-indigo-200' : ''
+                          selectedDataSource?.id === dataSource.id ? 'bg-gray-50 border border-gray-200' : ''
                         }`}
                       >
                         {getDataSourceIcon(dataSource.type)}

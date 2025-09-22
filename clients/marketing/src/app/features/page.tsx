@@ -23,6 +23,7 @@ import {
   TickCircle as CheckCircle,
   Star
 } from 'iconsax-react';
+import { buttonVariants } from '@/components/button';
 
 export default function FeaturesPage() {
   return (
@@ -477,11 +478,11 @@ export default function FeaturesPage() {
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <Link href="/auth/up" className="bg-white text-black px-8 py-4 rounded-lg hover:bg-gray-100 hover:scale-105 transition-all duration-300 font-semibold inline-flex items-center gap-2">
+            <Link href="/auth/up" className={buttonVariants({ variant: "primary", size: "lg" })}>
               Start free trial
               <ArrowRight size={16} color="currentColor" variant="Outline" />
             </Link>
-            <Link href="#" className="text-gray-300 hover:text-white hover:scale-105 transition-all duration-300 px-8 py-4">
+            <Link href="#" className={buttonVariants({ variant: "ghost", size: "lg" })}>
               Schedule a demo
             </Link>
           </motion.div>

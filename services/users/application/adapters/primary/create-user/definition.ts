@@ -18,6 +18,11 @@ export const definition: AWS.ServerlessLambdaFunction = {
   iamRoleStatements: [
     {
       Effect: 'Allow',
+      Action: ['execute-api:Invoke'],
+      Resource: ['*'],
+    },
+    {
+      Effect: 'Allow',
       Action: [
         'dynamodb:GetItem',
         'dynamodb:UpdateItem',
@@ -26,6 +31,7 @@ export const definition: AWS.ServerlessLambdaFunction = {
       ],
       Resource: [
         '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}',
+        '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}/index/*',
       ],
     },
     {
@@ -38,5 +44,6 @@ export const definition: AWS.ServerlessLambdaFunction = {
   environment: {
     ZEIRO_TABLE_NAME:
       '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/name}',
+    WORKSPACE_API_URL: '${ssm:/zeiro/${self:custom.stage}/infrastructure/io/central/api/url}',
   },
 }

@@ -4,6 +4,7 @@ import { forwardRef, useEffect } from 'react';
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/utils/cn";
 import { Button } from '@/components/ui/buttons/button';
+import { type UseDisclosureReturn } from '@/hooks/use-disclosure';
 
 const modalVariants = cva(
   "relative bg-white rounded-2xl shadow-xl",
@@ -31,6 +32,15 @@ const modalVariants = cva(
 
 // Modal Root Component
 export interface ModalProps extends VariantProps<typeof modalVariants> {
+  disclosure: UseDisclosureReturn;
+  children: React.ReactNode;
+  closeOnOverlayClick?: boolean;
+  closeOnEsc?: boolean;
+  className?: string;
+}
+
+// Legacy interface for backward compatibility
+export interface ModalPropsLegacy extends VariantProps<typeof modalVariants> {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
@@ -39,17 +49,15 @@ export interface ModalProps extends VariantProps<typeof modalVariants> {
   className?: string;
 }
 
-export const Modal = forwardRef<HTMLDivElement, ModalProps>(
-  ({ 
-    isOpen, 
-    onClose, 
-    children, 
-    size,
-    closeOnOverlayClick = true,
-    closeOnEsc = true,
-    className,
-    ...props 
-  }, ref) => {
+export const Modal = forwardRef<HTMLDivElement, ModalProps | ModalPropsLegacy>(
+  (props, ref) => {
+    // Support both new disclosure prop and legacy isOpen/onClose props
+    const { disclosure, children, size, closeOnOverlayClick = true, closeOnEsc = true, className, ...restProps } = props as ModalProps;
+    const legacyProps = props as ModalPropsLegacy;
+    
+    const isOpen = disclosure?.isOpen ?? legacyProps.isOpen;
+    const onClose = disclosure?.onClose ?? legacyProps.onClose;
+
     // Handle ESC key
     useEffect(() => {
       if (!closeOnEsc || !isOpen) return;
@@ -93,7 +101,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
             ref={ref}
             className={cn(modalVariants({ size }), className)}
             onClick={(e) => e.stopPropagation()}
-            {...props}
+            {...restProps}
           >
             {children}
           </div>
@@ -109,18 +117,38 @@ Modal.displayName = "Modal";
 export interface ModalHeaderProps {
   children: React.ReactNode;
   className?: string;
+  onClose?: () => void;
+  disclosure?: UseDisclosureReturn;
+  showCloseButton?: boolean;
 }
 
 export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
-  ({ children, className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("flex items-center justify-between p-6 border-b border-slate-100", className)}
-      {...props}
-    >
-      {children}
-    </div>
-  )
+  ({ children, className, onClose, disclosure, showCloseButton = true, ...props }, ref) => {
+    const handleClose = disclosure?.onClose ?? onClose;
+    
+    return (
+      <div
+        ref={ref}
+        className={cn("flex items-center justify-between p-6 border-b border-slate-100", className)}
+        {...props}
+      >
+        <div className="flex-1">
+          {children}
+        </div>
+        {showCloseButton && handleClose && (
+          <button
+            onClick={handleClose}
+            className="ml-4 p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600"
+            aria-label="Close modal"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        )}
+      </div>
+    );
+  }
 );
 
 ModalHeader.displayName = "ModalHeader";
@@ -167,25 +195,30 @@ ModalFooter.displayName = "ModalFooter";
 
 // Modal Close Button Component
 export interface ModalCloseButtonProps {
-  onClose: () => void;
+  onClose?: () => void;
+  disclosure?: UseDisclosureReturn;
   className?: string;
 }
 
 export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonProps>(
-  ({ onClose, className, ...props }, ref) => (
-    <Button
-      ref={ref}
-      variant="ghost"
-      size="sm"
-      onClick={onClose}
-      className={cn("p-2 h-auto", className)}
-      {...props}
-    >
-      <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </Button>
-  )
+  ({ onClose, disclosure, className, ...props }, ref) => {
+    const handleClose = disclosure?.onClose ?? onClose;
+    
+    return (
+      <Button
+        ref={ref}
+        variant="ghost"
+        size="sm"
+        onClick={handleClose}
+        className={cn("p-2 h-auto", className)}
+        {...props}
+      >
+        <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </Button>
+    );
+  }
 );
 
 ModalCloseButton.displayName = "ModalCloseButton";

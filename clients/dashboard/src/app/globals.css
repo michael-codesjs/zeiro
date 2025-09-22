@@ -75,7 +75,7 @@ body {
 }
 
 .scrollbar-custom::-webkit-scrollbar-thumb:active {
-  background: rgb(79 70 229); /* indigo-600 */
+  background: rgb(75 85 99); /* gray-600 */
 }
 
 .scrollbar-custom::-webkit-scrollbar-corner {

@@ -16,7 +16,7 @@ export function WebSocketConnection() {
         const token = session.tokens?.idToken?.toString();
         
         if (!token) {
-          console.error('No auth token available');
+          // console.error('No auth token available');
           return;
         }
 

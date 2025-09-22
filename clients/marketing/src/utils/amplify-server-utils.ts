@@ -32,7 +32,7 @@ export async function createServerContext() {
   })
 
   // Get the actual request URL
-  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https'
+  const protocol = process.env.NEXT_PUBLIC_ENV === 'dev' ? 'http' : 'https'
   const host = headersList.get('host') || 'localhost'
   const url = `${protocol}://${host}`
 
@@ -54,11 +54,7 @@ export async function authenticatedUser(context: NextServer.Context) {
         }
         const user = {
           ...(await getCurrentUser(contextSpec)),
-          isAdmin: false,
         }
-        const groups = session.tokens.accessToken.payload['cognito:groups']
-        // @ts-ignore
-        user.isAdmin = Boolean(groups && groups.includes('Admins'))
 
         return user
       } catch (error) {

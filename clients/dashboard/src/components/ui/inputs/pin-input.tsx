@@ -5,7 +5,7 @@ import { cn } from "@/utils/cn";
 import { forwardRef, useState, useRef, useEffect } from "react";
 
 const pinInputVariants = cva(
-  "w-12 h-12 text-center border rounded-lg bg-white text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200",
+  "w-12 h-12 text-center border rounded-lg bg-white text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200",
   {
     variants: {
       variant: {
@@ -22,7 +22,7 @@ const pinInputVariants = cva(
         default: "",
         error: "border-red-300 focus:border-red-500 focus:ring-red-500",
         success: "border-green-300 focus:border-green-500 focus:ring-green-500",
-        filled: "border-indigo-500 bg-indigo-50",
+        filled: "border-gray-500 bg-gray-50",
       },
     },
     defaultVariants: {
@@ -206,7 +206,7 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
                   size, 
                   state: getInputState(index) 
                 }),
-                focusedIndex === index && "ring-2 ring-indigo-500 border-indigo-500 scale-105"
+                focusedIndex === index && "ring-2 ring-gray-500 border-gray-500 scale-105"
               )}
               value={mask && values[index] ? '•' : values[index]}
               placeholder={placeholder}
@@ -229,7 +229,7 @@ const PinInput = forwardRef<HTMLDivElement, PinInputProps>(
                 key={index}
                 className={cn(
                   "w-2 h-1 rounded-full transition-colors",
-                  values[index] ? "bg-indigo-500" : "bg-slate-200"
+                  values[index] ? "bg-gray-500" : "bg-slate-200"
                 )}
               />
             ))}

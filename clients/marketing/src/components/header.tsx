@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { buttonVariants } from './button';
 
 interface HeaderProps {
   currentPage?: 'home' | 'features' | 'pricing' | 'integrations' | 'blog' | 'careers' | 'contact' | 'help' | 'status' | 'privacy' | 'terms' | 'security';
@@ -48,10 +49,10 @@ export default function Header({ currentPage = 'home' }: HeaderProps) {
         </nav>
         
         <div className="flex items-center space-x-6">
-          <Link href="#" className="text-gray-400 hover:text-white transition-colors">
+          <Link href="/auth/in" className={buttonVariants({ variant: "ghost" })}>
             Sign in
           </Link>
-          <Link href="/auth/up" className="bg-white text-black px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium">
+          <Link href="/auth/up" className={buttonVariants({ variant: "primary" })}>
             Get started
           </Link>
         </div>

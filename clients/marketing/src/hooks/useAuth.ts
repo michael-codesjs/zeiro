@@ -47,6 +47,7 @@ interface UseAuthReturn {
 }
 
 export function useAuth(): Omit<UseAuthReturn, 'loading' | 'error'> {
+  
   const [user, setUser] = useState<UseAuthReturn['user']>(null)
   const router = useRouter()
 

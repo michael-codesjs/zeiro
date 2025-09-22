@@ -11,6 +11,7 @@ import { z } from 'zod';
 import Input from '@/components/input';
 import FormCard from '@/components/form-card';
 import { useAuth } from '@/hooks/useAuth';
+import { buttonVariants } from '@/components/button';
 
 // Sign-in form schema
 const signInSchema = z.object({
@@ -24,6 +25,7 @@ interface SignInFormData {
 }
 
 export default function SignIn() {
+  
   const [isLoading, setIsLoading] = useState(false);
   const [animateIn, setAnimateIn] = useState(false);
   const router = useRouter();
@@ -122,7 +124,7 @@ export default function SignIn() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                className={buttonVariants({ variant: "primary", className: "w-full" })}
               >
                 {isLoading ? 'Signing In...' : 'Sign In'}
               </button>

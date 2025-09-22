@@ -18,6 +18,7 @@ export const users = new Model<User>(
       email: { type: String },
       email_verified: { type: Boolean },
       password: { type: String },
+      workspace_id: { type: String },
     },
   },
 )

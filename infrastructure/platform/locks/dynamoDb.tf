@@ -12,4 +12,8 @@ resource "aws_dynamodb_table" "locks" {
         type = "S"
     }
 
+    lifecycle {
+      prevent_destroy = true
+    }
+
 }

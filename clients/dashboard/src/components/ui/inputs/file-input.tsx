@@ -5,13 +5,13 @@ import { cn } from "@/utils/cn";
 import { forwardRef, useState, useRef } from "react";
 
 const fileInputVariants = cva(
-  "relative w-full border-2 border-dashed rounded-lg transition-all duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500",
+  "relative w-full border-2 border-dashed rounded-lg transition-all duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-gray-500 focus-within:border-gray-500",
   {
     variants: {
       variant: {
         default: "border-slate-300 hover:border-slate-400 bg-white",
         filled: "border-slate-200 bg-slate-50 hover:bg-white",
-        primary: "border-indigo-300 bg-indigo-50 hover:border-indigo-400",
+        primary: "border-gray-300 bg-gray-50 hover:border-gray-400",
       },
       size: {
         sm: "p-4",
@@ -22,7 +22,7 @@ const fileInputVariants = cva(
         default: "",
         error: "border-red-300 bg-red-50 focus-within:border-red-500 focus-within:ring-red-500",
         success: "border-green-300 bg-green-50 focus-within:border-green-500 focus-within:ring-green-500",
-        dragOver: "border-indigo-500 bg-indigo-100 scale-[1.02]",
+        dragOver: "border-gray-500 bg-gray-100 scale-[1.02]",
       },
     },
     defaultVariants: {
@@ -175,7 +175,7 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
               <button
                 type="button"
                 onClick={handleBrowseClick}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-indigo-600 bg-white border border-indigo-300 rounded-md hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
               >
                 {browseText}
               </button>
@@ -201,8 +201,8 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
             {selectedFiles.map((file, index) => (
               <div key={index} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
                 <div className="flex items-center space-x-3 min-w-0 flex-1">
-                  <div className="flex-shrink-0 w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-                    <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>

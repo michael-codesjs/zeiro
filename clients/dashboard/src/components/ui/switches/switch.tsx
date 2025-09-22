@@ -40,10 +40,10 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
           />
           <div
             className={cn(
-              "relative inline-flex items-center rounded-lg border-2 border-transparent transition-colors duration-200 ease-in-out cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2",
+              "relative inline-flex items-center rounded-lg border-2 border-transparent transition-colors duration-200 ease-in-out cursor-pointer focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2",
               sizeClasses[size],
               props.checked
-                ? "bg-indigo-600"
+                ? "bg-gray-600"
                 : "bg-slate-200",
               disabled && "opacity-50 cursor-not-allowed"
             )}

@@ -84,11 +84,11 @@ export default function RecentDataSourceConnections({
 
   if (error) {
     return (
-      <div className={sidebarCollapsed ? "" : "bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3"}>
-        <div className={`text-center py-2 ${sidebarCollapsed ? 'px-1' : 'px-2'}`}>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">
-              {sidebarCollapsed ? '⚠️' : 'Failed to load data sources'}
-            </p>
+      <div className="mt-6">
+        <div className="text-center py-4">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            {sidebarCollapsed ? '' : 'Failed to load data sources'}
+          </p>
         </div>
       </div>
     );

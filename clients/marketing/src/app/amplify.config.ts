@@ -20,7 +20,7 @@ const cookieStorage = new CookieStorage({
   domain: env === 'prod' ? '.usezeiro.com' : 'localhost',
   path: '/',
   expires: 365,
-  sameSite: 'none',
+  sameSite: 'lax',
 })
 
 Amplify.configure(resourcesConfig, libraryOptions)

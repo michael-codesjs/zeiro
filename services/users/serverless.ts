@@ -3,6 +3,7 @@ import * as functions from '@adapters/primary'
 
 /** Serverless configuration for the 'user' service. */
 const serverlessConfiguration: AWS.Service = {
+
   service: 'zeiro-user',
   frameworkVersion: '3',
 
@@ -31,7 +32,10 @@ const serverlessConfiguration: AWS.Service = {
     individually: true,
   },
 
-  plugins: ['serverless-esbuild', 'serverless-iam-roles-per-function'],
+  plugins: [
+    'serverless-esbuild',
+    'serverless-iam-roles-per-function'
+  ],
 
   custom: {
     region: '${opt:region, self:provider.region}',
@@ -50,6 +54,7 @@ const serverlessConfiguration: AWS.Service = {
   },
 
   functions,
+
 }
 
 module.exports = serverlessConfiguration

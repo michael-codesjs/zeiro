@@ -26,6 +26,7 @@ export const definition: AWS.ServerlessLambdaFunction = {
       ],
       Resource: [
         '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}',
+        '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}/index/*',
       ],
     },
     {
