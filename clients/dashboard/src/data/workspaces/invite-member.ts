@@ -7,19 +7,34 @@ export type InviteMemberData = {
 };
 
 export const inviteMember = async ({ workspaceId, data }: { workspaceId: string; data: InviteMemberData }): Promise<void> => {
-  try {
-    const restOperation = post({
-      apiName: 'zeiro-api',
-      path: `/workspaces/${workspaceId}/members/invite`,
-      options: {
-        body: data,
-      },
-    });
+  const restOperation = post({
+    apiName: 'zeiro-api',
+    path: `/workspaces/${workspaceId}/members/invite`,
+    options: {
+      body: data,
+    },
+  });
 
+  try {
     await restOperation.response;
-  } catch (err) {
-    console.error('Error inviting member:', err);
-    // For development, just log the invitation
-    console.log('Mock invitation sent:', { workspaceId, ...data });
+  } catch (error: any) {
+    console.log('Raw error:', error);
+    
+    // Extract error message from Amplify error structure
+    let errorMessage = 'Failed to invite member';
+    
+    if (error?.response?.body) {
+      try {
+        const body = JSON.parse(error.response.body);
+        if (body.error) {
+          errorMessage = body.error;
+        }
+      } catch (e) {
+        console.log('Could not parse error body');
+      }
+    }
+    
+    console.log('Throwing error:', errorMessage);
+    throw new Error(errorMessage);
   }
 };

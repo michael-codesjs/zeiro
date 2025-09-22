@@ -299,7 +299,8 @@ interface EditWorkspaceButtonProps {
 }
 
 export function EditWorkspaceButton({ workspace, onOpen }: EditWorkspaceButtonProps) {
-  if (!workspace.membership || (workspace.membership.role !== "owner" && workspace.membership.role !== "admin")) {
+  // Only workspace owners can edit workspace details
+  if (!workspace.membership || workspace.membership.role !== "owner") {
     return null;
   }
 

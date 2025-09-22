@@ -7,11 +7,17 @@ resource "aws_dynamodb_table" "table" {
     read_capacity  = 1
     write_capacity = 1
     
-    # stream_enabled   = true
-    # stream_view_type = "NEW_AND_OLD_IMAGES" // not need yet
+    stream_enabled   = true
+    stream_view_type = "NEW_AND_OLD_IMAGES"
 
     hash_key  = "PK"
     range_key = "SK"
+
+    # TTL configuration for automatic expiration
+    ttl {
+      attribute_name = "ttl"
+      enabled        = true
+    }
 
     # Primary table attributes
     attribute {
@@ -153,6 +159,18 @@ resource "aws_ssm_parameter" "table_arn" {
   name      = "/zeiro/${var.stage}/infrastructure/storage/database/zeiro-table/arn"
   type      = "SecureString"
   value     = aws_dynamodb_table.table.arn
+  overwrite = true
+
+  tags = {
+    Application = "zeiro"
+    Environment = var.stage
+  }
+}
+
+resource "aws_ssm_parameter" "table_stream_arn" {
+  name      = "/zeiro/${var.stage}/infrastructure/storage/database/zeiro-table/stream-arn"
+  type      = "SecureString"
+  value     = aws_dynamodb_table.table.stream_arn
   overwrite = true
 
   tags = {

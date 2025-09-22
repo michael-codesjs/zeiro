@@ -27,6 +27,7 @@ const serverlessConfiguration: AWS.Service = {
         '${ssm:/zeiro/${self:custom.stage}/infrastructure/io/event-bus/central/name}',
         ZEIRO_TABLE_NAME:
         '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/name}',
+      MARKETING_URL: '${env:MARKETING_URL, "https://usezeiro.com"}',
     },
   },
 

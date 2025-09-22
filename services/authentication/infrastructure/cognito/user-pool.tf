@@ -82,6 +82,19 @@ resource "aws_cognito_user_pool" "user_pool" {
     }
   }
 
+  # Custom attribute for invitation token
+  schema {
+    name                     = "invitation_token"
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = false
+    string_attribute_constraints {
+      min_length = 1
+      max_length = 256
+    }
+  }
+
   lifecycle {
     ignore_changes = [
       lambda_config

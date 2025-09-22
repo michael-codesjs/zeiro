@@ -11,7 +11,7 @@ import { z } from 'zod';
 import Input from '@/components/input';
 import FormCard from '@/components/form-card';
 import { useAuth } from '@/hooks/useAuth';
-import { buttonVariants } from '@/components/button';
+import { buttonVariants } from '@/components/Button';
 
 // Sign-in form schema
 const signInSchema = z.object({

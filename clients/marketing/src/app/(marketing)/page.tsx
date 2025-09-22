@@ -19,7 +19,7 @@ import {
   Setting2 as Settings,
   Link as ExternalLink
 } from 'iconsax-react';
-import { buttonVariants } from '@/components/button';
+import { buttonVariants } from '@/components/Button';
 
 export default function Home() {
   return (

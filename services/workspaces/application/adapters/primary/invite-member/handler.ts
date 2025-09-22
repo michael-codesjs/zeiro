@@ -1,12 +1,22 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda'
-import { users, workspaces, workspaceMemberships } from '@zeiro/domain'
+import { users, workspaces, workspaceMemberships, invitationTokens, invitationReminders } from '@zeiro/domain'
 import { InviteMemberInput, WorkspaceMembership } from '@typings/workspace'
 import { MEMBER_INVITED_DOMAIN_EVENT } from '@typings/domain-events'
 import { EventBridgeAdapter } from '@adapters/secondary/event-bridge'
 import { v4 as uuidv4 } from 'uuid'
+import { randomBytes } from 'crypto'
 
 // Initialize EventBridge adapter outside the handler for better performance
 const eventBridgeAdapter = new EventBridgeAdapter()
+
+/**
+ * Generates a secure invitation token
+ * @returns A URL-safe base64 encoded token
+ */
+const generateInvitationToken = (): string => {
+  // Generate 32 random bytes and encode as URL-safe base64
+  return randomBytes(32).toString('base64url')
+}
 
 const handler = async (
   event: APIGatewayProxyEvent,
@@ -133,12 +143,27 @@ const handler = async (
       }
     }
 
-    // Check if user exists by email
-    // Note: We can't directly query users by email since it requires workspace_id
-    // For invitations, we'll use email as a placeholder user_id
-    let target_user_id: string | null = null
-    
-    // For now, we'll check if there's already a membership with this email
+    // Check if user already exists in the platform by email
+    const existingUsersResult = await users.query
+      .byEmail({ email: input.email })
+      .go()
+
+    if (existingUsersResult.data.length > 0) {
+      return {
+        statusCode: 409,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
+          'Access-Control-Allow-Methods': 'POST,OPTIONS',
+        },
+        body: JSON.stringify({ 
+          error: 'User already exists with this email' 
+        }),
+      }
+    }
+
+    // Check if there's already a pending invitation for this email in this workspace
     const existingMembershipsResult = await workspaceMemberships.query
       .byWorkspace({ workspace_id })
       .where(({ metadata }, { eq }) => eq(metadata.email, input.email))
@@ -163,12 +188,17 @@ const handler = async (
 
     const membership_id = uuidv4()
     const now = new Date()
+    const invitationToken = generateInvitationToken()
+    
+    // Set invitation expiration to 7 days from now
+    const invitationExpiry = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
+    const expiryTimestamp = Math.floor(invitationExpiry.getTime() / 1000) // Unix timestamp for TTL
 
     // Create the membership (pending if user doesn't exist yet)
     const membership = await workspaceMemberships.create({
       id: membership_id,
       workspace_id: workspace_id,
-      user_id: target_user_id || `EMAIL:${input.email}`, // Temporary placeholder
+      user_id: `EMAIL:${input.email}`, // Temporary placeholder until user accepts invitation
       role: input.role,
       status: 'pending', // Always pending until accepted
       invited_by: user_id,
@@ -181,6 +211,45 @@ const handler = async (
         invitation_message: input.message,
       },
     }).go()
+
+    // Create the invitation token entity
+    const invitationTokenRecord = await invitationTokens.create({
+      token: invitationToken,
+      workspace_id: workspace_id,
+      membership_id: membership_id,
+      email: input.email,
+      role: input.role,
+      invited_by: user_id,
+      status: 'pending',
+      expires_at: expiryTimestamp,
+      invitation_message: input.message,
+    }).go()
+
+    // Create reminder schedules (3 days, 6 days, and 7 days after invitation)
+    const reminderSchedules = [
+      { type: 'first_reminder', days: 3 },
+      { type: 'second_reminder', days: 6 },
+      { type: 'final_reminder', days: 7 },
+    ]
+
+    for (const schedule of reminderSchedules) {
+      const scheduledTime = new Date(now.getTime() + schedule.days * 24 * 60 * 60 * 1000)
+      const scheduledTimestamp = Math.floor(scheduledTime.getTime() / 1000)
+      
+      await invitationReminders.create({
+        id: uuidv4(),
+        invitation_token: invitationToken,
+        workspace_id: workspace_id,
+        membership_id: membership_id,
+        email: input.email,
+        invited_by: user_id,
+        reminder_type: schedule.type as 'first_reminder' | 'second_reminder' | 'final_reminder',
+        reminder_count: 0,
+        status: 'pending',
+        scheduled_for: scheduledTimestamp,
+        ttl: scheduledTimestamp + 86400, // TTL 1 day after scheduled time
+      }).go()
+    }
 
     // Publish domain event
     const memberInvitedEvent: MEMBER_INVITED_DOMAIN_EVENT = {
@@ -199,6 +268,10 @@ const handler = async (
 
     await eventBridgeAdapter.publish([memberInvitedEvent])
 
+    // Generate the invitation URL
+    const baseUrl = process.env.MARKETING_URL || 'https://usezeiro.com'
+    const invitationUrl = `${baseUrl}/auth/signup?invitation=${invitationToken}&workspace=${workspace_id}`
+
     return {
       statusCode: 201,
       headers: {
@@ -207,7 +280,11 @@ const handler = async (
         'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
         'Access-Control-Allow-Methods': 'POST,OPTIONS',
       },
-      body: JSON.stringify(membership),
+      body: JSON.stringify({
+        ...membership,
+        invitation_url: invitationUrl,
+        invitation_token: invitationToken, // Include token for debugging/testing
+      }),
     }
   } catch (error) {
     console.error('Error inviting member:', error)

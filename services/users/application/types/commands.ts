@@ -6,6 +6,7 @@ export type CREATE_USER_COMMAND = {
         name: string,
         id: string,
         usage_intent: string,
-        role: string
+        role: string,
+        invitation_token?: string
     }
 }

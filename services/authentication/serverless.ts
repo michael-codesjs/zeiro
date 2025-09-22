@@ -18,6 +18,10 @@ const serverlessConfiguration: AWS.Service = {
         '${ssm:/zeiro/${self:custom.stage}/infrastructure/io/central/api/root-resource-id}',
     },
 
+    environment: {
+      ACCEPT_INVITATION_URL: '${ssm:/zeiro/${self:custom.stage}/infrastructure/io/central/api/url}/invitations/accept',
+    },
+
     iam: {
       role: {
         statements: [

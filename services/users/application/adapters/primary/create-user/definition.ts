@@ -28,6 +28,7 @@ export const definition: AWS.ServerlessLambdaFunction = {
         'dynamodb:UpdateItem',
         'dynamodb:Query',
         'dynamodb:PutItem',
+        'dynamodb:DeleteItem',
       ],
       Resource: [
         '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}',

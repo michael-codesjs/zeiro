@@ -17,7 +17,6 @@ The `clients/` directory contains frontend applications and client-facing code f
 - Components should be organized in logical folders under `src/components/`
 - Layout-related components go in `src/components/layout/`
 - UI components go in `src/components/ui/`
-- Feature-specific components go in `src/components/[feature-name]/`
 
 ## React Patterns
 - Use "use client" directive only when necessary (client-side interactivity)

@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast';
 import { resendSignUpCode } from 'aws-amplify/auth';
 import PinInput from '@/components/PinInput';
 import { useAuth } from '@/hooks/useAuth';
-import { buttonVariants } from '@/components/button';
+import { buttonVariants } from '@/components/Button';
 
 // Create a client component that safely uses useSearchParams
 function VerificationCodeContent() {

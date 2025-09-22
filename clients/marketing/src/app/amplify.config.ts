@@ -13,6 +13,14 @@ const resourcesConfig: ResourcesConfig = {
       userPoolClientId: process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID!,
     },
   },
+  API: {
+    REST: {
+      'zeiro-api': {
+        endpoint: process.env.NEXT_PUBLIC_REST_API_URL || 'https://api.usezeiro.com',
+        region: process.env.NEXT_PUBLIC_AWS_REGION || 'eu-central-1',
+      },
+    },
+  },
 }
 
 const libraryOptions = { ssr: true }

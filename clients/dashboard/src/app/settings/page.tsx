@@ -53,7 +53,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-slate-50">
+    <div className="min-h-screen h-screen overflow-y-scroll w-full bg-slate-50">
       <div className="px-6 py-8">
         {/* Header */}
         <div className="mb-4">

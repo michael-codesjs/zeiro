@@ -1,17 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-hot-toast';
+import { get } from 'aws-amplify/api';
 
 import Input from '@/components/input';
 import Select from '@/components/select';
 import FormCard from '@/components/form-card';
 import { useAuth } from '@/hooks/useAuth';
-import { buttonVariants } from '@/components/button';
+import { buttonVariants } from '@/components/Button';
 import {
   signUpStep1Schema,
   signUpStep2Schema
@@ -30,12 +31,37 @@ interface SignUpStep2FormData {
 
 interface SignUpFormData extends SignUpStep1FormData, SignUpStep2FormData {}
 
-export default function Signup() {
+interface InvitationData {
+  valid: boolean;
+  workspace: {
+    id: string;
+    name: string;
+    description?: string;
+    logo?: string;
+    member_count?: number;
+    created_at?: string;
+  };
+  invitation: {
+    email: string;
+    role: string;
+    invited_by: string;
+    invited_by_name?: string;
+    invited_at: string;
+    expires_at: string;
+  };
+}
+
+function SignupContent() {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [animateIn, setAnimateIn] = useState(false);
+  const [invitationData, setInvitationData] = useState<InvitationData | null>(null);
+  const [isValidatingInvitation, setIsValidatingInvitation] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { signUpUser } = useAuth();
+  
+  const invitationToken = searchParams.get('invitation');
   
   // Form for step 1
   const step1Form = useForm<SignUpStep1FormData>({
@@ -66,10 +92,52 @@ export default function Signup() {
     setValue: setValueStep2
   } = step2Form;
   
+  // Validate invitation if token is present
+  const validateInvitation = async (token: string) => {
+    try {
+      setIsValidatingInvitation(true);
+      
+      // Use Amplify API like the dashboard
+      const restOperation = get({
+        apiName: 'zeiro-api',
+        path: `/invitations/${token}/validate`,
+      });
+      
+      const response = await restOperation.response;
+      const data = await response.body.json() as InvitationData;
+      
+      setInvitationData(data);
+      
+      // Pre-fill email if it matches invitation
+      if (data.invitation.email) {
+        step1Form.setValue('email', data.invitation.email);
+      }
+    } catch (error: any) {
+      console.error('Error validating invitation:', error);
+      
+      // Handle different error types
+      if (error.response?.status === 404 || error.response?.status === 410) {
+        toast.error('Invalid or expired invitation link');
+      } else {
+        toast.error('Failed to validate invitation');
+      }
+      
+      // Remove invalid token from URL
+      router.push('/auth/up');
+    } finally {
+      setIsValidatingInvitation(false);
+    }
+  };
+
   useEffect(() => {
+    // Validate invitation if token is present
+    if (invitationToken) {
+      validateInvitation(invitationToken);
+    }
+    
     // Trigger animation after component mounts
     setAnimateIn(true);
-  }, []);
+  }, [invitationToken]);
   
   const roles = [
     { id: 'engineering', name: 'Engineering' },
@@ -116,7 +184,8 @@ export default function Signup() {
         full_name: formData.name,
         password: formData.password,
         role: formData.role,
-        usage_intent: formData.usageIntent
+        usage_intent: formData.usageIntent,
+        invitation_token: invitationToken || undefined
       });
       
       
@@ -150,13 +219,14 @@ export default function Signup() {
           <Input
             id="email"
             type="email"
-            label="Work Email"
+            label="Email"
             placeholder="you@company.com"
             autoComplete="email"
             variant="modern"
             labelVariant="bold"
             size="lg"
             required
+            disabled={!!invitationData}
             error={errorsStep1.email?.message}
             {...registerStep1('email')}
           />
@@ -213,12 +283,37 @@ export default function Signup() {
 
   return (
     <div className={`w-full transition-all duration-1000 ease-out ${animateIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+      {/* Workspace Logo */}
+      {invitationData && (
+        <div className="mb-6 flex justify-center">
+          {invitationData.workspace.logo ? (
+            <img 
+              src={invitationData.workspace.logo} 
+              alt={`${invitationData.workspace.name} logo`}
+              className="w-16 h-16 rounded-lg object-cover"
+            />
+          ) : (
+            <div className="w-16 h-16 bg-blue-500 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-xl">
+                {invitationData.workspace.name.charAt(0).toUpperCase()}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="text-center mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
-          {step === 1 ? "Create your account" : "Tell us about yourself"}
+          {invitationData 
+            ? (step === 1 ? `Join ${invitationData.workspace.name} on Zeiro` : "Tell us about yourself")
+            : (step === 1 ? "Create your account" : "Tell us about yourself")
+          }
         </h1>
         <p className="text-lg text-gray-400">
-          {step === 1 ? "Join thousands of teams using Zeiro" : "Help us customize your experience"}
+          {invitationData
+            ? (step === 1 ? "Complete your profile to join the workspace" : "Help us customize your experience")
+            : (step === 1 ? "Join thousands of teams using Zeiro" : "Help us customize your experience")
+          }
         </p>
       </div>
 
@@ -268,5 +363,17 @@ export default function Signup() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function Signup() {
+  return (
+    <Suspense fallback={
+      <div className="w-full text-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    }>
+      <SignupContent />
+    </Suspense>
   );
 } 

@@ -1,3 +1,5 @@
 export { Workspace } from './workspace'
 export { WorkspaceMembership } from './workspace-membership'
 export { WorkspaceMembershipCount } from './workspace-membership-count'
+export { InvitationToken } from './invitation-token'
+export { InvitationReminder } from './invitation-reminder'

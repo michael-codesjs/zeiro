@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { buttonVariants } from './button';
+import { buttonVariants } from './Button';
 
 interface HeaderProps {
   currentPage?: 'home' | 'features' | 'pricing' | 'integrations' | 'blog' | 'careers' | 'contact' | 'help' | 'status' | 'privacy' | 'terms' | 'security';

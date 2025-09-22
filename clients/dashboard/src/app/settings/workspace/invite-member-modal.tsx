@@ -5,6 +5,7 @@ import { Button, Input, Textarea, Modal, ModalHeader, ModalBody, ModalFooter, Mo
 import { useWorkspaces, type InviteMemberData } from "@/data/workspaces";
 import { type UseDisclosureReturn } from "@/hooks/use-disclosure";
 import { UserAdd } from "iconsax-reactjs";
+import { toast } from "react-hot-toast";
 
 interface InviteMemberModalProps {
   disclosure: UseDisclosureReturn;
@@ -26,15 +27,16 @@ export function InviteMemberModal({ disclosure, workspaceId, onMemberInvited }: 
     message: ""
   });
   const [isInviting, setIsInviting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleInviteMember = async () => {
     if (!workspaceId || !inviteForm.email.trim()) return;
     
     try {
       setIsInviting(true);
-      setError(null);
       await inviteMember(workspaceId, inviteForm);
+      
+      // Show success toast
+      toast.success("Invitation sent successfully!");
       
       // Reset form
       setInviteForm({ email: "", role: "member", message: "" });
@@ -42,7 +44,8 @@ export function InviteMemberModal({ disclosure, workspaceId, onMemberInvited }: 
       onMemberInvited?.();
     } catch (err) {
       console.error("Failed to invite member:", err);
-      setError(err instanceof Error ? err.message : "Failed to invite member. Please try again.");
+      // Show error toast with the specific error message
+      toast.error(err?.error || err?.message || "Failed to invite member. Please try again.");
     } finally {
       setIsInviting(false);
     }
@@ -51,7 +54,6 @@ export function InviteMemberModal({ disclosure, workspaceId, onMemberInvited }: 
   const handleClose = () => {
     // Reset form when closing
     setInviteForm({ email: "", role: "member", message: "" });
-    setError(null);
     disclosure.onClose();
   };
 
@@ -60,11 +62,6 @@ export function InviteMemberModal({ disclosure, workspaceId, onMemberInvited }: 
       <ModalContent>
         <ModalHeader disclosure={disclosure}>Invite Member</ModalHeader>
         <ModalBody>
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
-          )}
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">

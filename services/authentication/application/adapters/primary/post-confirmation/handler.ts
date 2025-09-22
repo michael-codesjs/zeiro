@@ -9,13 +9,15 @@ const handler: PostConfirmationTriggerHandler = async (event) => {
 
   const usage_intent = event.request.userAttributes['custom:usage_intent']
   const role = event.request.userAttributes['custom:role']
+  const invitation_token = event.request.userAttributes['custom:invitation_token']
 
   const { email, name } = event.request.userAttributes
 
-  const params = { email, name, id: sub, usage_intent, role }
+  const params = { email, name, id: sub, usage_intent, role, invitation_token }
 
   console.log('params', params)
 
+  // createUser now handles both invitation acceptance and workspace creation
   await createUser(params)
 
   return event

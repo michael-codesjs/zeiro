@@ -24,6 +24,7 @@ type SignUpInput = {
   full_name: string
   role: string
   usage_intent: string
+  invitation_token?: string
 }
 
 interface UseAuthReturn {
@@ -123,20 +124,28 @@ export function useAuth(): Omit<UseAuthReturn, 'loading' | 'error'> {
     password,
     full_name,
     role,
-    usage_intent
+    usage_intent,
+    invitation_token
   }: SignUpInput) => {
     try {
+
+      const userAttributes: Record<string, string> = {
+        email,
+        name: full_name,
+        'custom:role': role,
+        'custom:usage_intent': usage_intent
+      }
+
+      // Add invitation token if present
+      if (invitation_token) {
+        userAttributes['custom:invitation_token'] = invitation_token
+      }
 
       const result = await signUp({
         username: email,
         password,
         options: {
-          userAttributes: {
-            email,
-            name: full_name,
-            'custom:role': role,
-            'custom:usage_intent': usage_intent
-          },
+          userAttributes,
         },
       })
 
