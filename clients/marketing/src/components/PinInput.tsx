@@ -147,10 +147,10 @@ const PinInput: React.FC<PinInputProps> = ({
             onKeyDown={(e) => handleKeyDown(e, index)}
             onPaste={(e) => handlePaste(e, index)}
             maxLength={1}
-            className={`w-12 h-14 text-center text-lg md:text-xl font-bold rounded-lg border-2 focus:ring-2 outline-none transition-all duration-200 ${
+            className={`w-12 h-14 text-center text-lg md:text-xl font-bold rounded-lg border-2 focus:ring-2 outline-none transition-all duration-300 ${
               disabled
-                ? 'bg-gray-100 border-gray-200 text-gray-400'
-                : 'bg-white/90 border-gray-200 hover:border-gray-300 focus:border-indigo-500 focus:ring-indigo-500/20 text-gray-800'
+                ? 'bg-gray-800/50 border-gray-700 text-gray-500 cursor-not-allowed'
+                : 'bg-gray-900/90 border-gray-800 text-white placeholder-gray-400 hover:border-gray-700 hover:bg-gray-900 focus:border-gray-600 focus:bg-gray-900 focus:ring-gray-600/20'
             }`}
             autoComplete="one-time-code"
             inputMode="numeric"

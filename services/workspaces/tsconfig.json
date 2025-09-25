@@ -17,7 +17,8 @@
         "@typings/*": ["types/*"],
         "@typings": ["types/index.ts"],
         "@repositories": ["repositories/index.ts"],
-        "@repositories/*": ["repositories/*"]
+        "@repositories/*": ["repositories/*"],
+        "@templates/*": ["templates/*"]
       }
     },
     "include": ["serverless.ts", "application/**/*.ts"],

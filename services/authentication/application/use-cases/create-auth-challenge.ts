@@ -2,8 +2,10 @@ import {
   configureEnviromentVariables,
   WithPartial,
   DEFAULT_AUTH_CHALLENGE,
+  sendEmail,
 } from '@zeiro/sdk'
 import * as digitGenerator from 'crypto-secure-random-digit'
+import { createAuthCodeEmail } from '@templates/auth-code-email'
 
 configureEnviromentVariables()
 
@@ -43,12 +45,43 @@ export const createAuthChallenge: CreateAuthChallengeUseCase = async (
     throw new Error('Either email or phoneNumber is required.')
 
   const STAGE = process.env.STAGE
-  const challenge =
-    STAGE === 'prod'
-      ? digitGenerator.randomDigits(6).join('')
-      : DEFAULT_AUTH_CHALLENGE // genereate 6 digit OTP in prod, use DEFAULT_OTP in other stages.
+  const challenge = digitGenerator.randomDigits(6).join('')
+    // STAGE === 'prod'
+      // ? 
+      // '123456'
+      // : DEFAULT_AUTH_CHALLENGE // genereate 6 digit OTP in prod, use DEFAULT_OTP in other stages.
 
-  // TODO: send sms & email.
+  // Send email if email is provided
+  if ('email' in params && params.email) {
+    try {
+      const authCodeEmail = createAuthCodeEmail({
+        to: {
+          email: params.email,
+          name: params.email.split('@')[0] // Use email prefix as fallback name
+        },
+        from: {
+          email: 'noreply@usezeiro.com',
+          name: 'Zeiro'
+        },
+        code: challenge,
+        expirationMinutes: 10
+      })
+
+      const emailResult = await sendEmail(authCodeEmail)
+      
+      if (!emailResult.success) {
+        console.error('Failed to send auth code email:', emailResult.error)
+        // Don't fail the entire auth flow if email fails, just log it
+      } else {
+        console.log('Auth code email sent successfully:', emailResult.messageId)
+      }
+    } catch (emailError) {
+      console.error('Error sending auth code email:', emailError)
+      // Don't fail the entire auth flow if email fails, just log it
+    }
+  }
+
+  // TODO: send SMS if phoneNumber is provided
 
   return challenge
 }

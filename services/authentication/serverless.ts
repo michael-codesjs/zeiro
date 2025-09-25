@@ -20,6 +20,7 @@ const serverlessConfiguration: AWS.Service = {
 
     environment: {
       ACCEPT_INVITATION_URL: '${ssm:/zeiro/${self:custom.stage}/infrastructure/io/central/api/url}/invitations/accept',
+      RESEND_API_KEY: '${ssm:/zeiro/${self:custom.stage}/external/resend/api-key}',
     },
 
     iam: {

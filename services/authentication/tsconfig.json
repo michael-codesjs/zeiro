@@ -24,7 +24,8 @@
       "@typings": ["types/index.ts"],
       "@use-cases/*": ["use-cases/*"],
       "@use-cases": ["use-cases/index.ts"],
-      "@utilities/*": ["utilities/*"]
+      "@utilities/*": ["utilities/*"],
+      "@templates/*": ["templates/*"]
     }
   },
   "include": ["serverless.ts", "application/**/*.ts", "scripts/**/*.ts"],

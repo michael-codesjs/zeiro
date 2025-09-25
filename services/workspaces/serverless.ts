@@ -28,6 +28,7 @@ const serverlessConfiguration: AWS.Service = {
         ZEIRO_TABLE_NAME:
         '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/name}',
       MARKETING_URL: '${env:MARKETING_URL, "https://usezeiro.com"}',
+      RESEND_API_KEY: '${ssm:/zeiro/${self:custom.stage}/external/resend/api-key}',
     },
   },
 

@@ -3,6 +3,8 @@ import { users, workspaces, workspaceMemberships, invitationTokens, invitationRe
 import { InviteMemberInput, WorkspaceMembership } from '@typings/workspace'
 import { MEMBER_INVITED_DOMAIN_EVENT } from '@typings/domain-events'
 import { EventBridgeAdapter } from '@adapters/secondary/event-bridge'
+import { sendEmail } from '@zeiro/sdk'
+import { createInvitationEmail } from '@templates/invitation-email'
 import { v4 as uuidv4 } from 'uuid'
 import { randomBytes } from 'crypto'
 
@@ -270,7 +272,38 @@ const handler = async (
 
     // Generate the invitation URL
     const baseUrl = process.env.MARKETING_URL || 'https://usezeiro.com'
-    const invitationUrl = `${baseUrl}/auth/signup?invitation=${invitationToken}&workspace=${workspace_id}`
+    const invitationUrl = `${baseUrl}/auth/up?invitation=${invitationToken}&workspace=${workspace_id}`
+
+    // Send invitation email
+    try {
+      const invitationEmail = createInvitationEmail({
+        to: {
+          email: input.email,
+          name: input.email.split('@')[0] // Use email prefix as fallback name
+        },
+        from: {
+          email: 'noreply@usezeiro.com',
+          name: 'Zeiro'
+        },
+        workspaceName: workspace.data.name,
+        inviterName: user.name || user.email,
+        invitationUrl,
+        role: input.role,
+        message: input.message
+      })
+
+      const emailResult = await sendEmail(invitationEmail)
+      
+      if (!emailResult.success) {
+        console.error('Failed to send invitation email:', emailResult.error)
+        // Don't fail the entire request if email fails, just log it
+      } else {
+        console.log('Invitation email sent successfully:', emailResult.messageId)
+      }
+    } catch (emailError) {
+      console.error('Error sending invitation email:', emailError)
+      // Don't fail the entire request if email fails, just log it
+    }
 
     return {
       statusCode: 201,
