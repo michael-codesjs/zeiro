@@ -461,6 +461,211 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Pricing Section */}
+      <section className="py-20 px-6 relative">
+        <FloatingElements variant="sparse" colors={['emerald', 'blue', 'violet']} />
+        
+        <div className="max-w-6xl mx-auto relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Simple pricing for every team</h2>
+            <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">Start free and scale as you grow. No hidden fees, no surprises.</p>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 text-sm text-gray-400 bg-gray-900/50 border border-gray-800 rounded-full px-4 py-2"
+            >
+              <Lightning size={16} color="#facc15" variant="Outline" />
+              <span>14-day free trial • No credit card required</span>
+            </motion.div>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            {/* Starter Plan */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.02, y: -5 }}
+              className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+            >
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold text-white mb-2">Starter</h3>
+                <p className="text-gray-400 mb-6">Perfect for individuals and small teams getting started</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-bold text-white">$0</span>
+                  <span className="text-gray-400">/month</span>
+                </div>
+                <p className="text-sm text-gray-500 mt-2">Forever free</p>
+              </div>
+              
+              <Link href="/auth/up" className="w-full bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors font-medium text-center block mb-8">
+                Get started free
+              </Link>
+              
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Up to 3 team members</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">5 data sources</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">10 dashboards</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Basic visualizations</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Email support</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Pro Plan - Most Popular */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.02, y: -5 }}
+              className="bg-gray-900/50 border-2 border-white/20 rounded-2xl p-8 hover:bg-gray-900/80 hover:border-white/30 transition-all duration-300 relative"
+            >
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <div className="bg-white text-black px-4 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+                  <Star size={12} color="currentColor" variant="Outline" />
+                  Most Popular
+                </div>
+              </div>
+              
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
+                <p className="text-gray-400 mb-6">For growing teams that need more power and flexibility</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-bold text-white">$29</span>
+                  <span className="text-gray-400">/month</span>
+                </div>
+                <p className="text-sm text-gray-500 mt-2">Per user, billed monthly</p>
+              </div>
+              
+              <Link href="/auth/up" className="w-full bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors font-medium text-center block mb-8">
+                Start free trial
+              </Link>
+              
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Up to 25 team members</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Unlimited data sources</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Unlimited dashboards</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Advanced visualizations</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Priority support</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Advanced analytics</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">API access</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Ultra Plan */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.02, y: -5 }}
+              className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+            >
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold text-white mb-2">Ultra</h3>
+                <p className="text-gray-400 mb-6">For power users who need maximum performance and advanced features</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-bold text-white">$99</span>
+                  <span className="text-gray-400">/month</span>
+                </div>
+                <p className="text-sm text-gray-500 mt-2">Per user, billed monthly</p>
+              </div>
+              
+              <Link href="/auth/up" className="w-full bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors font-medium text-center block mb-8">
+                Start free trial
+              </Link>
+              
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Up to 100 team members</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Everything in Pro</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Advanced AI insights</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">White-label options</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Premium support</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check size={20} color="#4ade80" variant="Outline" />
+                  <span className="text-gray-300">Advanced security features</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="text-center mt-16">
+            <p className="text-gray-400 mb-4">
+              Need a custom enterprise plan with unlimited team members and on-premise deployment?
+            </p>
+            <Link 
+              href="/pricing" 
+              className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors font-medium"
+            >
+              View enterprise options
+              <ArrowRight size={16} color="currentColor" variant="Outline" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 px-6 relative">
         <FloatingElements variant="sparse" colors={['violet', 'emerald', 'rose']} />
