@@ -24,6 +24,30 @@ The `clients/` directory contains frontend applications and client-facing code f
 - Keep state management close to where it's needed
 - Use proper component composition patterns
 
+## Form Management
+- **ALWAYS use react-hook-form for all form state management**
+- Use proper form validation with react-hook-form's built-in validation or schema libraries
+- Implement proper error handling and display for form fields
+- Use controlled components pattern with react-hook-form
+
+## API Integration
+- **ALWAYS use Amplify SDK for making API calls to the zeiro-api**
+- Configure Amplify properly for authentication and API endpoints
+- Use proper error handling for API calls
+- Implement loading states for API operations
+
+## Data Fetching & State Management
+- **ALWAYS use React Query (TanStack Query) for server state management**
+- Use proper query keys and cache invalidation strategies
+- Implement optimistic updates where appropriate
+- Use React Query's built-in loading, error, and success states
+
+## Icons
+- **ALWAYS use Iconsax (iconsax) for all icon needs**
+- **CRITICAL: Always verify an icon exists before using it** - check the Iconsax documentation or test import
+- Use consistent icon sizing and styling across the application
+- Example usage: `import { User } from 'iconsax-react'`
+
 ## Marketing Site
 
 The Marketing client in [clients/marketing](mdc:clients/marketing) contains:

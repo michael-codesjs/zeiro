@@ -10,7 +10,7 @@ import { z } from 'zod';
 
 import Input from '@/components/input';
 import FormCard from '@/components/form-card';
-import { buttonVariants } from '@/components/button';
+import { buttonVariants } from '@/components/Button';
 
 // Forgot password form schema
 const forgotPasswordSchema = z.object({

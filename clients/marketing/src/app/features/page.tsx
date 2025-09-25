@@ -23,7 +23,7 @@ import {
   TickCircle as CheckCircle,
   Star
 } from 'iconsax-react';
-import { buttonVariants } from '@/components/button';
+import { buttonVariants } from '@/components/Button';
 
 export default function FeaturesPage() {
   return (

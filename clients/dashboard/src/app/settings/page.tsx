@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button, Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui";
 import { useSettings } from "../../hooks/use-settings";
@@ -18,7 +18,7 @@ import {
 
 type SettingsSection = 'general' | 'workspaces';
 
-export default function SettingsPage() {
+function SettingsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [activeSection, setActiveSection] = useState<SettingsSection>('general');
@@ -86,5 +86,17 @@ export default function SettingsPage() {
         </Tabs>
       </div>
     </div>
+  );
+}
+
+export default function SettingsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
+      </div>
+    }>
+      <SettingsContent />
+    </Suspense>
   );
 } 

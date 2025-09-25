@@ -6,7 +6,10 @@
     "dev": "PORT=3002 next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "amplify publish",
+    "deploy:staging": "amplify publish --environment staging",
+    "deploy:prod": "amplify publish --environment production"
   },
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "^1.6.0",
