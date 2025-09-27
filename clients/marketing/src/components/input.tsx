@@ -9,43 +9,43 @@ const inputVariants = cva(
     variants: {
       variant: {
         default: [
-          'rounded-lg bg-gray-900/90 border border-gray-800',
-          'text-white placeholder-gray-400',
-          'hover:border-gray-700 hover:bg-gray-900 hover:shadow-lg hover:shadow-black/20',
-          'focus:border-gray-600 focus:bg-gray-900 focus:shadow-xl focus:shadow-black/30',
+          'rounded-lg bg-input border border-border',
+          'text-foreground placeholder-muted-foreground',
+          'hover:border-border/80 hover:bg-accent/50 hover:shadow-lg',
+          'focus:border-ring focus:bg-background focus:shadow-xl focus:ring-2 focus:ring-ring/20',
         ],
         clean: [
-          'rounded-md bg-gray-800/80 border border-gray-700/50',
-          'text-white placeholder-gray-500',
-          'hover:border-gray-600 hover:bg-gray-800/90 hover:shadow-md hover:shadow-black/10',
-          'focus:border-white/60 focus:bg-gray-800 focus:shadow-lg focus:shadow-white/5',
+          'rounded-md bg-card border border-border',
+          'text-foreground placeholder-muted-foreground',
+          'hover:border-border/80 hover:bg-accent/50 hover:shadow-md',
+          'focus:border-ring focus:bg-background focus:shadow-lg focus:ring-2 focus:ring-ring/10',
         ],
         minimal: [
-          'rounded-md bg-gray-900/60 border-b-2 border-gray-700',
-          'text-white placeholder-gray-400',
-          'hover:border-gray-600 hover:bg-gray-900/80',
-          'focus:border-white focus:bg-gray-900/90',
+          'rounded-md bg-background/60 border-b-2 border-border',
+          'text-foreground placeholder-muted-foreground',
+          'hover:border-border/80 hover:bg-background/80',
+          'focus:border-ring focus:bg-background/90',
           'rounded-b-none'
         ],
         modern: [
-          'rounded-xl bg-white/5 border border-white/10',
-          'text-white placeholder-gray-400',
-          'hover:bg-white/10 hover:border-white/20 hover:shadow-lg hover:shadow-white/5',
-          'focus:bg-white/15 focus:border-white/30 focus:shadow-xl focus:shadow-white/10',
+          'rounded-xl bg-card/80 border border-border/50',
+          'text-foreground placeholder-muted-foreground',
+          'hover:bg-card hover:border-border hover:shadow-lg',
+          'focus:bg-background focus:border-ring focus:shadow-xl focus:ring-2 focus:ring-ring/10',
           'backdrop-blur-sm'
         ],
         floating: [
-          'rounded-lg bg-transparent border-2 border-gray-700',
-          'text-white placeholder-transparent',
-          'hover:border-gray-600 hover:bg-gray-900/20',
-          'focus:border-white focus:bg-gray-900/30',
+          'rounded-lg bg-transparent border-2 border-border',
+          'text-foreground placeholder-transparent',
+          'hover:border-border/80 hover:bg-accent/20',
+          'focus:border-ring focus:bg-background/30',
           'peer'
         ],
         password: [
-          'rounded-xl bg-white/5 border border-white/10',
-          'text-white placeholder-gray-400',
-          'hover:bg-white/10 hover:border-white/20 hover:shadow-lg hover:shadow-white/5',
-          'focus:bg-white/15 focus:border-white/30 focus:shadow-xl focus:shadow-white/10',
+          'rounded-xl bg-card/80 border border-border/50',
+          'text-foreground placeholder-muted-foreground',
+          'hover:bg-card hover:border-border hover:shadow-lg',
+          'focus:bg-background focus:border-ring focus:shadow-xl focus:ring-2 focus:ring-ring/10',
           'backdrop-blur-sm pr-12'
         ],
       },
@@ -101,9 +101,9 @@ const labelVariants = cva(
         xl: 'text-lg',
       },
       variant: {
-        default: 'text-gray-300',
-        bold: 'text-white font-semibold',
-        subtle: 'text-gray-400',
+        default: 'text-muted-foreground',
+        bold: 'text-foreground font-semibold',
+        subtle: 'text-muted-foreground',
         floating: 'text-gray-500',
       },
       required: {
@@ -179,7 +179,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
       <div className="relative">
         {leftIcon && (
           <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none z-10">
-            <div className="text-gray-500 group-focus-within:text-gray-300 transition-colors duration-200">
+            <div className="text-gray-500 group-focus-within:text-muted-foreground transition-colors duration-200">
               {leftIcon}
             </div>
           </div>
@@ -203,10 +203,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
         {label && isFloating && (
           <label
             htmlFor={inputId}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 transition-all duration-200 pointer-events-none
-                       peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400
-                       peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-white
-                       peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-white"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground transition-all duration-200 pointer-events-none
+                       peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-muted-foreground
+                       peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-foreground
+                       peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-foreground"
           >
             {label}
             {required && <span className="text-red-400 ml-1">*</span>}
@@ -217,7 +217,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
         {isPassword && (
           <button
             type="button"
-            className="absolute inset-y-0 right-0 flex items-center pr-4 z-10 text-gray-500 hover:text-gray-300 transition-colors duration-200"
+            className="absolute inset-y-0 right-0 flex items-center pr-4 z-10 text-gray-500 hover:text-muted-foreground transition-colors duration-200"
             onClick={togglePasswordVisibility}
             tabIndex={-1}
           >
@@ -231,7 +231,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
 
         {rightIcon && !isPassword && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none z-10">
-            <div className="text-gray-500 group-focus-within:text-gray-300 transition-colors duration-200">
+            <div className="text-gray-500 group-focus-within:text-muted-foreground transition-colors duration-200">
               {rightIcon}
             </div>
           </div>
@@ -336,7 +336,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(({
               key={option.value} 
               value={option.value}
               disabled={option.disabled}
-              className="bg-gray-900 text-white"
+              className="bg-gray-900 text-foreground"
             >
               {option.label}
             </option>
@@ -345,7 +345,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(({
         
         {/* Enhanced dropdown arrow */}
         <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none z-10">
-          <div className="text-gray-500 group-focus-within:text-gray-300 group-hover:text-gray-400 transition-all duration-200">
+          <div className="text-gray-500 group-focus-within:text-muted-foreground group-hover:text-muted-foreground transition-all duration-200">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transform group-focus-within:rotate-180 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>

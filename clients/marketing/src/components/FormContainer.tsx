@@ -52,8 +52,8 @@ const formHeaderVariants = cva(
       background: {
         light: 'bg-gradient-to-br from-gray-50 to-gray-100',
         primary: 'bg-gradient-to-br from-indigo-50 to-indigo-100',
-        dark: 'bg-gradient-to-br from-gray-800 to-gray-900 text-white',
-        darkPrimary: 'bg-gradient-to-br from-gray-800/50 to-gray-900/50 text-white',
+        dark: 'bg-gradient-to-br from-gray-800 to-gray-900 text-foreground',
+        darkPrimary: 'bg-gradient-to-br from-gray-800/50 to-gray-900/50 text-foreground',
       },
     },
     defaultVariants: {
@@ -91,8 +91,8 @@ const FormContainer: React.FC<FormContainerProps> = ({
       <div className={formContainerVariants({ theme, showBorder, size, className })}>
         {/* Form header with gradient background */}
         <div className={formHeaderVariants({ theme, background })}>
-          <h2 className={`text-2xl font-bold mb-1 ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>{title}</h2>
-          {subtitle && <p className={`mt-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>{subtitle}</p>}
+          <h2 className={`text-2xl font-bold mb-1 ${theme === 'dark' ? 'text-foreground' : 'text-gray-800'}`}>{title}</h2>
+          {subtitle && <p className={`mt-1 ${theme === 'dark' ? 'text-muted-foreground' : 'text-gray-600'}`}>{subtitle}</p>}
         </div>
         
         {/* Form content with background and padding */}

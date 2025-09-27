@@ -48,11 +48,11 @@ export default function DataSourcePage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Navigation */}
       <div className="pt-20 pb-6 px-6 border-b border-gray-800/50">
         <div className="max-w-6xl mx-auto">
-          <Link href="/features" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
+          <Link href="/features" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
             <ArrowLeft size={14} color="currentColor" variant="Outline" />
             <span>Back to integrations</span>
           </Link>
@@ -84,22 +84,22 @@ export default function DataSourcePage() {
                     
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h1 className="text-3xl md:text-4xl font-bold text-white">{dataSource.name}</h1>
+                        <h1 className="text-3xl md:text-4xl font-bold text-foreground">{dataSource.name}</h1>
                         <div className="flex items-center gap-1">
                           {renderStars(dataSource.popularity)}
                         </div>
                       </div>
                       
                       <div className="flex flex-wrap items-center gap-2 mb-4">
-                        <span className="px-3 py-1 bg-gray-800/50 border border-gray-700/50 text-gray-300 text-xs rounded-full">
+                        <span className="px-3 py-1 bg-gray-800/50 border border-gray-700/50 text-muted-foreground text-xs rounded-full">
                           {dataSource.category}
                         </span>
-                        <span className="px-3 py-1 bg-gray-800/50 border border-gray-700/50 text-gray-300 text-xs rounded-full">
+                        <span className="px-3 py-1 bg-gray-800/50 border border-gray-700/50 text-muted-foreground text-xs rounded-full">
                           {dataSource.pricing}
                         </span>
                       </div>
                       
-                      <p className="text-gray-400 text-base leading-relaxed mb-6">
+                      <p className="text-muted-foreground text-base leading-relaxed mb-6">
                         {dataSource.description}
                       </p>
                       
@@ -114,7 +114,7 @@ export default function DataSourcePage() {
                         <Link
                           href={dataSource.documentation}
                           target="_blank"
-                          className="border border-gray-700/50 text-white px-6 py-3 rounded-xl hover:bg-gray-800/50 transition-all duration-200 font-medium inline-flex items-center gap-2 justify-center"
+                          className="border border-gray-700/50 text-foreground px-6 py-3 rounded-xl hover:bg-gray-800/50 transition-all duration-200 font-medium inline-flex items-center gap-2 justify-center"
                         >
                           <DocumentText size={14} color="currentColor" variant="Outline" />
                           Documentation
@@ -127,28 +127,28 @@ export default function DataSourcePage() {
                 {/* Right: Quick Stats */}
                 <div className="lg:col-span-4">
                   <div className="bg-gray-800/30 border border-gray-700/30 rounded-2xl p-6">
-                    <h3 className="text-sm font-medium text-gray-300 mb-4">Quick Stats</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-4">Quick Stats</h3>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Clock size={14} color="#9ca3af" variant="Outline" />
-                          <span className="text-sm text-gray-400">Setup Time</span>
+                          <span className="text-sm text-muted-foreground">Setup Time</span>
                         </div>
-                        <span className="text-sm font-medium text-white">2 minutes</span>
+                        <span className="text-sm font-medium text-foreground">2 minutes</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Shield size={14} color="#9ca3af" variant="Outline" />
-                          <span className="text-sm text-gray-400">Security</span>
+                          <span className="text-sm text-muted-foreground">Security</span>
                         </div>
-                        <span className="text-sm font-medium text-white">Enterprise</span>
+                        <span className="text-sm font-medium text-foreground">Enterprise</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Database size={14} color="#9ca3af" variant="Outline" />
-                          <span className="text-sm text-gray-400">Type</span>
+                          <span className="text-sm text-muted-foreground">Type</span>
                         </div>
-                        <span className="text-sm font-medium text-white">Native</span>
+                        <span className="text-sm font-medium text-foreground">Native</span>
                       </div>
                     </div>
                   </div>
@@ -166,7 +166,7 @@ export default function DataSourcePage() {
             
             {/* Left Column: Setup Steps */}
             <div className="bg-gray-900/40 border border-gray-800/50 rounded-2xl p-6">
-              <h2 className="text-xl font-semibold text-white mb-6">Quick Setup</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-6">Quick Setup</h2>
               <div className="space-y-4">
                 {dataSource.setupSteps.map((step, index) => (
                   <div key={index} className="flex gap-3">
@@ -174,8 +174,8 @@ export default function DataSourcePage() {
                       <span className="text-black font-bold text-xs">{index + 1}</span>
                     </div>
                     <div>
-                      <h3 className="text-sm font-medium text-white mb-1">{step.title}</h3>
-                      <p className="text-xs text-gray-400 leading-relaxed">{step.description}</p>
+                      <h3 className="text-sm font-medium text-foreground mb-1">{step.title}</h3>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{step.description}</p>
                     </div>
                   </div>
                 ))}
@@ -186,7 +186,7 @@ export default function DataSourcePage() {
             <div className="bg-gray-900/40 border border-gray-800/50 rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <h2 className="text-sm font-medium text-white">Live Demo</h2>
+                <h2 className="text-sm font-medium text-foreground">Live Demo</h2>
               </div>
               
               <div className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-4 space-y-3">
@@ -194,27 +194,27 @@ export default function DataSourcePage() {
                   <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center">
                     <Chat size={10} color="black" variant="Bold" />
                   </div>
-                  <span className="text-white text-xs font-medium">Zeiro AI</span>
+                  <span className="text-foreground text-xs font-medium">Zeiro AI</span>
                 </div>
                 
                 <div className="bg-gray-700/50 rounded-lg p-3">
-                  <p className="text-white text-xs">Show me revenue by month from {dataSource.name}</p>
+                  <p className="text-foreground text-xs">Show me revenue by month from {dataSource.name}</p>
                 </div>
                 
                 <div className="bg-gray-700/30 border border-gray-600/30 rounded-lg p-3">
-                  <p className="text-gray-300 text-xs mb-2">Here's your monthly revenue:</p>
+                  <p className="text-muted-foreground text-xs mb-2">Here's your monthly revenue:</p>
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
-                      <span className="text-gray-400">January</span>
-                      <span className="text-white">$124,500</span>
+                      <span className="text-muted-foreground">January</span>
+                      <span className="text-foreground">$124,500</span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-gray-400">February</span>
-                      <span className="text-white">$138,200</span>
+                      <span className="text-muted-foreground">February</span>
+                      <span className="text-foreground">$138,200</span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-gray-400">March</span>
-                      <span className="text-white">$156,800</span>
+                      <span className="text-muted-foreground">March</span>
+                      <span className="text-foreground">$156,800</span>
                     </div>
                   </div>
                 </div>
@@ -228,10 +228,10 @@ export default function DataSourcePage() {
       <div className="px-6 pb-12">
         <div className="max-w-6xl mx-auto">
           <div className="bg-gradient-to-r from-gray-900/60 to-gray-800/60 border border-gray-700/50 rounded-2xl p-8 text-center">
-            <h2 className="text-2xl font-bold text-white mb-3">
+            <h2 className="text-2xl font-bold text-foreground mb-3">
               Ready to connect {dataSource.name}?
             </h2>
-            <p className="text-gray-400 mb-6 max-w-2xl mx-auto">
+            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
               Start querying your {dataSource.name} data with natural language in under 2 minutes.
             </p>
             
@@ -245,7 +245,7 @@ export default function DataSourcePage() {
               </Link>
               <Link
                 href="/features"
-                className="text-gray-400 hover:text-white transition-colors text-sm inline-flex items-center gap-1"
+                className="text-muted-foreground hover:text-foreground transition-colors text-sm inline-flex items-center gap-1"
               >
                 <Eye size={14} color="currentColor" variant="Outline" />
                 View all integrations

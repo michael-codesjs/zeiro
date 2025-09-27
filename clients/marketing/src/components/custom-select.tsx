@@ -11,17 +11,17 @@ const selectVariants = cva(
       variant: {
         default: [
           'rounded-lg bg-gray-900/90 border border-gray-800',
-          'text-white hover:border-gray-700 hover:bg-gray-900',
+          'text-foreground hover:border-gray-700 hover:bg-gray-900',
           'focus:border-gray-600 focus:bg-gray-900',
         ],
         clean: [
           'rounded-md bg-gray-800/80 border border-gray-700/50',
-          'text-white hover:border-gray-600 hover:bg-gray-800/90',
+          'text-foreground hover:border-gray-600 hover:bg-gray-800/90',
           'focus:border-white/60 focus:bg-gray-800',
         ],
         modern: [
           'rounded-xl bg-white/5 border border-white/10',
-          'text-white hover:bg-white/10 hover:border-white/20',
+          'text-foreground hover:bg-white/10 hover:border-white/20',
           'focus:bg-white/15 focus:border-white/30',
           'backdrop-blur-sm'
         ],
@@ -160,9 +160,9 @@ const CustomSelect = forwardRef<HTMLDivElement, CustomSelectProps>(({
     {
       variants: {
         variant: {
-          default: 'text-gray-300',
-          bold: 'text-white font-semibold',
-          subtle: 'text-gray-400',
+          default: 'text-muted-foreground',
+          bold: 'text-foreground font-semibold',
+          subtle: 'text-muted-foreground',
           floating: 'text-gray-500',
         },
       },
@@ -196,7 +196,7 @@ const CustomSelect = forwardRef<HTMLDivElement, CustomSelectProps>(({
         aria-expanded={isOpen}
         aria-haspopup="listbox"
       >
-        <span className={selectedOption ? 'text-white' : 'text-gray-500'}>
+        <span className={selectedOption ? 'text-foreground' : 'text-gray-500'}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         
@@ -204,7 +204,7 @@ const CustomSelect = forwardRef<HTMLDivElement, CustomSelectProps>(({
           size={16}
           color="currentColor"
           variant="Outline"
-          className={`text-gray-400 transition-transform duration-200 ${
+          className={`text-muted-foreground transition-transform duration-200 ${
             isOpen ? 'rotate-180' : ''
           }`}
         />
@@ -223,7 +223,7 @@ const CustomSelect = forwardRef<HTMLDivElement, CustomSelectProps>(({
             placeholder="Search options..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className={`w-full px-3 py-2 border rounded-lg text-white placeholder-gray-400 text-sm focus:outline-none transition-colors ${
+            className={`w-full px-3 py-2 border rounded-lg text-foreground placeholder-gray-400 text-sm focus:outline-none transition-colors ${
               variant === 'clean' 
                 ? 'bg-gray-800 border-gray-700 focus:border-gray-600 focus:bg-gray-800' 
                 : variant === 'modern'
@@ -236,7 +236,7 @@ const CustomSelect = forwardRef<HTMLDivElement, CustomSelectProps>(({
         {/* Options List */}
         <div className="max-h-60 overflow-y-auto py-2">
           {filteredOptions.length === 0 ? (
-            <div className="px-4 py-3 text-gray-400 text-sm">
+            <div className="px-4 py-3 text-muted-foreground text-sm">
               No options found
             </div>
           ) : (
@@ -247,7 +247,7 @@ const CustomSelect = forwardRef<HTMLDivElement, CustomSelectProps>(({
                   px-4 py-3 cursor-pointer transition-colors duration-150 flex items-center justify-between
                   ${option.disabled 
                     ? 'text-gray-500 cursor-not-allowed' 
-                    : 'text-white hover:bg-white/10'
+                    : 'text-foreground hover:bg-white/10'
                   }
                   ${value === option.value ? 'bg-white/5' : ''}
                 `}

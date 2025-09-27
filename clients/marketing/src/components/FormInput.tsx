@@ -31,7 +31,7 @@ const iconContainerVariants = cva(
       {
         theme: 'light',
         state: 'default',
-        class: 'text-gray-400',
+        class: 'text-muted-foreground',
       },
       // Dark theme variants
       {
@@ -64,7 +64,7 @@ const inputVariants = cva(
     variants: {
       theme: {
         light: 'text-gray-600',
-        dark: 'text-white',
+        dark: 'text-foreground',
       },
       state: {
         error: '',
@@ -107,7 +107,7 @@ const inputVariants = cva(
       {
         theme: 'dark',
         state: 'default',
-        class: 'border-gray-700 bg-gray-800/50 text-white placeholder-gray-400 hover:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20',
+        class: 'border-gray-700 bg-gray-800/50 text-foreground placeholder-gray-400 hover:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20',
       },
     ],
     defaultVariants: {
@@ -199,7 +199,7 @@ const FormInput: React.FC<FormInputProps> = ({
             type="button"
             className={`absolute inset-y-0 right-0 flex items-center pr-3 transition-colors ${
               theme === 'dark' 
-                ? 'text-gray-400 hover:text-blue-400' 
+                ? 'text-muted-foreground hover:text-blue-400' 
                 : 'text-gray-500 hover:text-indigo-600'
             }`}
             onClick={() => setShowPassword(!showPassword)}
@@ -242,7 +242,7 @@ const FormInput: React.FC<FormInputProps> = ({
           {error}
         </p>
       ) : hint ? (
-        <p className={`mt-1.5 text-xs ml-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{hint}</p>
+        <p className={`mt-1.5 text-xs ml-1 ${theme === 'dark' ? 'text-muted-foreground' : 'text-gray-500'}`}>{hint}</p>
       ) : null}
     </div>
   );

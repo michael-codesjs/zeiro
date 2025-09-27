@@ -18,17 +18,17 @@ export default function PrivacyPage() {
       <section className="pt-32 pb-16 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-center mb-8">
-            <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+            <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
               <ArrowLeft size={16} color="currentColor" variant="Outline" />
               <span>Back to home</span>
             </Link>
           </div>
           
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               Privacy Policy
             </h1>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Your privacy is important to us. This policy explains how we collect, use, and protect your information.
             </p>
             <div className="flex items-center justify-center gap-2 text-gray-500 text-sm mt-6">
@@ -47,24 +47,24 @@ export default function PrivacyPage() {
               <div className="w-16 h-16 bg-blue-500/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Shield size={32} color="#60a5fa" variant="Outline" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Data Protection</h3>
-              <p className="text-gray-400 text-sm">We use industry-standard encryption and security measures to protect your data.</p>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Data Protection</h3>
+              <p className="text-muted-foreground text-sm">We use industry-standard encryption and security measures to protect your data.</p>
             </div>
             
             <div className="text-center">
               <div className="w-16 h-16 bg-green-500/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Eye size={32} color="#4ade80" variant="Outline" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Transparency</h3>
-              <p className="text-gray-400 text-sm">We're clear about what data we collect and how we use it.</p>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Transparency</h3>
+              <p className="text-muted-foreground text-sm">We're clear about what data we collect and how we use it.</p>
             </div>
             
             <div className="text-center">
               <div className="w-16 h-16 bg-purple-500/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <People size={32} color="#c084fc" variant="Outline" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Your Rights</h3>
-              <p className="text-gray-400 text-sm">You have full control over your personal information and can request changes anytime.</p>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Your Rights</h3>
+              <p className="text-muted-foreground text-sm">You have full control over your personal information and can request changes anytime.</p>
             </div>
           </div>
         </div>
@@ -81,12 +81,12 @@ export default function PrivacyPage() {
                 <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
                   <DocumentText size={20} color="#60a5fa" variant="Outline" />
                 </div>
-                <h2 className="text-2xl font-bold text-white m-0">Information We Collect</h2>
+                <h2 className="text-2xl font-bold text-foreground m-0">Information We Collect</h2>
               </div>
               
-              <div className="space-y-6 text-gray-300">
+              <div className="space-y-6 text-muted-foreground">
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Personal Information</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Personal Information</h3>
                   <p className="mb-4">When you create an account or use our services, we may collect:</p>
                   <ul className="space-y-2 ml-6">
                     <li>• Name and email address</li>
@@ -97,7 +97,7 @@ export default function PrivacyPage() {
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Usage Data</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Usage Data</h3>
                   <p className="mb-4">We automatically collect information about how you use our platform:</p>
                   <ul className="space-y-2 ml-6">
                     <li>• Log data and analytics</li>
@@ -108,7 +108,7 @@ export default function PrivacyPage() {
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Data You Upload</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Data You Upload</h3>
                   <p className="mb-4">When using our data analysis platform:</p>
                   <ul className="space-y-2 ml-6">
                     <li>• Database connections and queries</li>
@@ -126,10 +126,10 @@ export default function PrivacyPage() {
                 <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
                   <Settings size={20} color="#4ade80" variant="Outline" />
                 </div>
-                <h2 className="text-2xl font-bold text-white m-0">How We Use Your Information</h2>
+                <h2 className="text-2xl font-bold text-foreground m-0">How We Use Your Information</h2>
               </div>
               
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>We use the information we collect to:</p>
                 <ul className="space-y-2 ml-6">
                   <li>• Provide and improve our data analysis services</li>
@@ -149,10 +149,10 @@ export default function PrivacyPage() {
                 <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
                   <Global size={20} color="#c084fc" variant="Outline" />
                 </div>
-                <h2 className="text-2xl font-bold text-white m-0">Data Sharing and Disclosure</h2>
+                <h2 className="text-2xl font-bold text-foreground m-0">Data Sharing and Disclosure</h2>
               </div>
               
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>We do not sell your personal information. We may share your information only in these limited circumstances:</p>
                 <ul className="space-y-2 ml-6">
                   <li>• <strong>Service Providers:</strong> Trusted third parties who help us operate our platform</li>
@@ -169,10 +169,10 @@ export default function PrivacyPage() {
                 <div className="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center">
                   <Lock size={20} color="#fb923c" variant="Outline" />
                 </div>
-                <h2 className="text-2xl font-bold text-white m-0">Data Security</h2>
+                <h2 className="text-2xl font-bold text-foreground m-0">Data Security</h2>
               </div>
               
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>We implement comprehensive security measures to protect your information:</p>
                 <ul className="space-y-2 ml-6">
                   <li>• End-to-end encryption for data in transit and at rest</li>
@@ -191,10 +191,10 @@ export default function PrivacyPage() {
                 <div className="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center">
                   <People size={20} color="#22d3ee" variant="Outline" />
                 </div>
-                <h2 className="text-2xl font-bold text-white m-0">Your Privacy Rights</h2>
+                <h2 className="text-2xl font-bold text-foreground m-0">Your Privacy Rights</h2>
               </div>
               
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>You have the following rights regarding your personal information:</p>
                 <ul className="space-y-2 ml-6">
                   <li>• <strong>Access:</strong> Request a copy of your personal data</li>
@@ -210,8 +210,8 @@ export default function PrivacyPage() {
 
             {/* Contact Information */}
             <div className="mb-12">
-              <h2 className="text-2xl font-bold text-white mb-6">Contact Us</h2>
-              <div className="space-y-4 text-gray-300">
+              <h2 className="text-2xl font-bold text-foreground mb-6">Contact Us</h2>
+              <div className="space-y-4 text-muted-foreground">
                 <p>If you have questions about this Privacy Policy or our data practices, please contact us:</p>
                 <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
                   <p><strong>Email:</strong> <a href="mailto:privacy@zeiro.com" className="text-blue-400 hover:text-blue-300">privacy@zeiro.com</a></p>
@@ -223,8 +223,8 @@ export default function PrivacyPage() {
 
             {/* Updates */}
             <div className="mb-12">
-              <h2 className="text-2xl font-bold text-white mb-6">Policy Updates</h2>
-              <div className="space-y-4 text-gray-300">
+              <h2 className="text-2xl font-bold text-foreground mb-6">Policy Updates</h2>
+              <div className="space-y-4 text-muted-foreground">
                 <p>We may update this Privacy Policy from time to time. When we do, we will:</p>
                 <ul className="space-y-2 ml-6">
                   <li>• Post the updated policy on this page</li>

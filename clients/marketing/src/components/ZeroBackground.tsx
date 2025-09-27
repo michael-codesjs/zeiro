@@ -76,7 +76,7 @@ const ZeroBackground: React.FC<ZeroBackgroundProps> = ({
       {showHeader && (
         <header className="absolute top-0 left-0 w-full px-6 py-4 z-20">
           <div className="max-w-7xl mx-auto">
-            <Link href="/" className="font-bold text-white text-2xl">
+            <Link href="/" className="font-bold text-foreground text-2xl">
               zeiro
             </Link>
           </div>

@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="light" style={{ colorScheme: 'light' }}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -35,22 +35,23 @@ export default function RootLayout({
           position="top-right"
           toastOptions={{
             style: {
-              background: '#363636',
-              color: '#fff',
+              background: '#ffffff',
+              color: '#1a1a1a',
               borderRadius: '8px',
+              border: '1px solid #e2e8f0',
             },
             success: {
               duration: 5000,
               iconTheme: {
-                primary: '#10B981',
-                secondary: 'white',
+                primary: '#22c55e',
+                secondary: '#ffffff',
               },
             },
             error: {
               duration: 5000,
               iconTheme: {
-                primary: '#EF4444',
-                secondary: 'white',
+                primary: '#ef4444',
+                secondary: '#ffffff',
               },
             },
           }}

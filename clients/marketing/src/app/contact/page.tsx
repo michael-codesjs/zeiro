@@ -3,7 +3,7 @@ import { Sms, MessageText, Call, Location, Clock, Send2, ArrowRight } from 'icon
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Hero Section with Split Layout */}
       <section className="pt-32 pb-16 px-6">
         <div className="max-w-7xl mx-auto">
@@ -17,7 +17,7 @@ export default function ContactPage() {
                 </span>
               </h1>
               
-              <p className="text-lg text-gray-400 mb-8 leading-relaxed">
+              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
                 Whether you have questions, need support, or want to explore how Zeiro can transform your data workflow, 
                 we're here to help you succeed.
               </p>
@@ -25,16 +25,16 @@ export default function ContactPage() {
               {/* Quick Stats */}
               <div className="grid grid-cols-3 gap-6 mb-8">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-white mb-1">&lt; 2h</div>
-                  <div className="text-sm text-gray-400">Response Time</div>
+                  <div className="text-2xl font-bold text-foreground mb-1">&lt; 2h</div>
+                  <div className="text-sm text-muted-foreground">Response Time</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-white mb-1">24/7</div>
-                  <div className="text-sm text-gray-400">Support</div>
+                  <div className="text-2xl font-bold text-foreground mb-1">24/7</div>
+                  <div className="text-sm text-muted-foreground">Support</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-white mb-1">99%</div>
-                  <div className="text-sm text-gray-400">Satisfaction</div>
+                  <div className="text-2xl font-bold text-foreground mb-1">99%</div>
+                  <div className="text-sm text-muted-foreground">Satisfaction</div>
                 </div>
               </div>
 
@@ -45,8 +45,8 @@ export default function ContactPage() {
                     <Sms size={20} color="#60a5fa" variant="Outline" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-white">Email</div>
-                    <div className="text-xs text-gray-400">support@zeiro.com</div>
+                    <div className="text-sm font-medium text-foreground">Email</div>
+                    <div className="text-xs text-muted-foreground">support@zeiro.com</div>
                   </div>
                 </a>
 
@@ -55,8 +55,8 @@ export default function ContactPage() {
                     <MessageText size={20} color="#4ade80" variant="Outline" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-white">Chat</div>
-                    <div className="text-xs text-gray-400">Start conversation</div>
+                    <div className="text-sm font-medium text-foreground">Chat</div>
+                    <div className="text-xs text-muted-foreground">Start conversation</div>
                   </div>
                 </button>
 
@@ -65,8 +65,8 @@ export default function ContactPage() {
                     <Call size={20} color="#c084fc" variant="Outline" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-white">Call</div>
-                    <div className="text-xs text-gray-400">+1 (555) ZEIRO-1</div>
+                    <div className="text-sm font-medium text-foreground">Call</div>
+                    <div className="text-xs text-muted-foreground">+1 (555) ZEIRO-1</div>
                   </div>
                 </a>
               </div>
@@ -75,8 +75,8 @@ export default function ContactPage() {
             {/* Right Side - Contact Form */}
             <div className="bg-gray-900/30 border border-gray-800 rounded-2xl p-8">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-white mb-2">Send us a message</h2>
-                <p className="text-gray-400">We'll respond within 2 hours during business hours</p>
+                <h2 className="text-2xl font-bold text-foreground mb-2">Send us a message</h2>
+                <p className="text-muted-foreground">We'll respond within 2 hours during business hours</p>
               </div>
 
               <form className="space-y-4">
@@ -84,14 +84,14 @@ export default function ContactPage() {
                   <div>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:bg-gray-800 transition-all"
+                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-foreground placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:bg-gray-800 transition-all"
                       placeholder="First name"
                     />
                   </div>
                   <div>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:bg-gray-800 transition-all"
+                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-foreground placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:bg-gray-800 transition-all"
                       placeholder="Last name"
                     />
                   </div>
@@ -99,17 +99,17 @@ export default function ContactPage() {
 
                 <input
                   type="email"
-                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:bg-gray-800 transition-all"
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-foreground placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:bg-gray-800 transition-all"
                   placeholder="Work email"
                 />
 
                 <input
                   type="text"
-                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:bg-gray-800 transition-all"
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-foreground placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:bg-gray-800 transition-all"
                   placeholder="Company"
                 />
 
-                <select className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500 focus:bg-gray-800 transition-all">
+                <select className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-foreground focus:outline-none focus:border-blue-500 focus:bg-gray-800 transition-all">
                   <option value="">How can we help?</option>
                   <option>General Question</option>
                   <option>Technical Support</option>
@@ -120,13 +120,13 @@ export default function ContactPage() {
 
                 <textarea
                   rows={4}
-                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:bg-gray-800 transition-all resize-none"
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-foreground placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:bg-gray-800 transition-all resize-none"
                   placeholder="Tell us more about your needs..."
                 ></textarea>
 
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all font-medium flex items-center justify-center gap-2 group"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-foreground px-6 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all font-medium flex items-center justify-center gap-2 group"
                 >
                   Send Message
                   <ArrowRight size={16} color="currentColor" variant="Outline" />
@@ -143,15 +143,15 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Office Info */}
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-white mb-4">Visit our office</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-4">Visit our office</h3>
               
               <div className="flex items-start gap-3">
                 <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                   <Location size={16} color="#60a5fa" variant="Outline" />
                 </div>
                 <div>
-                  <div className="font-medium text-white mb-1">San Francisco HQ</div>
-                  <div className="text-sm text-gray-400">
+                  <div className="font-medium text-foreground mb-1">San Francisco HQ</div>
+                  <div className="text-sm text-muted-foreground">
                     123 Data Street<br />
                     San Francisco, CA 94105
                   </div>
@@ -163,8 +163,8 @@ export default function ContactPage() {
                   <Clock size={16} color="#4ade80" variant="Outline" />
                 </div>
                 <div>
-                  <div className="font-medium text-white mb-1">Business Hours</div>
-                  <div className="text-sm text-gray-400">
+                  <div className="font-medium text-foreground mb-1">Business Hours</div>
+                  <div className="text-sm text-muted-foreground">
                     Mon-Fri: 9AM - 6PM PST<br />
                     Sat: 10AM - 4PM PST
                   </div>
@@ -174,18 +174,18 @@ export default function ContactPage() {
 
             {/* Support Resources */}
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-white mb-4">Self-service</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-4">Self-service</h3>
               <div className="space-y-3">
                 <Link href="/help" className="flex items-center justify-between p-3 bg-gray-900/30 border border-gray-800 rounded-lg hover:bg-gray-900/50 hover:border-gray-700 transition-all group">
-                  <span className="text-white">Help Center</span>
+                  <span className="text-foreground">Help Center</span>
                   <ArrowRight size={16} color="currentColor" variant="Outline" />
                 </Link>
                 <Link href="/status" className="flex items-center justify-between p-3 bg-gray-900/30 border border-gray-800 rounded-lg hover:bg-gray-900/50 hover:border-gray-700 transition-all group">
-                  <span className="text-white">System Status</span>
+                  <span className="text-foreground">System Status</span>
                   <ArrowRight size={16} color="currentColor" variant="Outline" />
                 </Link>
                 <Link href="/pricing" className="flex items-center justify-between p-3 bg-gray-900/30 border border-gray-800 rounded-lg hover:bg-gray-900/50 hover:border-gray-700 transition-all group">
-                  <span className="text-white">Pricing</span>
+                  <span className="text-foreground">Pricing</span>
                   <ArrowRight size={16} color="currentColor" variant="Outline" />
                 </Link>
               </div>
@@ -193,10 +193,10 @@ export default function ContactPage() {
 
             {/* Enterprise */}
             <div className="space-y-6">
-              <h3 className="text-xl font-semibold text-white mb-4">Enterprise</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-4">Enterprise</h3>
               <div className="p-6 bg-gradient-to-br from-blue-600/10 to-purple-600/10 border border-blue-600/20 rounded-xl">
-                <div className="text-white font-medium mb-2">Need enterprise support?</div>
-                <div className="text-sm text-gray-400 mb-4">
+                <div className="text-foreground font-medium mb-2">Need enterprise support?</div>
+                <div className="text-sm text-muted-foreground mb-4">
                   Get dedicated support, custom integrations, and priority assistance.
                 </div>
                 <Link href="/contact" className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors text-sm font-medium">

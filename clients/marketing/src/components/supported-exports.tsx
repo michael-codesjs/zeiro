@@ -32,20 +32,20 @@ export default function SupportedExports({
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">{title}</h2>
-            <p className="text-xl text-gray-400 mb-8">{subtitle}</p>
+            <h2 className="text-4xl font-bold text-foreground mb-4">{title}</h2>
+            <p className="text-xl text-muted-foreground mb-8">{subtitle}</p>
             
             {showSearch && (
               <div className="max-w-md mx-auto relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-gray-400" />
+                  <Search className="h-5 w-5 text-muted-foreground" />
                 </div>
                 <input
                   type="text"
                   placeholder="Search integrations..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 bg-input border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-transparent"
                 />
               </div>
             )}
@@ -73,14 +73,14 @@ export default function SupportedExports({
           
           {showSearch && filteredExports.length === 0 && (
             <div className="text-center mt-12">
-              <p className="text-gray-400">No integrations found matching "{searchTerm}"</p>
-              <p className="text-gray-500 text-sm mt-2">Need a custom integration? <span className="text-white hover:text-gray-300 cursor-pointer">Contact us</span> and we'll build it.</p>
+              <p className="text-muted-foreground">No integrations found matching "{searchTerm}"</p>
+              <p className="text-gray-500 text-sm mt-2">Need a custom integration? <span className="text-foreground hover:text-muted-foreground cursor-pointer">Contact us</span> and we'll build it.</p>
             </div>
           )}
           
           {showSearch && filteredExports.length > 0 && searchTerm && (
             <div className="text-center mt-12">
-              <p className="text-gray-400">Found {filteredExports.length} integration{filteredExports.length !== 1 ? 's' : ''}</p>
+              <p className="text-muted-foreground">Found {filteredExports.length} integration{filteredExports.length !== 1 ? 's' : ''}</p>
             </div>
           )}
         </div>
@@ -93,8 +93,8 @@ export default function SupportedExports({
     return (
       <section className="py-20">
         <div className="max-w-4xl mx-auto text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">{title}</h2>
-          <p className="text-xl text-gray-400">{subtitle}</p>
+          <h2 className="text-4xl font-bold text-foreground mb-4">{title}</h2>
+          <p className="text-xl text-muted-foreground">{subtitle}</p>
         </div>
         
         {/* Marquee Container */}
@@ -127,8 +127,8 @@ export default function SupportedExports({
   return (
     <section className=" px-6">
       <div className="max-w-4xl mx-auto text-center mb-16">
-        <h2 className="text-4xl font-bold text-white mb-4">{title}</h2>
-        <p className="text-xl text-gray-400">{subtitle}</p>
+        <h2 className="text-4xl font-bold text-foreground mb-4">{title}</h2>
+        <p className="text-xl text-muted-foreground">{subtitle}</p>
       </div>
       
       {/* Scrollable Integration Grid */}

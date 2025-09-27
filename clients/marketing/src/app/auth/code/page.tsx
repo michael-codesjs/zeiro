@@ -134,10 +134,10 @@ function VerificationCodeContent() {
   return (
     <div className={`w-full transition-all duration-1000 ease-out ${animateIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
       <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
           {content.title}
         </h1>
-        <p className="text-xl text-gray-400">
+        <p className="text-xl text-muted-foreground">
           {content.subtitle}
         </p>
       </div>
@@ -145,19 +145,19 @@ function VerificationCodeContent() {
       <div className="max-w-md mx-auto">
 
         {/* Email information */}
-        <div className="mb-8 bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+        <div className="mb-8 bg-secondary/80 rounded-lg p-4 border border-border">
           <div className="flex items-center">
             <div className="shrink-0 mr-3">
-              <div className="bg-gray-700 rounded-full p-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
+              <div className="bg-muted rounded-full p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-muted-foreground" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                 </svg>
               </div>
             </div>
             <div>
-              <div className="text-sm text-gray-300 font-medium">Verification code sent to:</div>
-              <div className="text-white">{username || 'your email address'}</div>
+              <div className="text-sm text-muted-foreground font-medium">Verification code sent to:</div>
+              <div className="text-foreground">{username || 'your email address'}</div>
             </div>
           </div>
         </div>
@@ -165,7 +165,7 @@ function VerificationCodeContent() {
         <form onSubmit={handleVerify} className="space-y-6">
           {/* Pin Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-4">
+            <label className="block text-sm font-medium text-muted-foreground mb-4">
               Verification Code
             </label>
             <PinInput
@@ -180,7 +180,7 @@ function VerificationCodeContent() {
           <div className="flex justify-center">
             <button
               type="button"
-              className={`text-sm text-gray-400 hover:text-white transition-colors ${isActionInProgress ? 'pointer-events-none opacity-50' : ''}`}
+              className={`text-sm text-muted-foreground hover:text-foreground transition-colors ${isActionInProgress ? 'pointer-events-none opacity-50' : ''}`}
               onClick={handleResend}
               disabled={isActionInProgress}
             >
@@ -199,8 +199,8 @@ function VerificationCodeContent() {
           </div>
         </form>
 
-        <p className="text-center text-xs text-gray-500 mt-8">
-          Having trouble? Contact <a href="mailto:support@zeiro.com" className="text-gray-400 hover:text-white underline transition-colors">support@zeiro.com</a>
+        <p className="text-center text-xs text-muted-foreground mt-8">
+          Having trouble? Contact <a href="mailto:support@zeiro.com" className="text-muted-foreground hover:text-foreground underline transition-colors">support@zeiro.com</a>
         </p>
       </div>
     </div>
@@ -212,12 +212,12 @@ function LoadingState() {
   return (
     <div className="w-full">
       <div className="max-w-md mx-auto">
-        <div className="p-8 bg-white rounded-xl shadow-lg">
+        <div className="p-8 bg-card rounded-xl shadow-lg border border-border">
           <div className="animate-pulse space-y-4">
-            <div className="h-6 bg-gray-200 rounded w-3/4 mx-auto"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
-            <div className="h-32 bg-gray-200 rounded"></div>
-            <div className="h-10 bg-gray-200 rounded"></div>
+            <div className="h-6 bg-muted rounded w-3/4 mx-auto"></div>
+            <div className="h-4 bg-muted rounded w-1/2 mx-auto"></div>
+            <div className="h-32 bg-muted rounded"></div>
+            <div className="h-10 bg-muted rounded"></div>
           </div>
         </div>
       </div>

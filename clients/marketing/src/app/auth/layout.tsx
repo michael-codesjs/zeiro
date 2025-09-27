@@ -13,17 +13,17 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-gray-800">
+      <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-border">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center">
-            <Link href="/" className="text-xl font-bold text-white hover:text-gray-300 transition-colors">
+            <Link href="/" className="text-xl font-bold text-foreground hover:text-muted-foreground transition-colors">
               zeiro
             </Link>
           </div>
           
-          <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+          <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft size={16} color="currentColor" variant="Outline" />
             <span>Back to home</span>
           </Link>

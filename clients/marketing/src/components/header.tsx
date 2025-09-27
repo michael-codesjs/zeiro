@@ -7,10 +7,10 @@ interface HeaderProps {
 
 export default function Header({ currentPage = 'home' }: HeaderProps) {
   return (
-    <header className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-gray-800">
+    <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-border">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <div className="flex items-center">
-          <Link href="/" className="text-xl font-bold text-white hover:text-gray-300 transition-colors">
+          <Link href="/" className="text-xl font-bold text-foreground hover:text-muted-foreground transition-colors">
             zeiro
           </Link>
         </div>
@@ -20,8 +20,8 @@ export default function Header({ currentPage = 'home' }: HeaderProps) {
             href="/features" 
             className={`transition-colors ${
               currentPage === 'features' 
-                ? 'text-white font-medium' 
-                : 'text-gray-400 hover:text-white'
+                ? 'text-foreground font-medium' 
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             Features
@@ -30,8 +30,8 @@ export default function Header({ currentPage = 'home' }: HeaderProps) {
             href="/pricing" 
             className={`transition-colors ${
               currentPage === 'pricing' 
-                ? 'text-white font-medium' 
-                : 'text-gray-400 hover:text-white'
+                ? 'text-foreground font-medium' 
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             Pricing
@@ -40,8 +40,8 @@ export default function Header({ currentPage = 'home' }: HeaderProps) {
             href="/integrations" 
             className={`transition-colors ${
               currentPage === 'integrations' 
-                ? 'text-white font-medium' 
-                : 'text-gray-400 hover:text-white'
+                ? 'text-foreground font-medium' 
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             Integrations
