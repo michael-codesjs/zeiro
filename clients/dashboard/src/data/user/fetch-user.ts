@@ -1,5 +1,4 @@
 import { get } from 'aws-amplify/api';
-import { getCurrentUser } from 'aws-amplify/auth';
 
 export type User = {
   id: string;
@@ -19,11 +18,12 @@ export const fetchCurrentUser = async (): Promise<User | null> => {
     const response = await restOperation.response;
     
     if (response.statusCode === 404) {
-      return null;
+      throw new Error('User not found');
     }
 
     const userData = await response.body.json();
     return userData as User;
+    
   } catch (err) {
     console.error('Error fetching current user:', err);
     throw err;

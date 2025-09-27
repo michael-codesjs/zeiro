@@ -87,8 +87,8 @@ resource "aws_dynamodb_table" "table" {
       hash_key        = "GSI1_PK"
       range_key       = "GSI1_SK"
       projection_type = "ALL"
-      read_capacity   = 10
-      write_capacity  = 10
+      read_capacity   = 1
+      write_capacity  = 1
     }
 
     # Global Secondary Index 2
@@ -97,8 +97,8 @@ resource "aws_dynamodb_table" "table" {
       hash_key        = "GSI2_PK"
       range_key       = "GSI2_SK"
       projection_type = "ALL"
-      read_capacity   = 10
-      write_capacity  = 10
+      read_capacity   = 1
+      write_capacity  = 1
     }
 
     # Global Secondary Index 3
@@ -107,8 +107,8 @@ resource "aws_dynamodb_table" "table" {
       hash_key        = "GSI3_PK"
       range_key       = "GSI3_SK"
       projection_type = "ALL"
-      read_capacity   = 10
-      write_capacity  = 10
+      read_capacity   = 1
+      write_capacity  = 1
     }
 
     # Global Secondary Index 4
@@ -117,8 +117,8 @@ resource "aws_dynamodb_table" "table" {
       hash_key        = "GSI4_PK"
       range_key       = "GSI4_SK"
       projection_type = "ALL"
-      read_capacity   = 10
-      write_capacity  = 10
+      read_capacity   = 1
+      write_capacity  = 1
     }
 
     # Global Secondary Index 5
@@ -127,8 +127,8 @@ resource "aws_dynamodb_table" "table" {
       hash_key        = "GSI5_PK"
       range_key       = "GSI5_SK"
       projection_type = "ALL"
-      read_capacity   = 10
-      write_capacity  = 10
+      read_capacity   = 1
+      write_capacity  = 1
     }
     
     lifecycle {

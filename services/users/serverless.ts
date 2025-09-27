@@ -20,6 +20,7 @@ const serverlessConfiguration: AWS.Service = {
         '${ssm:/zeiro/${self:custom.stage}/infrastructure/io/central/api/root-resource-id}',
     },
 
+
     environment: {
       CENTRAL_EVENT_BUS_ARN:
         '${ssm:/zeiro/${self:custom.stage}/infrastructure/io/event-bus/central/arn}',
@@ -40,6 +41,22 @@ const serverlessConfiguration: AWS.Service = {
   custom: {
     region: '${opt:region, self:provider.region}',
     stage: '${opt:stage, self:provider.stage}',
+    corsAllowedOrigins: '${self:custom.corsOriginsByStage.${self:custom.stage}, self:custom.corsOriginsByStage.dev}',
+    corsOriginsByStage: {
+      dev: [
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'http://localhost:8080'
+      ],
+      staging: [
+        'https://app.usezeiro.com',
+        'https://usezeiro.com'
+      ],
+      prod: [
+        'https://app.usezeiro.com',
+        'https://usezeiro.com'
+      ]
+    },
 
     esbuild: {
       bundle: true,

@@ -9,18 +9,7 @@ export const definition: AWS.ServerlessLambdaFunction = {
       http: {
         path: '/user/me',
         method: 'GET',
-        cors: {
-          origin: '*',
-          headers: [
-            'Content-Type',
-            'X-Amz-Date',
-            'Authorization',
-            'X-Api-Key',
-            'X-Amz-Security-Token',
-            'X-Amz-User-Agent'
-          ],
-          allowCredentials: false
-        },
+        cors: true,
         authorizer: {
           name: 'CognitoUser',
           type: 'COGNITO_USER_POOLS',
