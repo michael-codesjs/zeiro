@@ -2,10 +2,30 @@ import { User } from '@typings/user'
 import { users } from '@zeiro/domain'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 
+// Helper function to get CORS headers
+const getCorsHeaders = (event: APIGatewayProxyEvent) => {
+  return {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
+    'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+    'Access-Control-Allow-Credentials': 'false',
+  }
+}
+
 export const main = async (
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
   console.log('Event:', JSON.stringify(event, null, 2))
+
+  // Handle OPTIONS preflight requests
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: getCorsHeaders(event),
+      body: '',
+    }
+  }
 
   try {
     // Extract cognito_user_id from authorizer claims
@@ -14,12 +34,7 @@ export const main = async (
     if (!cognito_user_id) {
       return {
         statusCode: 401,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-          'Access-Control-Allow-Methods': 'GET,OPTIONS',
-        },
+        headers: getCorsHeaders(event),
         body: JSON.stringify({ error: 'User not authenticated' }),
       }
     }
@@ -38,12 +53,7 @@ export const main = async (
     if (!user) {
       return {
         statusCode: 404,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-          'Access-Control-Allow-Methods': 'GET,OPTIONS',
-        },
+        headers: getCorsHeaders(event),
         body: JSON.stringify({ error: 'User not found' }),
       }
     }
@@ -57,24 +67,15 @@ export const main = async (
 
     return {
       statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-        'Access-Control-Allow-Methods': 'GET,OPTIONS',
-      },
+      headers: getCorsHeaders(event),
       body: JSON.stringify(responseUser),
     }
+    
   } catch (error) {
     console.error('Error fetching user:', error)
     return {
       statusCode: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-        'Access-Control-Allow-Methods': 'GET,OPTIONS',
-      },
+      headers: getCorsHeaders(event),
       body: JSON.stringify({ error: 'Internal server error' }),
     }
   }

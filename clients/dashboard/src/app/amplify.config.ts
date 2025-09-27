@@ -3,8 +3,8 @@
 import { Amplify, ResourcesConfig } from 'aws-amplify'
 import { CookieStorage } from 'aws-amplify/utils'
 import { cognitoUserPoolsTokenProvider } from 'aws-amplify/auth/cognito'
-import { fetchAuthSession } from 'aws-amplify/auth'
 import { generateClient } from 'aws-amplify/api'
+import { getAuthHeaders } from '../hooks/use-auth-session'
 
 const env = process.env.NEXT_PUBLIC_ENV
 
@@ -27,11 +27,6 @@ const resourcesConfig: ResourcesConfig = {
     },
   },
   API: {
-    // GraphQL: {
-    //   endpoint: process.env.NEXT_PUBLIC_APPSYNC_URL!,
-    //   region: process.env.NEXT_PUBLIC_AWS_REGION || 'eu-central-1',
-    //   defaultAuthMode: 'userPool',
-    // },
     REST: {
       'zeiro-api': {
         endpoint: process.env.NEXT_PUBLIC_REST_API_URL!,
@@ -52,11 +47,7 @@ const libraryOptions: Parameters<typeof Amplify.configure>[1] = {
   API: {
     REST: {
       headers: async () => {
-        const session = await fetchAuthSession()
-        const token = session.tokens?.idToken?.toString()
-        return {
-          Authorization: `Bearer ${token}`
-        }
+        return await getAuthHeaders();
       }
     }
   }

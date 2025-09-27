@@ -17,8 +17,6 @@ export async function middleware(request: NextRequest) {
   const response = NextResponse.next()
   const user = await authenticatedUser({ request, response } as any)
 
-  console.log('User:', user)
-
   const isAuthenticated = !!user
 
   // Auth paths are only accessible to non-authenticated users
