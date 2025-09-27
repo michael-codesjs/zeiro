@@ -149,8 +149,8 @@ const PinInput: React.FC<PinInputProps> = ({
             maxLength={1}
             className={`w-12 h-14 text-center text-lg md:text-xl font-bold rounded-lg border-2 focus:ring-2 outline-none transition-all duration-300 ${
               disabled
-                ? 'bg-gray-800/50 border-gray-700 text-gray-500 cursor-not-allowed'
-                : 'bg-gray-900/90 border-gray-800 text-white placeholder-gray-400 hover:border-gray-700 hover:bg-gray-900 focus:border-gray-600 focus:bg-gray-900 focus:ring-gray-600/20'
+                ? 'bg-muted/50 border-border text-muted-foreground cursor-not-allowed'
+                : 'bg-input border-border text-foreground placeholder-muted-foreground hover:border-border/80 hover:bg-accent/50 focus:border-ring focus:bg-background focus:ring-ring/20'
             }`}
             autoComplete="one-time-code"
             inputMode="numeric"

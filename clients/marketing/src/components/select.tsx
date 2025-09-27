@@ -5,13 +5,13 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { ArrowDown2, TickCircle, SearchNormal1 } from 'iconsax-react';
 
 const selectTriggerVariants = cva(
-  'w-full flex items-center justify-between px-4 py-2.5 text-sm text-left bg-gray-900 border border-gray-800 rounded-lg text-white cursor-pointer transition-all duration-300 focus:outline-none focus:border-gray-600 focus:bg-gray-900 hover:border-gray-700 hover:bg-gray-900 group-hover:scale-[1.01] focus:scale-[1.01]',
+  'w-full flex items-center justify-between px-4 py-2.5 text-sm text-left bg-input border border-border rounded-lg text-foreground cursor-pointer transition-all duration-300 focus:outline-none focus:border-ring focus:bg-background hover:border-border/80 hover:bg-accent/50 group-hover:scale-[1.01] focus:scale-[1.01]',
   {
     variants: {
       variant: {
-        default: 'bg-gray-900 border-gray-800',
-        clean: 'bg-gray-800 border-gray-700 hover:border-gray-600 hover:bg-gray-800 focus:border-gray-600 focus:bg-gray-800',
-        modern: 'bg-gray-900 border-gray-700 hover:bg-gray-800 hover:border-gray-600 focus:bg-gray-800 focus:border-gray-600',
+        default: 'bg-input border-border',
+        clean: 'bg-card border-border hover:border-border/80 hover:bg-accent/50 focus:border-ring focus:bg-background',
+        modern: 'bg-input border-border hover:bg-accent/50 hover:border-border/80 focus:bg-background focus:border-ring',
       },
       size: {
         sm: 'px-3 py-2 text-sm min-h-[36px]',
@@ -21,9 +21,9 @@ const selectTriggerVariants = cva(
       },
       state: {
         default: '',
-        error: 'border-red-500/60 bg-red-950/10 text-red-100 focus:border-red-400',
-        success: 'border-green-500/60 bg-green-950/10 text-green-100 focus:border-green-400',
-        disabled: 'opacity-50 cursor-not-allowed border-gray-800',
+        error: 'border-destructive/60 bg-destructive/10 text-destructive focus:border-destructive',
+        success: 'border-success/60 bg-success/10 text-success focus:border-success',
+        disabled: 'opacity-50 cursor-not-allowed border-border',
       },
     },
     defaultVariants: {
@@ -39,9 +39,9 @@ const dropdownVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-gray-900 border border-gray-800 shadow-black/50',
-        clean: 'bg-gray-800 border border-gray-700 shadow-black/40',
-        modern: 'bg-gray-900 border border-gray-700 shadow-white/5',
+        default: 'bg-card border border-border shadow-lg',
+        clean: 'bg-card border border-border shadow-lg',
+        modern: 'bg-card border border-border shadow-lg',
       },
       state: {
         open: 'scale-100 translate-y-0 visible',
@@ -60,9 +60,9 @@ const labelVariants = cva(
   {
     variants: {
       variant: {
-        default: 'text-gray-300',
-        bold: 'text-white font-semibold',
-        subtle: 'text-gray-400',
+        default: 'text-muted-foreground',
+        bold: 'text-foreground font-semibold',
+        subtle: 'text-muted-foreground',
       },
     },
     defaultVariants: {
@@ -168,11 +168,11 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
   const getSearchInputStyles = () => {
     switch (variant) {
       case 'clean':
-        return 'bg-gray-800 border-gray-700 hover:border-gray-600 hover:bg-gray-700 focus:border-gray-600 focus:bg-gray-700';
+        return 'bg-input border-border hover:border-border/80 hover:bg-accent/50 focus:border-ring focus:bg-background';
       case 'modern':
-        return 'bg-gray-800 border-gray-700 hover:bg-gray-700 hover:border-gray-600 focus:bg-gray-700 focus:border-gray-600';
+        return 'bg-input border-border hover:bg-accent/50 hover:border-border/80 focus:bg-background focus:border-ring';
       default:
-        return 'bg-gray-900 border-gray-800 hover:border-gray-700 hover:bg-gray-800 focus:border-gray-600 focus:bg-gray-800';
+        return 'bg-input border-border hover:border-border/80 hover:bg-accent/50 focus:border-ring focus:bg-background';
     }
   };
 
@@ -185,7 +185,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
       {label && (
         <label className={labelVariants({ variant: labelVariant })}>
           {label}
-          {required && <span className="text-red-400 ml-1">*</span>}
+          {required && <span className="text-destructive ml-1">*</span>}
         </label>
       )}
 
@@ -205,13 +205,13 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
           }
         }}
       >
-        <span className={selectedOption ? 'text-white' : 'text-gray-400'}>
+        <span className={selectedOption ? 'text-foreground' : 'text-muted-foreground'}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         
         <ArrowDown2
           size={16}
-          className={`text-gray-400 transition-transform duration-300 ${
+          className={`text-foreground/70 transition-transform duration-300 ${
             isOpen ? 'rotate-180' : 'rotate-0'
           }`}
         />
@@ -224,11 +224,11 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
       })}>
         {/* Search Input */}
         {searchable && (
-          <div className="p-3 border-b border-gray-800/50">
+          <div className="p-3 border-b border-border/50">
             <div className="relative">
               <SearchNormal1 
                 size={16} 
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
               />
               <input
                 ref={searchInputRef}
@@ -236,7 +236,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 placeholder="Search options..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full pl-10 pr-3 py-2 border rounded-lg text-white placeholder-gray-400 text-sm focus:outline-none transition-all duration-300 ${getSearchInputStyles()}`}
+                className={`w-full pl-10 pr-3 py-2 border rounded-lg text-foreground placeholder-muted-foreground text-sm focus:outline-none transition-all duration-300 ${getSearchInputStyles()}`}
               />
             </div>
           </div>
@@ -245,7 +245,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
         {/* Options List */}
         <div className="max-h-60 overflow-y-auto py-2">
           {filteredOptions.length === 0 ? (
-            <div className="px-4 py-3 text-gray-400 text-sm text-center">
+            <div className="px-4 py-3 text-muted-foreground text-sm text-center">
               {searchable && searchQuery ? 'No options found' : 'No options available'}
             </div>
           ) : (
@@ -255,10 +255,10 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
                 type="button"
                 className={`w-full px-4 py-3 text-left flex items-center justify-between transition-colors duration-200 ${
                   option.disabled 
-                    ? 'text-gray-500 cursor-not-allowed' 
-                    : 'text-white hover:bg-gray-800 focus:bg-gray-800 focus:outline-none'
+                    ? 'text-muted-foreground cursor-not-allowed' 
+                    : 'text-foreground hover:bg-accent/50 focus:bg-accent/50 focus:outline-none'
                 } ${
-                  value === option.value ? 'bg-gray-800' : ''
+                  value === option.value ? 'bg-accent/30' : ''
                 }`}
                 onClick={() => !option.disabled && handleSelect(option.value)}
                 disabled={option.disabled}
@@ -267,7 +267,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
               >
                 <span className="text-sm">{option.label}</span>
                 {value === option.value && (
-                  <TickCircle size={16} className="text-white" />
+                  <TickCircle size={16} className="text-foreground" />
                 )}
               </button>
             ))
@@ -277,14 +277,14 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
 
       {/* Error Message */}
       {error && (
-        <p className="mt-2 text-sm text-red-400">
+        <p className="mt-2 text-sm text-destructive">
           {error}
         </p>
       )}
 
       {/* Hint */}
       {hint && !error && (
-        <p className="mt-2 text-xs text-gray-500">
+        <p className="mt-2 text-xs text-muted-foreground">
           {hint}
         </p>
       )}

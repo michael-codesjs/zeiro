@@ -39,7 +39,7 @@ export default function FeaturesPage() {
             transition={{ duration: 0.6 }}
             className="flex justify-center mb-8"
           >
-            <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+            <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
               <ArrowLeft size={16} color="currentColor" variant="Outline" />
               <span>Back to home</span>
             </Link>
@@ -53,7 +53,7 @@ export default function FeaturesPage() {
           >
             Features that make
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground to-muted-foreground">
               data simple
             </span>
           </motion.h1>
@@ -62,7 +62,7 @@ export default function FeaturesPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed"
+            className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed"
           >
             Everything you need to transform complex data into clear insights. 
             Built for teams who want results, not complexity.
@@ -86,29 +86,29 @@ export default function FeaturesPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02, y: -5 }}
-              className="group bg-gray-900/50 border border-gray-800 rounded-2xl p-10 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+              className="group bg-card border border-border rounded-2xl p-10 hover:bg-accent/50 hover:border-border transition-all duration-300"
             >
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Chat size={32} color="white" variant="Outline" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-white">Natural Language Processing</h3>
-                  <p className="text-gray-400">Ask questions like you're talking to a colleague</p>
+                  <h3 className="text-2xl font-bold text-foreground">Natural Language Processing</h3>
+                  <p className="text-muted-foreground">Ask questions like you're talking to a colleague</p>
                 </div>
               </div>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <CheckCircle size={20} color="#4ade80" variant="Outline" />
-                  <span className="text-gray-300">Convert plain English to complex SQL queries automatically</span>
+                  <span className="text-muted-foreground">Convert plain English to complex SQL queries automatically</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle size={20} color="#4ade80" variant="Outline" />
-                  <span className="text-gray-300">Understand context and intent behind your questions</span>
+                  <span className="text-muted-foreground">Understand context and intent behind your questions</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle size={20} color="#4ade80" variant="Outline" />
-                  <span className="text-gray-300">Support for multiple languages and dialects</span>
+                  <span className="text-muted-foreground">Support for multiple languages and dialects</span>
                 </div>
               </div>
             </motion.div>
@@ -120,29 +120,29 @@ export default function FeaturesPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02, y: -5 }}
-              className="group bg-gray-900/50 border border-gray-800 rounded-2xl p-10 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+              className="group bg-card border border-border rounded-2xl p-10 hover:bg-accent/50 hover:border-border transition-all duration-300"
             >
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Chart size={32} color="white" variant="Outline" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-white">Smart Visualizations</h3>
-                  <p className="text-gray-400">Beautiful charts that tell your data's story</p>
+                  <h3 className="text-2xl font-bold text-foreground">Smart Visualizations</h3>
+                  <p className="text-muted-foreground">Beautiful charts that tell your data's story</p>
                 </div>
               </div>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <CheckCircle size={20} color="#4ade80" variant="Outline" />
-                  <span className="text-gray-300">AI-powered chart recommendations based on your data</span>
+                  <span className="text-muted-foreground">AI-powered chart recommendations based on your data</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle size={20} color="#4ade80" variant="Outline" />
-                  <span className="text-gray-300">Interactive dashboards with real-time updates</span>
+                  <span className="text-muted-foreground">Interactive dashboards with real-time updates</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle size={20} color="#4ade80" variant="Outline" />
-                  <span className="text-gray-300">Export to any format: PNG, PDF, SVG, or embed code</span>
+                  <span className="text-muted-foreground">Export to any format: PNG, PDF, SVG, or embed code</span>
                 </div>
               </div>
             </motion.div>
@@ -154,29 +154,29 @@ export default function FeaturesPage() {
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02, y: -5 }}
-              className="group bg-gray-900/50 border border-gray-800 rounded-2xl p-10 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+              className="group bg-card border border-border rounded-2xl p-10 hover:bg-accent/50 hover:border-border transition-all duration-300"
             >
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Lightning size={32} color="white" variant="Outline" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-white">Lightning Performance</h3>
-                  <p className="text-gray-400">Results in milliseconds, not minutes</p>
+                  <h3 className="text-2xl font-bold text-foreground">Lightning Performance</h3>
+                  <p className="text-muted-foreground">Results in milliseconds, not minutes</p>
                 </div>
               </div>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <CheckCircle size={20} color="#4ade80" variant="Outline" />
-                  <span className="text-gray-300">Optimized query engine with intelligent caching</span>
+                  <span className="text-muted-foreground">Optimized query engine with intelligent caching</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle size={20} color="#4ade80" variant="Outline" />
-                  <span className="text-gray-300">Handle millions of rows without breaking a sweat</span>
+                  <span className="text-muted-foreground">Handle millions of rows without breaking a sweat</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle size={20} color="#4ade80" variant="Outline" />
-                  <span className="text-gray-300">Real-time streaming for live data updates</span>
+                  <span className="text-muted-foreground">Real-time streaming for live data updates</span>
                 </div>
               </div>
             </motion.div>
@@ -188,29 +188,29 @@ export default function FeaturesPage() {
               transition={{ duration: 0.6, delay: 0.4 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02, y: -5 }}
-              className="group bg-gray-900/50 border border-gray-800 rounded-2xl p-10 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+              className="group bg-card border border-border rounded-2xl p-10 hover:bg-accent/50 hover:border-border transition-all duration-300"
             >
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Database size={32} color="white" variant="Outline" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-white">Universal Connectivity</h3>
-                  <p className="text-gray-400">Connect to any data source, anywhere</p>
+                  <h3 className="text-2xl font-bold text-foreground">Universal Connectivity</h3>
+                  <p className="text-muted-foreground">Connect to any data source, anywhere</p>
                 </div>
               </div>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <CheckCircle size={20} color="#4ade80" variant="Outline" />
-                  <span className="text-gray-300">50+ native connectors for popular databases</span>
+                  <span className="text-muted-foreground">50+ native connectors for popular databases</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle size={20} color="#4ade80" variant="Outline" />
-                  <span className="text-gray-300">REST API and webhook support for custom integrations</span>
+                  <span className="text-muted-foreground">REST API and webhook support for custom integrations</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle size={20} color="#4ade80" variant="Outline" />
-                  <span className="text-gray-300">Cloud and on-premise deployment options</span>
+                  <span className="text-muted-foreground">Cloud and on-premise deployment options</span>
                 </div>
               </div>
             </motion.div>
@@ -237,8 +237,8 @@ export default function FeaturesPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-white mb-4">Advanced Features</h2>
-            <p className="text-xl text-gray-400">For teams that need more power and control</p>
+            <h2 className="text-4xl font-bold text-foreground mb-4">Advanced Features</h2>
+            <p className="text-xl text-muted-foreground">For teams that need more power and control</p>
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -249,16 +249,16 @@ export default function FeaturesPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02, y: -5 }}
-              className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+              className="bg-card border border-border rounded-xl p-8 hover:bg-accent/50 hover:border-border transition-all duration-300"
             >
               <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-6">
                 <Shield size={24} color="white" variant="Outline" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Enterprise Security</h3>
-              <p className="text-gray-400 leading-relaxed mb-4">
+              <h3 className="text-xl font-semibold text-foreground mb-3">Enterprise Security</h3>
+              <p className="text-muted-foreground leading-relaxed mb-4">
                 Enterprise-grade encryption, SOC 2 compliance, and role-based access controls.
               </p>
-              <ul className="space-y-2 text-sm text-gray-300">
+              <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>• End-to-end encryption</li>
                 <li>• Single sign-on (SSO)</li>
                 <li>• Audit logs</li>
@@ -272,16 +272,16 @@ export default function FeaturesPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02, y: -5 }}
-              className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+              className="bg-card border border-border rounded-xl p-8 hover:bg-accent/50 hover:border-border transition-all duration-300"
             >
               <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-6">
                 <Code size={24} color="white" variant="Outline" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">API & Integrations</h3>
-              <p className="text-gray-400 leading-relaxed mb-4">
+              <h3 className="text-xl font-semibold text-foreground mb-3">API & Integrations</h3>
+              <p className="text-muted-foreground leading-relaxed mb-4">
                 Powerful APIs and pre-built integrations for seamless workflow integration.
               </p>
-              <ul className="space-y-2 text-sm text-gray-300">
+              <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>• RESTful API</li>
                 <li>• Webhook support</li>
                 <li>• SDK libraries</li>
@@ -295,16 +295,16 @@ export default function FeaturesPage() {
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02, y: -5 }}
-              className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+              className="bg-card border border-border rounded-xl p-8 hover:bg-accent/50 hover:border-border transition-all duration-300"
             >
               <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-6">
                 <Eye size={24} color="white" variant="Outline" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Real-time Monitoring</h3>
-              <p className="text-gray-400 leading-relaxed mb-4">
+              <h3 className="text-xl font-semibold text-foreground mb-3">Real-time Monitoring</h3>
+              <p className="text-muted-foreground leading-relaxed mb-4">
                 Monitor your data pipelines and get alerts when something needs attention.
               </p>
-              <ul className="space-y-2 text-sm text-gray-300">
+              <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>• Live data streaming</li>
                 <li>• Custom alerts</li>
                 <li>• Performance metrics</li>
@@ -318,16 +318,16 @@ export default function FeaturesPage() {
               transition={{ duration: 0.6, delay: 0.4 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02, y: -5 }}
-              className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+              className="bg-card border border-border rounded-xl p-8 hover:bg-accent/50 hover:border-border transition-all duration-300"
             >
               <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-6">
                 <People size={24} color="white" variant="Outline" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Collaboration Tools</h3>
-              <p className="text-gray-400 leading-relaxed mb-4">
+              <h3 className="text-xl font-semibold text-foreground mb-3">Collaboration Tools</h3>
+              <p className="text-muted-foreground leading-relaxed mb-4">
                 Share insights, comment on dashboards, and work together seamlessly.
               </p>
-              <ul className="space-y-2 text-sm text-gray-300">
+              <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>• Team workspaces</li>
                 <li>• Shared dashboards</li>
                 <li>• Comments & annotations</li>
@@ -341,16 +341,16 @@ export default function FeaturesPage() {
               transition={{ duration: 0.6, delay: 0.5 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02, y: -5 }}
-              className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+              className="bg-card border border-border rounded-xl p-8 hover:bg-accent/50 hover:border-border transition-all duration-300"
             >
               <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-6">
                 <CloudDownload size={24} color="white" variant="Outline" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Data Export</h3>
-              <p className="text-gray-400 leading-relaxed mb-4">
+              <h3 className="text-xl font-semibold text-foreground mb-3">Data Export</h3>
+              <p className="text-muted-foreground leading-relaxed mb-4">
                 Export your data and visualizations in any format you need.
               </p>
-              <ul className="space-y-2 text-sm text-gray-300">
+              <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>• CSV, JSON, Excel</li>
                 <li>• PDF reports</li>
                 <li>• Scheduled exports</li>
@@ -364,16 +364,16 @@ export default function FeaturesPage() {
               transition={{ duration: 0.6, delay: 0.6 }}
               viewport={{ once: true }}
               whileHover={{ scale: 1.02, y: -5 }}
-              className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 hover:bg-gray-900/80 hover:border-gray-700 transition-all duration-300"
+              className="bg-card border border-border rounded-xl p-8 hover:bg-accent/50 hover:border-border transition-all duration-300"
             >
               <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center mb-6">
                 <Brush size={24} color="white" variant="Outline" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Custom Themes</h3>
-              <p className="text-gray-400 leading-relaxed mb-4">
+              <h3 className="text-xl font-semibold text-foreground mb-3">Custom Themes</h3>
+              <p className="text-muted-foreground leading-relaxed mb-4">
                 Brand your dashboards with custom colors, fonts, and styling.
               </p>
-              <ul className="space-y-2 text-sm text-gray-300">
+              <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>• Brand customization</li>
                 <li>• White-label options</li>
                 <li>• Custom CSS</li>
@@ -394,8 +394,8 @@ export default function FeaturesPage() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold text-white mb-4">Trusted by data teams worldwide</h2>
-            <p className="text-xl text-gray-400 mb-12">Join thousands of teams already using Zeiro</p>
+            <h2 className="text-4xl font-bold text-foreground mb-4">Trusted by data teams worldwide</h2>
+            <p className="text-xl text-muted-foreground mb-12">Join thousands of teams already using Zeiro</p>
           </motion.div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -407,8 +407,8 @@ export default function FeaturesPage() {
               whileHover={{ scale: 1.05 }}
               className="text-center"
             >
-              <div className="text-3xl font-bold text-white mb-2">10k+</div>
-              <div className="text-gray-400">Active users</div>
+              <div className="text-3xl font-bold text-foreground mb-2">10k+</div>
+              <div className="text-muted-foreground">Active users</div>
             </motion.div>
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -418,8 +418,8 @@ export default function FeaturesPage() {
               whileHover={{ scale: 1.05 }}
               className="text-center"
             >
-              <div className="text-3xl font-bold text-white mb-2">1M+</div>
-              <div className="text-gray-400">Queries processed</div>
+              <div className="text-3xl font-bold text-foreground mb-2">1M+</div>
+              <div className="text-muted-foreground">Queries processed</div>
             </motion.div>
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -429,8 +429,8 @@ export default function FeaturesPage() {
               whileHover={{ scale: 1.05 }}
               className="text-center"
             >
-              <div className="text-3xl font-bold text-white mb-2">5k+</div>
-              <div className="text-gray-400">Dashboards created</div>
+              <div className="text-3xl font-bold text-foreground mb-2">5k+</div>
+              <div className="text-muted-foreground">Dashboards created</div>
             </motion.div>
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -440,8 +440,8 @@ export default function FeaturesPage() {
               whileHover={{ scale: 1.05 }}
               className="text-center"
             >
-              <div className="text-3xl font-bold text-white mb-2">99.9%</div>
-              <div className="text-gray-400">Uptime</div>
+              <div className="text-3xl font-bold text-foreground mb-2">99.9%</div>
+              <div className="text-muted-foreground">Uptime</div>
             </motion.div>
           </div>
         </div>
@@ -457,7 +457,7 @@ export default function FeaturesPage() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-4xl font-bold text-white mb-6"
+            className="text-4xl font-bold text-foreground mb-6"
           >
             Ready to experience the future of data analysis?
           </motion.h2>
@@ -466,7 +466,7 @@ export default function FeaturesPage() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="text-xl text-gray-400 mb-10"
+            className="text-xl text-muted-foreground mb-10"
           >
             Start your free trial today and see why teams love Zeiro.
           </motion.p>

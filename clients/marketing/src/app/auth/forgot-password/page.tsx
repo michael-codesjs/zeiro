@@ -65,10 +65,10 @@ export default function ForgotPassword() {
   return (
     <div className={`w-full transition-all duration-1000 ease-out ${animateIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
       <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
           Reset your password
         </h1>
-        <p className="text-xl text-gray-400">
+        <p className="text-xl text-muted-foreground">
           {isSubmitted ? "Check your email" : "We'll send you instructions to reset your password"}
         </p>
       </div>
@@ -109,8 +109,8 @@ export default function ForgotPassword() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <p className="text-gray-300 mb-8 text-lg">
-              We've sent reset instructions to <strong className="text-white">{email}</strong>. Please check your email and follow the instructions to reset your password.
+            <p className="text-muted-foreground mb-8 text-lg">
+              We've sent reset instructions to <strong className="text-foreground">{email}</strong>. Please check your email and follow the instructions to reset your password.
             </p>
             <button
               type="button"
@@ -123,11 +123,11 @@ export default function ForgotPassword() {
         )}
 
         <div className="mt-8 pt-6 border-t border-gray-800 text-center">
-          <p className="text-gray-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             Remember your password?{' '}
             <Link 
               href="/auth/in" 
-              className={`text-white hover:text-gray-300 transition-colors font-medium ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
+              className={`text-foreground hover:text-muted-foreground transition-colors font-medium ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
               tabIndex={isLoading ? -1 : 0}
               aria-disabled={isLoading}
             >

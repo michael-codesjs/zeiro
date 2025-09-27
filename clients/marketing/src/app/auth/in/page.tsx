@@ -70,10 +70,10 @@ export default function SignIn() {
   return (
     <div className={`w-full transition-all duration-1000 ease-out ${animateIn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
       <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
           Welcome back
         </h1>
-        <p className="text-xl text-gray-400">
+        <p className="text-xl text-muted-foreground">
           Sign in to your Zeiro account
         </p>
       </div>
@@ -112,7 +112,7 @@ export default function SignIn() {
             <div className="flex justify-end">
               <Link 
                 href="/auth/forgot-password" 
-                className={`text-sm text-gray-400 hover:text-white transition-colors ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
+                className={`text-sm text-muted-foreground hover:text-foreground transition-colors ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
                 tabIndex={isLoading ? -1 : 0}
                 aria-disabled={isLoading}
               >
@@ -133,11 +133,11 @@ export default function SignIn() {
         </FormCard>
 
         <div className="pt-6 text-center">
-          <p className="text-gray-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             Don&apos;t have an account?{' '}
             <Link 
               href="/auth/up" 
-              className={`text-white hover:text-gray-300 transition-colors font-medium ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
+              className={`text-foreground hover:text-muted-foreground transition-colors font-medium ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
               tabIndex={isLoading ? -1 : 0}
               aria-disabled={isLoading}
             >

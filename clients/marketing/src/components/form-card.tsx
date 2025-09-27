@@ -8,22 +8,22 @@ const formCardVariants = cva(
     variants: {
       variant: {
         default: [
-          'bg-gray-900/40 border-gray-700/50',
-          'shadow-black/20 hover:shadow-black/30',
+          'bg-card/95 border-border',
+          'shadow-lg hover:shadow-xl',
         ],
         elevated: [
-          'bg-gray-800/60 border-gray-600/40',
-          'shadow-black/30 hover:shadow-black/40',
+          'bg-card border-border',
+          'shadow-xl hover:shadow-2xl',
           'hover:-translate-y-1',
         ],
         glass: [
-          'bg-white/5 border-white/10',
-          'shadow-white/5 hover:shadow-white/10',
+          'bg-card/80 border-border/50',
+          'shadow-lg hover:shadow-xl',
           'backdrop-blur-2xl',
         ],
         subtle: [
-          'bg-gray-900/20 border-gray-800/30',
-          'shadow-black/10',
+          'bg-card/60 border-border/30',
+          'shadow-sm',
         ],
       },
       size: {
@@ -66,7 +66,7 @@ const FormCard: React.FC<FormCardProps> = ({
       {...props}
     >
       {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent rounded-3xl pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-muted/10 to-transparent rounded-3xl pointer-events-none" />
       
       {/* Content */}
       <div className="relative z-10">

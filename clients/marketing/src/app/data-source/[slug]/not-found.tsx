@@ -3,11 +3,11 @@ import { ArrowLeft } from 'iconsax-react';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-6">
       <div className="text-center max-w-md">
         <h1 className="text-6xl font-bold text-gray-600 mb-4">404</h1>
-        <h2 className="text-2xl font-bold text-white mb-4">Data Source Not Found</h2>
-        <p className="text-gray-400 mb-8">
+        <h2 className="text-2xl font-bold text-foreground mb-4">Data Source Not Found</h2>
+        <p className="text-muted-foreground mb-8">
           The data source you're looking for doesn't exist or may have been moved.
         </p>
         <Link 

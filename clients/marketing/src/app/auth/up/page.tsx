@@ -294,7 +294,7 @@ function SignupContent() {
             />
           ) : (
             <div className="w-16 h-16 bg-blue-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">
+              <span className="text-foreground font-bold text-xl">
                 {invitationData.workspace.name.charAt(0).toUpperCase()}
               </span>
             </div>
@@ -303,13 +303,13 @@ function SignupContent() {
       )}
 
       <div className="text-center mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
           {invitationData 
             ? (step === 1 ? `Join ${invitationData.workspace.name} on Zeiro` : "Tell us about yourself")
             : (step === 1 ? "Create your account" : "Tell us about yourself")
           }
         </h1>
-        <p className="text-lg text-gray-400">
+        <p className="text-lg text-muted-foreground">
           {invitationData
             ? (step === 1 ? "Complete your profile to join the workspace" : "Help us customize your experience")
             : (step === 1 ? "Join thousands of teams using Zeiro" : "Help us customize your experience")
@@ -347,9 +347,9 @@ function SignupContent() {
         </FormCard>
         
         <div className="mt-3 text-center">
-          <p className="text-gray-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             Already have an account?{' '}
-            <Link href="/auth/in" className="text-white hover:text-gray-300 transition-colors font-medium">
+            <Link href="/auth/in" className="text-foreground hover:text-muted-foreground transition-colors font-medium">
               Sign in
             </Link>
           </p>
@@ -357,9 +357,9 @@ function SignupContent() {
         
         <p className="text-center text-xs text-gray-500 mt-4">
           By creating an account, you agree to our{' '}
-          <Link href="/terms" className="text-gray-400 hover:text-white underline transition-colors">Terms of Service</Link>{' '}
+          <Link href="/terms" className="text-muted-foreground hover:text-foreground underline transition-colors">Terms of Service</Link>{' '}
           and{' '}
-          <Link href="/privacy" className="text-gray-400 hover:text-white underline transition-colors">Privacy Policy</Link>.
+          <Link href="/privacy" className="text-muted-foreground hover:text-foreground underline transition-colors">Privacy Policy</Link>.
         </p>
       </div>
     </div>
@@ -370,7 +370,7 @@ export default function Signup() {
   return (
     <Suspense fallback={
       <div className="w-full text-center">
-        <div className="text-white">Loading...</div>
+        <div className="text-foreground">Loading...</div>
       </div>
     }>
       <SignupContent />

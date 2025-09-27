@@ -50,11 +50,11 @@ export default function IntegrationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Navigation */}
       <div className="pt-20 pb-6 px-6 border-b border-gray-800/50">
         <div className="max-w-6xl mx-auto">
-          <Link href="/integrations" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
+          <Link href="/integrations" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
             <ArrowLeft size={14} color="currentColor" variant="Outline" />
             <span>Back to integrations</span>
           </Link>
@@ -86,22 +86,22 @@ export default function IntegrationPage() {
                     
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h1 className="text-3xl md:text-4xl font-bold text-white">{integration.name}</h1>
+                        <h1 className="text-3xl md:text-4xl font-bold text-foreground">{integration.name}</h1>
                         <div className="flex items-center gap-1">
                           {renderStars(integration.popularity)}
                         </div>
                       </div>
                       
                       <div className="flex flex-wrap items-center gap-2 mb-4">
-                        <span className="px-3 py-1 bg-gray-800/50 border border-gray-700/50 text-gray-300 text-xs rounded-full">
+                        <span className="px-3 py-1 bg-gray-800/50 border border-gray-700/50 text-muted-foreground text-xs rounded-full">
                           {integration.category}
                         </span>
-                        <span className="px-3 py-1 bg-gray-800/50 border border-gray-700/50 text-gray-300 text-xs rounded-full">
+                        <span className="px-3 py-1 bg-gray-800/50 border border-gray-700/50 text-muted-foreground text-xs rounded-full">
                           {integration.pricing}
                         </span>
                       </div>
                       
-                      <p className="text-gray-400 text-base leading-relaxed mb-6">
+                      <p className="text-muted-foreground text-base leading-relaxed mb-6">
                         {integration.description}
                       </p>
                       
@@ -116,7 +116,7 @@ export default function IntegrationPage() {
                         <Link
                           href={integration.documentation}
                           target="_blank"
-                          className="border border-gray-700/50 text-white px-6 py-3 rounded-xl hover:bg-gray-800/50 transition-all duration-200 font-medium inline-flex items-center gap-2 justify-center"
+                          className="border border-gray-700/50 text-foreground px-6 py-3 rounded-xl hover:bg-gray-800/50 transition-all duration-200 font-medium inline-flex items-center gap-2 justify-center"
                         >
                           <DocumentText size={14} color="currentColor" variant="Outline" />
                           Documentation
@@ -129,28 +129,28 @@ export default function IntegrationPage() {
                 {/* Right: Quick Stats */}
                 <div className="lg:col-span-4">
                   <div className="bg-gray-800/30 border border-gray-700/30 rounded-2xl p-6">
-                    <h3 className="text-sm font-medium text-gray-300 mb-4">Export Details</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-4">Export Details</h3>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Clock size={14} color="#9ca3af" variant="Outline" />
-                          <span className="text-sm text-gray-400">Setup Time</span>
+                          <span className="text-sm text-muted-foreground">Setup Time</span>
                         </div>
-                        <span className="text-sm font-medium text-white">1 minute</span>
+                        <span className="text-sm font-medium text-foreground">1 minute</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Export size={14} color="#9ca3af" variant="Outline" />
-                          <span className="text-sm text-gray-400">Export Type</span>
+                          <span className="text-sm text-muted-foreground">Export Type</span>
                         </div>
-                        <span className="text-sm font-medium text-white">{integration.exportType}</span>
+                        <span className="text-sm font-medium text-foreground">{integration.exportType}</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Refresh size={14} color="#9ca3af" variant="Outline" />
-                          <span className="text-sm text-gray-400">Frequency</span>
+                          <span className="text-sm text-muted-foreground">Frequency</span>
                         </div>
-                        <span className="text-sm font-medium text-white">{integration.frequency}</span>
+                        <span className="text-sm font-medium text-foreground">{integration.frequency}</span>
                       </div>
                     </div>
                   </div>
@@ -168,7 +168,7 @@ export default function IntegrationPage() {
             
             {/* Left Column: Export Process */}
             <div className="bg-gray-900/40 border border-gray-800/50 rounded-2xl p-6">
-              <h2 className="text-xl font-semibold text-white mb-6">Export Process</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-6">Export Process</h2>
               <div className="space-y-4">
                 {integration.exportSteps.map((step, index) => (
                   <div key={index} className="flex gap-3">
@@ -176,8 +176,8 @@ export default function IntegrationPage() {
                       <span className="text-black font-bold text-xs">{index + 1}</span>
                     </div>
                     <div>
-                      <h3 className="text-sm font-medium text-white mb-1">{step.title}</h3>
-                      <p className="text-xs text-gray-400 leading-relaxed">{step.description}</p>
+                      <h3 className="text-sm font-medium text-foreground mb-1">{step.title}</h3>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{step.description}</p>
                     </div>
                   </div>
                 ))}
@@ -188,7 +188,7 @@ export default function IntegrationPage() {
             <div className="bg-gray-900/40 border border-gray-800/50 rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <h2 className="text-sm font-medium text-white">Export Preview</h2>
+                <h2 className="text-sm font-medium text-foreground">Export Preview</h2>
               </div>
               
               <div className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-4 space-y-3">
@@ -196,26 +196,26 @@ export default function IntegrationPage() {
                   <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center">
                     <Send size={10} color="black" variant="Bold" />
                   </div>
-                  <span className="text-white text-xs font-medium">Zeiro Export</span>
+                  <span className="text-foreground text-xs font-medium">Zeiro Export</span>
                 </div>
                 
                 <div className="bg-gray-700/50 rounded-lg p-3">
-                  <p className="text-white text-xs">Exporting Q1 sales report to {integration.name}</p>
+                  <p className="text-foreground text-xs">Exporting Q1 sales report to {integration.name}</p>
                 </div>
                 
                 <div className="bg-gray-700/30 border border-gray-600/30 rounded-lg p-3">
-                  <p className="text-gray-300 text-xs mb-2">Export successful:</p>
+                  <p className="text-muted-foreground text-xs mb-2">Export successful:</p>
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
-                      <span className="text-gray-400">Records exported</span>
-                      <span className="text-white">1,247</span>
+                      <span className="text-muted-foreground">Records exported</span>
+                      <span className="text-foreground">1,247</span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-gray-400">Format</span>
-                      <span className="text-white">{integration.format}</span>
+                      <span className="text-muted-foreground">Format</span>
+                      <span className="text-foreground">{integration.format}</span>
                     </div>
                     <div className="flex justify-between text-xs">
-                      <span className="text-gray-400">Status</span>
+                      <span className="text-muted-foreground">Status</span>
                       <span className="text-green-400">Completed</span>
                     </div>
                   </div>
@@ -230,10 +230,10 @@ export default function IntegrationPage() {
       <div className="px-6 pb-12">
         <div className="max-w-6xl mx-auto">
           <div className="bg-gradient-to-r from-gray-900/60 to-gray-800/60 border border-gray-700/50 rounded-2xl p-8 text-center">
-            <h2 className="text-2xl font-bold text-white mb-3">
+            <h2 className="text-2xl font-bold text-foreground mb-3">
               Ready to export to {integration.name}?
             </h2>
-            <p className="text-gray-400 mb-6 max-w-2xl mx-auto">
+            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
               Start sending your Zeiro insights to {integration.name} automatically in under 1 minute.
             </p>
             
@@ -247,7 +247,7 @@ export default function IntegrationPage() {
               </Link>
               <Link
                 href="/integrations"
-                className="text-gray-400 hover:text-white transition-colors text-sm inline-flex items-center gap-1"
+                className="text-muted-foreground hover:text-foreground transition-colors text-sm inline-flex items-center gap-1"
               >
                 <Eye size={14} color="currentColor" variant="Outline" />
                 View all integrations

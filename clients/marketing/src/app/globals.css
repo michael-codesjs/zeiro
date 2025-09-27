@@ -1,36 +1,58 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #1a1a1a;
+  --color-muted: #f8fafc;
+  --color-muted-foreground: #64748b;
+  --color-border: #e2e8f0;
+  --color-input: #ffffff;
+  --color-card: #ffffff;
+  --color-card-foreground: #1a1a1a;
+  --color-primary: #000000;
+  --color-primary-foreground: #ffffff;
+  --color-primary-hover: #1a1a1a;
+  --color-secondary: #f1f5f9;
+  --color-secondary-foreground: #0f172a;
+  --color-secondary-hover: #e2e8f0;
+  --color-accent: #f8fafc;
+  --color-accent-foreground: #0f172a;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-ring: #000000;
+  --color-success: #22c55e;
+  --color-success-foreground: #ffffff;
+  --color-warning: #f59e0b;
+  --color-warning-foreground: #ffffff;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: theme(colors.border);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background-color: theme(colors.background) !important;
+  color: theme(colors.foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Grid Pattern Animations */
+/* Ensure html and body are white */
+html {
+  background-color: #ffffff !important;
+}
+
+html, body {
+  background: #ffffff !important;
+}
+
+/* Grid Pattern Animations - Light Mode */
 .grid-pattern-primary {
   background-size: 40px 40px;
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
   width: 100%;
   height: 100%;
   animation: moveGrid 20s linear infinite;
@@ -39,8 +61,8 @@ body {
 .grid-pattern-secondary {
   background-size: 80px 80px;
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.1) 1.5px, transparent 1.5px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1.5px, transparent 1.5px);
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1.5px, transparent 1.5px);
   width: 100%;
   height: 100%;
   transform: rotate(5deg) scale(1.2);
@@ -65,15 +87,15 @@ body {
   }
 }
 
-/* Animated Glowing Dots */
+/* Animated Glowing Dots - Light Mode */
 .dot {
   position: absolute;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(0, 0, 0, 0.6);
   box-shadow: 
-    0 0 10px 2px rgba(255, 255, 255, 0.8),
-    0 0 20px 4px rgba(255, 255, 255, 0.6),
-    0 0 30px 6px rgba(255, 255, 255, 0.3);
+    0 0 10px 2px rgba(0, 0, 0, 0.3),
+    0 0 20px 4px rgba(0, 0, 0, 0.2),
+    0 0 30px 6px rgba(0, 0, 0, 0.1);
   animation: float-x 15s linear infinite;
   z-index: 5;
 }

@@ -18,17 +18,17 @@ export default function TermsPage() {
       <section className="pt-32 pb-16 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-center mb-8">
-            <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+            <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
               <ArrowLeft size={16} color="currentColor" variant="Outline" />
               <span>Back to home</span>
             </Link>
           </div>
           
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               Terms of Service
             </h1>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               These terms govern your use of Zeiro's data analysis platform and services.
             </p>
             <div className="flex items-center justify-center gap-2 text-gray-500 text-sm mt-6">
@@ -47,24 +47,24 @@ export default function TermsPage() {
               <div className="w-16 h-16 bg-green-500/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Check size={32} color="#4ade80" variant="Outline" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Fair Use</h3>
-              <p className="text-gray-400 text-sm">Use our platform responsibly and in accordance with applicable laws.</p>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Fair Use</h3>
+              <p className="text-muted-foreground text-sm">Use our platform responsibly and in accordance with applicable laws.</p>
             </div>
             
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-500/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Shield size={32} color="#60a5fa" variant="Outline" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Data Rights</h3>
-              <p className="text-gray-400 text-sm">You retain ownership of your data while granting us necessary permissions to provide our services.</p>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Data Rights</h3>
+              <p className="text-muted-foreground text-sm">You retain ownership of your data while granting us necessary permissions to provide our services.</p>
             </div>
             
             <div className="text-center">
               <div className="w-16 h-16 bg-orange-500/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Warning2 size={32} color="#fb923c" variant="Outline" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Limitations</h3>
-              <p className="text-gray-400 text-sm">Our liability is limited as outlined in these terms to protect both parties.</p>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Limitations</h3>
+              <p className="text-muted-foreground text-sm">Our liability is limited as outlined in these terms to protect both parties.</p>
             </div>
           </div>
         </div>
@@ -81,10 +81,10 @@ export default function TermsPage() {
                 <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
                   <DocumentText size={20} color="#60a5fa" variant="Outline" />
                 </div>
-                <h2 className="text-2xl font-bold text-white m-0">Acceptance of Terms</h2>
+                <h2 className="text-2xl font-bold text-foreground m-0">Acceptance of Terms</h2>
               </div>
               
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>By accessing or using Zeiro's services, you agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree to these terms, please do not use our services.</p>
                 <p>These terms apply to all users of our platform, including free trial users, paid subscribers, and enterprise customers.</p>
               </div>
@@ -96,10 +96,10 @@ export default function TermsPage() {
                 <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
                   <Settings size={20} color="#4ade80" variant="Outline" />
                 </div>
-                <h2 className="text-2xl font-bold text-white m-0">Description of Service</h2>
+                <h2 className="text-2xl font-bold text-foreground m-0">Description of Service</h2>
               </div>
               
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>Zeiro provides a cloud-based data analysis platform that enables users to:</p>
                 <ul className="space-y-2 ml-6">
                   <li>• Connect to various data sources and databases</li>
@@ -118,12 +118,12 @@ export default function TermsPage() {
                 <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
                   <People size={20} color="#c084fc" variant="Outline" />
                 </div>
-                <h2 className="text-2xl font-bold text-white m-0">User Accounts and Responsibilities</h2>
+                <h2 className="text-2xl font-bold text-foreground m-0">User Accounts and Responsibilities</h2>
               </div>
               
-              <div className="space-y-6 text-gray-300">
+              <div className="space-y-6 text-muted-foreground">
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Account Creation</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Account Creation</h3>
                   <ul className="space-y-2 ml-6">
                     <li>• You must provide accurate and complete information</li>
                     <li>• You are responsible for maintaining account security</li>
@@ -133,7 +133,7 @@ export default function TermsPage() {
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Account Security</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Account Security</h3>
                   <ul className="space-y-2 ml-6">
                     <li>• Keep your login credentials confidential</li>
                     <li>• Enable two-factor authentication when available</li>
@@ -150,12 +150,12 @@ export default function TermsPage() {
                 <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
                   <Check size={20} color="#4ade80" variant="Outline" />
                 </div>
-                <h2 className="text-2xl font-bold text-white m-0">Acceptable Use Policy</h2>
+                <h2 className="text-2xl font-bold text-foreground m-0">Acceptable Use Policy</h2>
               </div>
               
-              <div className="space-y-6 text-gray-300">
+              <div className="space-y-6 text-muted-foreground">
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Permitted Uses</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Permitted Uses</h3>
                   <ul className="space-y-2 ml-6">
                     <li>• Analyze your own data or data you have permission to use</li>
                     <li>• Create reports and visualizations for business purposes</li>
@@ -165,7 +165,7 @@ export default function TermsPage() {
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Prohibited Uses</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Prohibited Uses</h3>
                   <ul className="space-y-2 ml-6">
                     <li>• Upload or analyze data you don't have rights to use</li>
                     <li>• Attempt to reverse engineer our platform</li>
@@ -184,12 +184,12 @@ export default function TermsPage() {
                 <div className="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center">
                   <Shield size={20} color="#22d3ee" variant="Outline" />
                 </div>
-                <h2 className="text-2xl font-bold text-white m-0">Data Ownership and Privacy</h2>
+                <h2 className="text-2xl font-bold text-foreground m-0">Data Ownership and Privacy</h2>
               </div>
               
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Your Data</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Your Data</h3>
                   <ul className="space-y-2 ml-6">
                     <li>• You retain all rights to your data</li>
                     <li>• You grant us permission to process your data to provide our services</li>
@@ -199,7 +199,7 @@ export default function TermsPage() {
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Our Responsibilities</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Our Responsibilities</h3>
                   <ul className="space-y-2 ml-6">
                     <li>• Implement appropriate security measures</li>
                     <li>• Process data only as necessary to provide services</li>
@@ -216,12 +216,12 @@ export default function TermsPage() {
                 <div className="w-8 h-8 bg-yellow-500/20 rounded-lg flex items-center justify-center">
                   <DocumentText size={20} color="#facc15" variant="Outline" />
                 </div>
-                <h2 className="text-2xl font-bold text-white m-0">Payment and Billing</h2>
+                <h2 className="text-2xl font-bold text-foreground m-0">Payment and Billing</h2>
               </div>
               
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Subscription Plans</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Subscription Plans</h3>
                   <ul className="space-y-2 ml-6">
                     <li>• Fees are charged in advance on a monthly or annual basis</li>
                     <li>• All fees are non-refundable except as required by law</li>
@@ -231,7 +231,7 @@ export default function TermsPage() {
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-3">Cancellation</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-3">Cancellation</h3>
                   <ul className="space-y-2 ml-6">
                     <li>• You may cancel your subscription at any time</li>
                     <li>• Cancellation takes effect at the end of your billing period</li>
@@ -248,10 +248,10 @@ export default function TermsPage() {
                 <div className="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center">
                   <Warning2 size={20} color="#fb923c" variant="Outline" />
                 </div>
-                <h2 className="text-2xl font-bold text-white m-0">Limitation of Liability</h2>
+                <h2 className="text-2xl font-bold text-foreground m-0">Limitation of Liability</h2>
               </div>
               
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW:</p>
                 <ul className="space-y-2 ml-6">
                   <li>• Our services are provided "as is" without warranties</li>
@@ -269,10 +269,10 @@ export default function TermsPage() {
                 <div className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center">
                   <X size={20} color="#f87171" variant="Outline" />
                 </div>
-                <h2 className="text-2xl font-bold text-white m-0">Termination</h2>
+                <h2 className="text-2xl font-bold text-foreground m-0">Termination</h2>
               </div>
               
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>We may terminate or suspend your account immediately if you:</p>
                 <ul className="space-y-2 ml-6">
                   <li>• Violate these terms of service</li>
@@ -286,8 +286,8 @@ export default function TermsPage() {
 
             {/* Changes to Terms */}
             <div className="mb-12">
-              <h2 className="text-2xl font-bold text-white mb-6">Changes to These Terms</h2>
-              <div className="space-y-4 text-gray-300">
+              <h2 className="text-2xl font-bold text-foreground mb-6">Changes to These Terms</h2>
+              <div className="space-y-4 text-muted-foreground">
                 <p>We may update these terms from time to time. When we do:</p>
                 <ul className="space-y-2 ml-6">
                   <li>• We will post the updated terms on this page</li>
@@ -300,8 +300,8 @@ export default function TermsPage() {
 
             {/* Contact Information */}
             <div className="mb-12">
-              <h2 className="text-2xl font-bold text-white mb-6">Contact Us</h2>
-              <div className="space-y-4 text-gray-300">
+              <h2 className="text-2xl font-bold text-foreground mb-6">Contact Us</h2>
+              <div className="space-y-4 text-muted-foreground">
                 <p>If you have questions about these Terms of Service, please contact us:</p>
                 <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
                   <p><strong>Email:</strong> <a href="mailto:legal@zeiro.com" className="text-blue-400 hover:text-blue-300">legal@zeiro.com</a></p>

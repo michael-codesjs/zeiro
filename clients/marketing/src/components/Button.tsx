@@ -4,16 +4,16 @@ import { cn } from '@/utils/cn';
 
 const buttonVariants = cva(
   // Base styles
-  "inline-flex items-center justify-center rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed",
+  "inline-flex items-center justify-center rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed",
   {
     variants: {
       variant: {
-        primary: "bg-white text-black hover:bg-gray-100 hover:scale-105 focus:ring-white/20",
-        secondary: "bg-gray-800 text-white border border-gray-700 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-500/20",
-        outline: "border border-gray-800 text-white hover:bg-gray-900/50 hover:border-gray-700 focus:ring-gray-500/20",
-        ghost: "text-gray-400 hover:text-white hover:bg-gray-900/50 focus:ring-gray-500/20",
-        link: "text-gray-400 hover:text-white underline-offset-4 hover:underline focus:ring-gray-500/20",
-        destructive: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500/20",
+        primary: "bg-primary text-primary-foreground hover:bg-primary-hover hover:scale-105 focus:ring-ring/20",
+        secondary: "bg-secondary text-secondary-foreground border border-border hover:bg-secondary-hover hover:border-border focus:ring-ring/20",
+        outline: "border border-border text-foreground hover:bg-accent hover:border-border focus:ring-ring/20",
+        ghost: "text-muted-foreground hover:text-foreground hover:bg-accent focus:ring-ring/20",
+        link: "text-muted-foreground hover:text-foreground underline-offset-4 hover:underline focus:ring-ring/20",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus:ring-destructive/20",
       },
       size: {
         sm: "px-3 py-1.5 text-sm gap-1.5",

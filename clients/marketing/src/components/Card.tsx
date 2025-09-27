@@ -7,11 +7,11 @@ const cardVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-white border border-gray-200 shadow-sm',
-        primary: 'bg-white border border-indigo-100 shadow-lg shadow-indigo-100/20',
-        secondary: 'bg-indigo-50/50 border border-indigo-100',
-        gradient: 'bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100',
-        outline: 'bg-transparent border border-gray-200',
+        default: 'bg-card border border-border shadow-sm',
+        primary: 'bg-card border border-primary/20 shadow-lg shadow-primary/10',
+        secondary: 'bg-secondary/50 border border-border',
+        gradient: 'bg-gradient-to-br from-secondary/30 to-accent/30 border border-border',
+        outline: 'bg-transparent border border-border',
       },
       size: {
         sm: 'p-4',
@@ -22,7 +22,7 @@ const cardVariants = cva(
         none: '',
         lift: 'hover:-translate-y-1 hover:shadow-lg',
         grow: 'hover:scale-[1.02]',
-        glow: 'hover:shadow-xl hover:shadow-indigo-200/20',
+        glow: 'hover:shadow-xl hover:shadow-primary/10',
       },
       rounded: {
         default: 'rounded-xl',
@@ -100,7 +100,7 @@ const CardFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => {
   return (
     <div 
-      className={`mt-4 pt-4 border-t border-gray-100 ${className || ''}`} 
+      className={`mt-4 pt-4 border-t border-border ${className || ''}`} 
       {...props}
     >
       {children}
