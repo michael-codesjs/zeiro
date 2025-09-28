@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { FiDatabase, FiPlus, FiSearch, FiFilter, FiTrash2, FiCheckSquare, FiSquare, FiRefreshCw } from 'react-icons/fi';
 import { Button, useDisclosure, Input, Select, type SelectOption } from '@/components/ui';
 import { useDataSources, useDeleteDatabase } from '@/hooks/use-data-sources';
-import AddDatasourceModal from '../(workbench)/add-datasource-modal';
+// import AddDatasourceModal from '../(chat)/add-datasource-modal';
 import DataSourceCard from './data-source-card';
 import QueryProvider from '@/providers/query-client-provider';
 
@@ -373,10 +373,10 @@ function DataSourcesPageContent() {
         )}
       </div>
 
-      <AddDatasourceModal
+      {/* <AddDatasourceModal
         isOpen={isOpen}
         onClose={onClose}
-      />
+      /> */}
     </div>
   );
 }

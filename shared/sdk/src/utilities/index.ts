@@ -1,2 +1,6 @@
 export * from './constants'
 export * from './functions'
+export * from './user'
+export * from './encryption'
+export * from './kms-encryption'
+export * from './credential'

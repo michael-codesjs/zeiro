@@ -22,26 +22,18 @@ export const credentials = new Model<Credential>(
         created_at: { type: String, required: true },
         updated_at: { type: String, required: true },
         last_used: { type: String },
-        // AWS specific fields
+        // AWS Access Keys specific fields
         account_id: { type: String },
         access_key_id: { type: String },
         secret_access_key: { type: String },
         region: { type: String },
-        // GCP specific fields
-        service_account_key: { type: String },
-        project_id: { type: String },
-        // Azure specific fields
-        client_id: { type: String },
-        client_secret: { type: String },
-        tenant_id: { type: String },
-        subscription_id: { type: String },
-        // Database specific fields
+        // Database Connection specific fields
         host: { type: String },
         port: { type: Number },
-        database: { type: String },
+        database_name: { type: String },
         username: { type: String },
         password: { type: String },
-        ssl: { type: Boolean },
+        ssl_enabled: { type: Boolean },
     },
   },
 )

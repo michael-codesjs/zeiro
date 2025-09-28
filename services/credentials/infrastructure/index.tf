@@ -25,9 +25,3 @@ variable "region" {
   default     = "eu-central-1"
   description = "Region the user service infrastructure is created in."
 }
-
-module "storage" {
-  source = "./storage"
-  region = var.region
-  stage  = var.stage
-}

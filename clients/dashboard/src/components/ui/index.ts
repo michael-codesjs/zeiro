@@ -46,12 +46,14 @@ export {
   ModalFooter, 
   ModalCloseButton, 
   ModalContent,
+  ConfirmationModal,
   type ModalProps,
   type ModalHeaderProps,
   type ModalBodyProps,
   type ModalFooterProps,
   type ModalCloseButtonProps,
-  type ModalContentProps
+  type ModalContentProps,
+  type ConfirmationModalProps
 } from "./modals";
 
 // Panels
@@ -67,6 +69,9 @@ export {
   type SidePanelFooterProps,
   type SidePanelCloseButtonProps
 } from "./panels";
+
+// Popover
+export { Popover, type PopoverProps } from "./popover";
 
 // Error State
 export { default as ErrorState, type ErrorStateProps } from "./error-state";

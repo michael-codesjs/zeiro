@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda'
-import { credentials } from '@adapters/secondary/one-table'
+import { credentials } from '@zeiro/domain'
 import { CREDENTIAL_DELETED_DOMAIN_EVENT } from '@typings/domain-events'
-import { withLambdaIOStandard } from '@zeiro/sdk'
+import { validateAuthenticatedUser } from '@zeiro/sdk'
 import { EventBridgeAdapter } from '@adapters/secondary/event-bridge'
 
 // Initialize EventBridge adapter outside the handler for better performance
@@ -19,20 +19,9 @@ const handler = async (
   console.log('event', JSON.stringify(event, null, 2))
   
   try {
-    // Extract user_id from Cognito authorizer context
-    const user_id = event.requestContext?.authorizer?.claims?.sub
-    if (!user_id) {
-      return {
-        statusCode: 401,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
-          'Access-Control-Allow-Methods': 'DELETE,OPTIONS',
-        },
-        body: JSON.stringify({ error: 'User not authenticated' }),
-      }
-    }
+    // Validate authenticated user using SDK utility
+    const cognito_user_id = event.requestContext?.authorizer?.claims?.sub
+    const user = await validateAuthenticatedUser(cognito_user_id)
 
     // Extract credential ID from path parameters
     const id = event.pathParameters?.id
@@ -49,13 +38,14 @@ const handler = async (
       }
     }
     
-    // First, get the existing credential to ensure it belongs to the user
-    const existing_credential = await credentials.get({
-      id,
-      user_id,
-    } as never)
-    
-    if (!existing_credential) {
+    // Try to delete credential directly - if it doesn't exist or doesn't belong to workspace, it will fail
+    let deleted_credential
+    try {
+      deleted_credential = await credentials.delete({
+        workspace_id: user.workspace_id,
+        id: id
+      }).go()
+    } catch (error) {
       return {
         statusCode: 404,
         headers: {
@@ -68,22 +58,16 @@ const handler = async (
       }
     }
     
-    // Delete credential from database
-    await credentials.remove({
-      id,
-      user_id,
-    } as never)
-    
     // Create and publish CREDENTIAL_DELETED event
     const credential_deleted_event: CREDENTIAL_DELETED_DOMAIN_EVENT = {
-      id: existing_credential.id,
+      id: deleted_credential.data.id,
       source: 'zeiro.domain.credentials.services.credential',
       name: 'CREDENTIAL_DELETED',
       payload: {
-        id: existing_credential.id,
-        user_id: existing_credential.user_id,
-        name: existing_credential.name,
-        type: existing_credential.type,
+        id: deleted_credential.data.id,
+        user_id: deleted_credential.data.user_id,
+        name: deleted_credential.data.name,
+        type: deleted_credential.data.type,
       },
       date: new Date(),
     }
@@ -107,6 +91,36 @@ const handler = async (
     }
   } catch (error) {
     console.error('Error deleting credential:', error)
+    
+    // Handle authentication errors
+    if (error instanceof Error) {
+      if (error.message === 'User not authenticated') {
+        return {
+          statusCode: 401,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
+            'Access-Control-Allow-Methods': 'DELETE,OPTIONS',
+          },
+          body: JSON.stringify({ error: 'User not authenticated' }),
+        }
+      }
+      
+      if (error.message === 'User not found') {
+        return {
+          statusCode: 404,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
+            'Access-Control-Allow-Methods': 'DELETE,OPTIONS',
+          },
+          body: JSON.stringify({ error: 'User not found' }),
+        }
+      }
+    }
+    
     return {
       statusCode: 500,
       headers: {

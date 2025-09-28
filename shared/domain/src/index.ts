@@ -1,7 +1,15 @@
 import { Service } from 'electrodb'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
-import { User, Workspace, WorkspaceMembership, WorkspaceMembershipCount, InvitationToken, InvitationReminder } from './entities'
+import {
+  User,
+  Workspace,
+  WorkspaceMembership,
+  WorkspaceMembershipCount,
+  InvitationToken,
+  InvitationReminder,
+  Credential,
+} from './entities'
 
 // Create DynamoDB Document Client
 const ddbClient = new DynamoDBClient({ region: process.env.AWS_REGION })
@@ -15,6 +23,7 @@ export const zeiro = new Service({
   workspaceMembershipCount: WorkspaceMembershipCount,
   invitationToken: InvitationToken,
   invitationReminder: InvitationReminder,
+  credential: Credential,
 }, {
   table: process.env.ZEIRO_TABLE_NAME,
   client: docClient as any,
@@ -22,6 +31,7 @@ export const zeiro = new Service({
 
 // Export individual entity collections for convenience
 export const users = zeiro.entities.user
+export const credentials = zeiro.entities.credential
 export const workspaces = zeiro.entities.workspace
 export const workspaceMemberships = zeiro.entities.workspaceMembership
 export const workspaceMembershipCounts = zeiro.entities.workspaceMembershipCount
@@ -29,4 +39,4 @@ export const invitationTokens = zeiro.entities.invitationToken
 export const invitationReminders = zeiro.entities.invitationReminder
 
 // Export the entities themselves for direct usage if needed
-export { User, Workspace, WorkspaceMembership, WorkspaceMembershipCount, InvitationToken, InvitationReminder }
+export { User, Workspace, WorkspaceMembership, WorkspaceMembershipCount, InvitationToken, InvitationReminder, Credential }

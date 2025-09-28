@@ -1,4 +1,4 @@
-export type CredentialType = 'aws' | 'gcp' | 'azure' | 'database'
+export type CredentialType = 'aws_access_keys' | 'database_connection'
 
 export type CredentialStatus = 'active' | 'inactive' | 'expired'
 
@@ -13,39 +13,25 @@ export type BaseCredential = {
   last_used?: string
 }
 
-export type AWSCredential = BaseCredential & {
-  type: 'aws'
+export type AWSAccessKeysCredential = BaseCredential & {
+  type: 'aws_access_keys'
   account_id: string
   access_key_id: string
   secret_access_key: string // This will be encrypted
   region?: string
 }
 
-export type GCPCredential = BaseCredential & {
-  type: 'gcp'
-  service_account_key: string // This will be encrypted
-  project_id?: string
-}
-
-export type AzureCredential = BaseCredential & {
-  type: 'azure'
-  client_id: string
-  client_secret: string // This will be encrypted
-  tenant_id: string
-  subscription_id?: string
-}
-
-export type DatabaseCredential = BaseCredential & {
-  type: 'database'
+export type DatabaseConnectionCredential = BaseCredential & {
+  type: 'database_connection'
   host: string
   port: number
-  database: string
+  database_name: string
   username: string
   password: string // This will be encrypted
-  ssl?: boolean
+  ssl_enabled?: boolean
 }
 
-export type Credential = AWSCredential | GCPCredential | AzureCredential | DatabaseCredential
+export type Credential = AWSAccessKeysCredential | DatabaseConnectionCredential
 
 export type CreateCredentialInput = 
   | Omit<Credential, 'id' | 'created_at' | 'updated_at' | 'last_used'>

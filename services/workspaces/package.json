@@ -1,5 +1,5 @@
 {
-  "name": "@zeiro/workspace",
+  "name": "@zeiro/workspaces",
   "version": "0.9.0",
   "description": "workspace service",
   "main": "serverless.ts",

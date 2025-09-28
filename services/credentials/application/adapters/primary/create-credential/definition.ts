@@ -20,7 +20,7 @@ export const definition: AWS.ServerlessLambdaFunction = {
           allowCredentials: false
         },
         authorizer: {
-          name: 'CognitoAuthorizer',
+          name: 'CognitoAuthorizerCredentials',
           type: 'COGNITO_USER_POOLS',
           arn: '${ssm:/zeiro/${self:custom.stage}/infrastructure/authentication/user-pool/arn}',
         },
@@ -33,9 +33,11 @@ export const definition: AWS.ServerlessLambdaFunction = {
       Action: [
         'dynamodb:PutItem',
         'dynamodb:GetItem',
+        'dynamodb:Query',
       ],
       Resource: [
-        '${ssm:/zeiro/${self:custom.stage}/domain/credentials/infrastructure/storage/zeiro-credentials-table/arn}',
+        '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}',
+        '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}/index/*',
       ],
     },
     {
@@ -50,16 +52,30 @@ export const definition: AWS.ServerlessLambdaFunction = {
     {
       Effect: 'Allow',
       Action: [
+        'kms:Encrypt',
+        'kms:Decrypt',
+        'kms:ReEncrypt*',
+        'kms:GenerateDataKey*',
+        'kms:DescribeKey',
+      ],
+      Resource: [
+        '${ssm:/zeiro/${self:custom.stage}/infrastructure/security/kms/credentials-key/arn}',
+      ],
+    },
+    {
+      Effect: 'Allow',
+      Action: [
         'ssm:GetParameter',
       ],
-    Resource: [
+      Resource: [
         'arn:aws:ssm:${self:custom.region}:*:parameter/zeiro/${self:custom.stage}/domain/credentials/infrastructure/encryption/key',
       ],
     },
   ],
   environment: {
-    CREDENTIALS_DYNAMODB_TABLE_NAME: '${ssm:/zeiro/${self:custom.stage}/domain/credentials/infrastructure/storage/zeiro-credentials-table/name}',
-    CREDENTIAL_ENCRYPTION_KEY: '${ssm:/zeiro/${self:custom.stage}/domain/credentials/infrastructure/encryption/key}',
+    ZEIRO_TABLE_NAME: '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/name}',
+    CREDENTIAL_KMS_KEY_ALIAS: '${ssm:/zeiro/${self:custom.stage}/infrastructure/security/kms/credentials-key/alias}',
+    STAGE: '${self:custom.stage}',
   },
 }
 
