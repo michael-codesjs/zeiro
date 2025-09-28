@@ -2,44 +2,103 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { get, post, del } from 'aws-amplify/api';
 import { toast } from 'react-hot-toast';
 
-export type Credential ={
+export type Credential = {
   id: string;
   user_id: string;
+  workspace_id: string;
   name: string;
-  type: string;
-  provider: string;
-  account_id?: string;
-  access_key_id?: string;
-  secret_access_key?: string;
-  region?: string;
+  type: 'aws' | 'gcp' | 'azure' | 'database';
   status: 'active' | 'inactive' | 'expired';
   created_at: string;
   updated_at: string;
   last_used?: string;
+  
+  // AWS specific fields
+  account_id?: string;
+  access_key_id?: string;
+  secret_access_key?: string; // This will be masked in responses
+  region?: string;
+  
+  // GCP specific fields
+  service_account_key?: string; // This will be masked in responses
+  project_id?: string;
+  
+  // Azure specific fields
+  client_id?: string;
+  client_secret?: string; // This will be masked in responses
+  tenant_id?: string;
+  subscription_id?: string;
+  
+  // Database specific fields
+  host?: string;
+  port?: number;
+  database?: string;
+  username?: string;
+  password?: string; // This will be masked in responses
+  ssl?: boolean;
 }
 
 const CREDENTIALS_QUERY_KEY = ['credentials'];
 
 // Fetch credentials
-const fetchCredentials = async (): Promise<Credential[]> => {
+const fetchCredentials = async (type?: string): Promise<Credential[]> => {
+  const queryParams: Record<string, string> = {
+    page: '1',
+    limit: '50'
+  };
+  
+  if (type && type !== 'all') {
+    queryParams.type = type;
+  }
+  
   const restOperation = get({
     apiName: 'zeiro-api',
     path: '/credentials',
     options: {
-      queryParams: {
-        page: '1',
-        limit: '50'
-      }
+      queryParams
     }
   });
   
   const response = await restOperation.response;
-  const data = await response.body.json() as unknown as { credentials: Credential[] };
-  return data.credentials;
+  const data = await response.body.json() as unknown as { credentials: Credential[]; total: number; page: number; limit: number };
+  return data.credentials || [];
+};
+
+// Create credential input type
+export type CreateCredentialInput = {
+  name: string;
+  type: 'aws' | 'gcp' | 'azure' | 'database';
+  
+  // Connection details - will be flattened on the backend
+  connection_details?: {
+    // AWS fields
+    account_id?: string;
+    access_key_id?: string;
+    secret_access_key?: string;
+    region?: string;
+    
+    // GCP fields
+    service_account_key?: string;
+    project_id?: string;
+    
+    // Azure fields
+    client_id?: string;
+    client_secret?: string;
+    tenant_id?: string;
+    subscription_id?: string;
+    
+    // Database fields
+    host?: string;
+    port?: number;
+    database?: string;
+    username?: string;
+    password?: string;
+    ssl?: boolean;
+  };
 };
 
 // Create credential
-const createCredential = async (newCredential: Omit<Credential, 'id' | 'user_id' | 'created_at' | 'updated_at'>): Promise<Credential> => {
+const createCredential = async (newCredential: CreateCredentialInput): Promise<Credential> => {
   const restOperation = post({
     apiName: 'zeiro-api',
     path: '/credentials',
@@ -63,10 +122,10 @@ const deleteCredential = async (id: string): Promise<void> => {
 };
 
 // Hooks
-export const useCredentials = () => {
+export const useCredentials = (type?: string) => {
   return useQuery({
-    queryKey: CREDENTIALS_QUERY_KEY,
-    queryFn: fetchCredentials,
+    queryKey: [...CREDENTIALS_QUERY_KEY, type],
+    queryFn: () => fetchCredentials(type),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
@@ -77,10 +136,8 @@ export const useCreateCredential = () => {
   return useMutation({
     mutationFn: createCredential,
     onSuccess: (newCredential) => {
-      // Optimistically update the cache
-      queryClient.setQueryData<Credential[]>(CREDENTIALS_QUERY_KEY, (old) => 
-        old ? [...old, newCredential] : [newCredential]
-      );
+      // Invalidate all credentials queries to refetch data
+      queryClient.invalidateQueries({ queryKey: CREDENTIALS_QUERY_KEY });
       toast.success('Credentials created successfully');
     },
     onError: (error) => {
@@ -96,10 +153,8 @@ export const useDeleteCredential = () => {
   return useMutation({
     mutationFn: deleteCredential,
     onSuccess: (_, deletedId) => {
-      // Optimistically update the cache
-      queryClient.setQueryData<Credential[]>(CREDENTIALS_QUERY_KEY, (old) => 
-        old ? old.filter(c => c.id !== deletedId) : []
-      );
+      // Invalidate all credentials queries to refetch data
+      queryClient.invalidateQueries({ queryKey: CREDENTIALS_QUERY_KEY });
       toast.success('Credentials deleted successfully');
     },
     onError: (error) => {

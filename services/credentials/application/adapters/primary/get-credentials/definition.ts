@@ -22,7 +22,7 @@ export const definition: AWS.ServerlessLambdaFunction = {
           allowCredentials: false
         },
         authorizer: {
-          name: 'CognitoAuthorizer',
+          name: 'CognitoAuthorizerCredentials',
           type: 'COGNITO_USER_POOLS',
           arn: '${ssm:/zeiro/${self:custom.stage}/infrastructure/authentication/user-pool/arn}',
         },
@@ -38,13 +38,13 @@ export const definition: AWS.ServerlessLambdaFunction = {
         'dynamodb:Query',
       ],
       Resource: [
-        '${ssm:/zeiro/${self:custom.stage}/domain/credentials/infrastructure/storage/zeiro-credentials-table/arn}',
+        '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}',
+        '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}/index/*',
       ],
     },
   ],
   environment: {
-    CREDENTIALS_DYNAMODB_TABLE_NAME:
-      '${ssm:/zeiro/${self:custom.stage}/domain/credentials/infrastructure/storage/zeiro-credentials-table/name}',
+    ZEIRO_TABLE_NAME: '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/name}',
     CREDENTIAL_ENCRYPTION_KEY:
       '${ssm:/zeiro/${self:custom.stage}/domain/credentials/infrastructure/encryption/key}',
   },

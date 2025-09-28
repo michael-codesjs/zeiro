@@ -19,9 +19,13 @@
     "url": "https://github.com/michael-codesjs/zeiro/issues"
   },
   "homepage": "https://github.com/michael-codesjs/zeiro#readme",
+  "dependencies": {
+    "@zeiro/domain": "*"
+  },
   "devDependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.287.0",
     "@aws-sdk/client-dynamodb": "^3.287.0",
+    "@aws-sdk/client-kms": "^3.287.0",
     "@aws-sdk/client-ssm": "^3.287.0",
     "@aws-sdk/credential-providers": "^3.282.0",
     "@aws-sdk/util-dynamodb": "^3.287.0",

@@ -113,8 +113,8 @@ export const WorkspaceSettings = ({}: WorkspaceSettingsProps) => {
       <div>
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Team Members</h2>
-            <p className="text-sm text-gray-500 mt-1">{workspace.member_count || 0} people in this workspace</p>
+            <h2 className="text-lg font-semibold text-slate-900">Team Members</h2>
+            <p className="text-sm text-slate-600 mt-1">{workspace.member_count || 0} people in this workspace</p>
           </div>
           <InviteMemberButton 
             workspace={workspace} 

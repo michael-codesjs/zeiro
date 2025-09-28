@@ -1,0 +1,14 @@
+{
+  "name": "@zeiro/security-infrastructure",
+  "version": "1.0.0",
+  "description": "zeiro security infrastructure",
+  "main": "index.tf",
+  "repository": "https://github.com/michael-codesjs/zeiro",
+  "author": "Michael Phiri(github@michael-codesjs)",
+  "license": "MIT",
+  "scripts": {
+    "deploy": "npx zeiro deploy --infra --stage ${STAGE:-dev} --force-init --reconfigure"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

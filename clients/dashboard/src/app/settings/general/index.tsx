@@ -89,8 +89,8 @@ function ProfileSection() {
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Profile Information</h1>
-              <p className="text-gray-600 mt-1">Update your personal information and profile details</p>
+              <h1 className="text-lg font-semibold text-slate-900">Profile Information</h1>
+              <p className="text-sm text-slate-600 mt-1">Update your personal information and profile details</p>
             </div>
           </div>
           

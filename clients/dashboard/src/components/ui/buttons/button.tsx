@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 const buttonVariants = cva(
   // Base styles
-  "inline-flex items-center justify-center rounded-lg text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer transform hover:scale-105 active:scale-95",
+  "inline-flex items-center justify-center rounded-lg text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer transform",
   {
     variants: {
       variant: {
@@ -68,8 +68,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
         className={cn(buttonVariants({ variant, size, fullWidth, loading, className }))}
         ref={ref}

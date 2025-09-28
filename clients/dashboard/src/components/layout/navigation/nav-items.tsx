@@ -11,7 +11,8 @@ import {
   Setting2,
   ChartSquare,
   Box1,
-  People
+  People,
+  Message
 } from "iconsax-reactjs";
 
 interface NavItemsProps {
@@ -22,9 +23,8 @@ export default function NavItems({ sidebarCollapsed }: NavItemsProps) {
   const pathname = usePathname();
 
   const navigationItems = [
-    { id: "workbench", label: "Workbench", path: "/", icon: Home, enabled: true },
+    { id: "chat", label: "Chats", path: "/", icon: Message, enabled: true },
     { id: "data-sources", label: "Data Sources", path: "/data-sources", icon: Box1, enabled: true },
-    { id: "credentials", label: "Credentials", path: "/credentials", icon: KeySquare, enabled: true },
     { id: "dashboards", label: "Dashboards", path: "/dashboards", icon: ChartSquare, enabled: false },
     { id: "migration-agent", label: "Migration Agent", path: "/migration-agent", icon: Data, enabled: false },
     { id: "settings", label: "Settings", path: "/settings", icon: Setting2, enabled: true },

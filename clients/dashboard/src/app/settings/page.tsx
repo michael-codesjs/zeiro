@@ -6,6 +6,7 @@ import { Button, Tabs, TabsList, TabsTrigger, TabsContent } from "../../componen
 import { useSettings } from "../../hooks/use-settings";
 import { WorkspaceSettings } from "./workspace";
 import GeneralSettings from "./general";
+import CredentialsSettings from "./credentials";
 import { 
   InfoCircle,
   Setting2,
@@ -13,10 +14,11 @@ import {
   Notification,
   ColorSwatch,
   Lock,
-  Cpu
+  Cpu,
+  Key
 } from "iconsax-reactjs";
 
-type SettingsSection = 'general' | 'workspaces';
+type SettingsSection = 'general' | 'workspaces' | 'credentials';
 
 function SettingsContent() {
   const searchParams = useSearchParams();
@@ -28,7 +30,7 @@ function SettingsContent() {
   // Initialize active section from URL
   useEffect(() => {
     const tabFromUrl = searchParams.get('activeTab') as SettingsSection;
-    if (tabFromUrl && (tabFromUrl === 'general' || tabFromUrl === 'workspaces')) {
+    if (tabFromUrl && (tabFromUrl === 'general' || tabFromUrl === 'workspaces' || tabFromUrl === 'credentials')) {
       setActiveSection(tabFromUrl);
     }
   }, [searchParams]);
@@ -74,6 +76,9 @@ function SettingsContent() {
             <TabsTrigger value="workspaces" icon={<People size="16" />}>
               Workspaces
             </TabsTrigger>
+            <TabsTrigger value="credentials" icon={<Key size="16" />}>
+              Credentials
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="general" className="bg-white rounded-xl border border-gray-200 p-6">
@@ -82,6 +87,10 @@ function SettingsContent() {
 
           <TabsContent value="workspaces" className="bg-white rounded-xl border border-gray-200 p-6">
             <WorkspaceSettings  />
+          </TabsContent>
+
+          <TabsContent value="credentials" className="bg-white rounded-xl border border-gray-200 p-6">
+            <CredentialsSettings />
           </TabsContent>
         </Tabs>
       </div>

@@ -12,3 +12,5 @@ export {
   type ModalCloseButtonProps,
   type ModalContentProps
 } from "./modal";
+
+export { default as ConfirmationModal, type ConfirmationModalProps } from "./confirmation-modal";
