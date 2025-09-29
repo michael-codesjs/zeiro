@@ -10,29 +10,29 @@ export interface DecryptedCredential {
   user_id: string
   workspace_id: string
   name: string
-  type: 'aws' | 'gcp' | 'azure' | 'database'
+  type: 'iam_access_keys' | 'service_account_keys' | 'service_principals' | 'connection_details'
   status: 'active' | 'inactive' | 'expired'
   created_at: string
   updated_at: string
   last_used?: string
   
-  // AWS specific fields (decrypted)
+  // IAM Access Keys specific fields (decrypted)
   account_id?: string
   access_key_id?: string
   secret_access_key?: string
   region?: string
   
-  // GCP specific fields (decrypted)
+  // Service Account Keys specific fields (decrypted)
   service_account_key?: string
   project_id?: string
   
-  // Azure specific fields (decrypted)
+  // Service Principals specific fields (decrypted)
   client_id?: string
   client_secret?: string
   tenant_id?: string
   subscription_id?: string
   
-  // Database specific fields (decrypted)
+  // Connection Details specific fields (decrypted)
   host?: string
   port?: number
   database?: string
@@ -82,7 +82,7 @@ export async function getDecryptedCredential(
 export async function getDecryptedCredentials(
   workspaceId: string,
   options: {
-    type?: 'aws' | 'gcp' | 'azure' | 'database'
+    type?: 'iam_access_keys' | 'service_account_keys' | 'service_principals' | 'connection_details'
     status?: 'active' | 'inactive' | 'expired'
   } = {}
 ): Promise<DecryptedCredential[]> {

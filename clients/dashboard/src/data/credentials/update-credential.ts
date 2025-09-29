@@ -6,20 +6,20 @@ export type UpdateCredentialInput = {
   status?: 'active' | 'inactive' | 'expired';
 } & (
   | {
-      type?: 'aws_access_keys';
+      type?: 'iam_access_keys';
       account_id?: string;
       access_key_id?: string;
       secret_access_key?: string;
       region?: string;
     }
   | {
-      type?: 'database_connection';
+      type?: 'connection_details';
       host?: string;
       port?: number;
-      database_name?: string;
+      database?: string;
       username?: string;
       password?: string;
-      ssl_enabled?: boolean;
+      ssl?: boolean;
     }
 );
 

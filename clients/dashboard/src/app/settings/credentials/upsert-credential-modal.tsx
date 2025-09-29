@@ -133,10 +133,6 @@ export default function UpsertCredentialModal({
     if (!isOpen) return;
 
     if (credential) {
-      console.log('🔍 DEBUGGING: Credential object received:', credential);
-      console.log('🔍 DEBUGGING: Credential type:', credential.type);
-      console.log('🔍 DEBUGGING: Credential name:', credential.name);
-      
       setSelectedType(credential.type as CredentialType);
       
       // Build form data object
@@ -147,9 +143,7 @@ export default function UpsertCredentialModal({
 
       // Add type-specific fields based on credential type
       if (credential.type === 'iam_access_keys') {
-        console.log('🔍 DEBUGGING: Processing IAM Access Keys credential');
         const iamCredential = credential as any;
-        console.log('🔍 DEBUGGING: IAM credential data:', iamCredential);
         formData.account_id = iamCredential.account_id || "";
         formData.access_key_id = iamCredential.access_key_id || "";
         formData.secret_access_key = ""; // Don't pre-fill sensitive data
@@ -162,9 +156,7 @@ export default function UpsertCredentialModal({
         formData.password = "";
         formData.ssl = false;
       } else if (credential.type === 'connection_details') {
-        console.log('🔍 DEBUGGING: Processing Connection Details credential');
         const dbCredential = credential as any;
-        console.log('🔍 DEBUGGING: DB credential data:', dbCredential);
         formData.host = dbCredential.host || "";
         formData.port = dbCredential.port || undefined;
         formData.database = dbCredential.database || "";
@@ -178,11 +170,9 @@ export default function UpsertCredentialModal({
         formData.region = "";
       }
 
-      console.log('🔍 DEBUGGING: Final form data:', formData);
       reset(formData);
     } else {
       // Reset to default values for add mode
-      console.log('🔍 DEBUGGING: Resetting to default values for add mode');
       const defaultData = {
         name: "",
         type: "connection_details" as CredentialType,
