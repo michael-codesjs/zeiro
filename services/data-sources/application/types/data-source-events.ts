@@ -5,9 +5,9 @@ export type DATA_SOURCE_CREATED_DOMAIN_EVENT = {
   payload: {
     id: string
     user_id: string
+    workspace_id: string
     name: string
     type: string
-    environment: string
     credential_id: string
   }
   date: Date
@@ -20,7 +20,10 @@ export type DATA_SOURCE_UPDATED_DOMAIN_EVENT = {
   payload: {
     id: string
     user_id: string
-    changes: Record<string, any>
+    workspace_id: string
+    name: string
+    type: string
+    changes: string[]
   }
   date: Date
 }

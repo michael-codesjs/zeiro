@@ -16,17 +16,9 @@ const kmsClient = new KMSClient({
   region: process.env.AWS_REGION || 'eu-central-1'
 })
 
-interface KMSEncryptedData {
-  version: 'kms-v1'
-  keyId: string
-  encryptionContext: Record<string, string>
-  ciphertextBlob: string
-  encryptedAt: string
-}
-
 /**
- * Direct KMS encryption (for small data < 4KB)
- * Best for: API keys, passwords, small secrets
+ * Simple KMS encryption (for small data < 4KB)
+ * Returns base64-encoded ciphertext blob
  */
 export async function encryptWithKMS(
   plaintext: string,
@@ -60,15 +52,8 @@ export async function encryptWithKMS(
       throw new Error('KMS encryption failed: no ciphertext returned')
     }
     
-    const encryptedData: KMSEncryptedData = {
-      version: 'kms-v1',
-      keyId: result.KeyId || keyId,
-      encryptionContext,
-      ciphertextBlob: Buffer.from(result.CiphertextBlob).toString('base64'),
-      encryptedAt: new Date().toISOString()
-    }
-    
-    return Buffer.from(JSON.stringify(encryptedData)).toString('base64')
+    // Return just the base64-encoded ciphertext blob
+    return Buffer.from(result.CiphertextBlob).toString('base64')
     
   } catch (error) {
     console.error('KMS encryption failed:', error)
@@ -77,26 +62,13 @@ export async function encryptWithKMS(
 }
 
 /**
- * Direct KMS decryption
+ * Simple KMS decryption
+ * Expects base64-encoded ciphertext blob
  */
 export async function decryptWithKMS(encryptedData: string): Promise<string> {
   try {
-    let kmsData: KMSEncryptedData
-    
-    try {
-      const jsonStr = Buffer.from(encryptedData, 'base64').toString('utf8')
-      kmsData = JSON.parse(jsonStr)
-    } catch {
-      throw new Error('Invalid KMS encrypted data format')
-    }
-    
-    if (kmsData.version !== 'kms-v1') {
-      throw new Error(`Unsupported KMS encryption version: ${kmsData.version}`)
-    }
-    
     const command = new DecryptCommand({
-      CiphertextBlob: Buffer.from(kmsData.ciphertextBlob, 'base64'),
-      EncryptionContext: kmsData.encryptionContext
+      CiphertextBlob: Buffer.from(encryptedData, 'base64')
     })
     
     const result = await kmsClient.send(command)

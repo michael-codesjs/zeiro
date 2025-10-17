@@ -1,4 +1,4 @@
-import { credentials } from '@zeiro/domain'
+import { credentials, dataSources } from '@zeiro/domain'
 import { decryptWithKMS } from './kms-encryption'
 
 /**
@@ -151,14 +151,17 @@ async function decryptCredentialSecrets(credential: any): Promise<any> {
       try {
         // If field has encryption metadata, decrypt it
         if (metadata[field]?.encrypted) {
+          console.log(`Decrypting field ${field} with metadata:`, credential[field].substring(0, 100) + '...')
           decrypted[field] = await decryptWithKMS(credential[field])
         }
         // If no metadata but field exists, assume it might be encrypted and try to decrypt
         else if (typeof credential[field] === 'string' && credential[field].length > 50) {
           try {
+            console.log(`Attempting to decrypt field ${field} (no metadata):`, credential[field].substring(0, 100) + '...')
             decrypted[field] = await decryptWithKMS(credential[field])
-          } catch {
+          } catch (error) {
             // If decryption fails, assume it's not encrypted
+            console.log(`Field ${field} decryption failed, using as plaintext:`, error.message)
             decrypted[field] = credential[field]
           }
         }
@@ -222,5 +225,212 @@ export async function isCredentialAccessible(
   } catch (error) {
     console.error('Error checking credential accessibility:', error)
     return false
+  }
+}
+
+/**
+ * Data source with decrypted credential interface
+ */
+export interface DataSourceWithDecryptedCredential {
+  id: string
+  user_id: string
+  workspace_id: string
+  name: string
+  description?: string
+  type: 'DynamoDB' | 'PostgreSQL' | 'MySQL' | 'MongoDB' | 'Redis' | 'Cassandra' | 'InfluxDB' | 'Elasticsearch'
+  credential_id: string
+  connection_config: any
+  entity_type: string
+  creator_id: string
+  creator_type: string
+  discontinued: boolean
+  created_at: string
+  updated_at: string
+  
+  // Decrypted credential data
+  credential: DecryptedCredential | null
+}
+
+
+/**
+ * Get a data source by ID with decrypted credential (no user validation)
+ * This is for trusted environments where user validation is handled elsewhere
+ * @param dataSourceId - The data source ID
+ * @returns Data source with decrypted credential or null if not found
+ */
+export async function getDataSourceWithCredentials(
+  dataSourceId: string
+): Promise<DataSourceWithDecryptedCredential | null> {
+  try {
+    console.log(`Attempting to fetch data source ${dataSourceId}`);
+    
+    // Use the byId index for efficient lookup
+    const result = await dataSources.query.byId({
+      id: dataSourceId
+    }).go();
+    
+    console.log(`Query result:`, result);
+    
+    if (!result.data || result.data.length === 0) {
+      console.warn(`Data source ${dataSourceId} not found`)
+      return null
+    }
+    
+    const dataSource = result.data[0]
+    
+    // Fetch and decrypt the credential
+    let credential: DecryptedCredential | null = null
+    
+    if (dataSource.credential_id) {
+      try {
+        console.log('Attempting to decrypt credential:', dataSource.credential_id)
+        credential = await getWorkspaceDecryptedCredential(
+          dataSource.credential_id,
+          dataSource.workspace_id
+        )
+        console.log('Successfully decrypted credential:', credential)
+      } catch (error) {
+        console.error(`Failed to decrypt credential for data source ${dataSourceId}:`, error)
+        console.log('Continuing without decrypted credential - some operations might still work')
+        // For development, we can continue without credential
+        credential = null
+      }
+      
+    }
+    
+    return {
+      ...dataSource,
+      credential
+    } as DataSourceWithDecryptedCredential
+  } catch (error) {
+    console.error(`Error fetching data source ${dataSourceId}:`, error)
+    throw error
+  }
+}
+
+/**
+ * Get a data source by workspace and ID with decrypted credential (no user validation)
+ * This is for trusted environments where user validation is handled elsewhere
+ * @param workspaceId - The workspace ID
+ * @param dataSourceId - The data source ID
+ * @returns Data source with decrypted credential or null if not found
+ */
+export async function getDataSourceWithDecryptedCredentialByWorkspace(
+  workspaceId: string,
+  dataSourceId: string
+): Promise<DataSourceWithDecryptedCredential | null> {
+  try {
+    console.log(`Attempting to fetch data source ${dataSourceId} in workspace ${workspaceId} (no user validation)`);
+    
+    // Use the primary index (byWorkspace) for efficient lookup
+    const result = await dataSources.get({
+      workspace_id: workspaceId,
+      id: dataSourceId
+    }).go();
+    
+    console.log(`Query result:`, result);
+    
+    if (!result.data) {
+      console.warn(`Data source ${dataSourceId} not found in workspace ${workspaceId}`)
+      return null
+    }
+    
+    const dataSource = result.data
+    
+    // Fetch and decrypt the credential
+    let credential: DecryptedCredential | null = null
+    
+    if (dataSource.credential_id) {
+      try {
+        credential = await getWorkspaceDecryptedCredential(
+          dataSource.credential_id,
+          dataSource.workspace_id
+        )
+        
+        if (!credential) {
+          console.warn(`Credential ${dataSource.credential_id} not found or not accessible for workspace ${dataSource.workspace_id}`)
+        }
+      } catch (error) {
+        console.error(`Failed to fetch credential ${dataSource.credential_id}:`, error)
+        // Continue without credential - some data sources might not need credentials
+      }
+    }
+    
+    return {
+      ...dataSource,
+      credential
+    } as DataSourceWithDecryptedCredential
+    
+  } catch (error) {
+    console.error('Error fetching data source with decrypted credential:', error)
+    throw error
+  }
+}
+
+/**
+ * Get a data source by user ID and data source ID with decrypted credential
+ * (Alternative method with explicit user validation)
+ * @param dataSourceId - The data source ID
+ * @param userId - The user ID
+ * @param workspaceId - The workspace ID (for additional validation)
+ * @returns Data source with decrypted credential or null if not found
+ */
+export async function getUserDataSourceWithDecryptedCredential(
+  dataSourceId: string,
+  userId: string,
+  workspaceId: string
+): Promise<DataSourceWithDecryptedCredential | null> {
+  try {
+    // Fetch data source by ID using the byId index
+    const result = await dataSources.query.byId({
+      id: dataSourceId
+    }).go();
+    
+    if (!result.data || result.data.length === 0) {
+      console.warn(`Data source ${dataSourceId} not found`)
+      return null
+    }
+    
+    const dataSource = result.data[0]
+    
+    // Validate workspace access
+    if (dataSource.workspace_id !== workspaceId) {
+      console.warn(`User ${userId} from workspace ${workspaceId} attempted to access data source ${dataSourceId} from workspace ${dataSource.workspace_id}`)
+      return null
+    }
+    
+    // Validate user access (if user_id is stored on data source)
+    if (dataSource.user_id !== userId) {
+      console.warn(`User ${userId} attempted to access data source ${dataSourceId} owned by user ${dataSource.user_id}`)
+      return null
+    }
+    
+    // Fetch and decrypt the credential
+    let credential: DecryptedCredential | null = null
+    
+    if (dataSource.credential_id) {
+      try {
+        credential = await getWorkspaceDecryptedCredential(
+          dataSource.credential_id,
+          dataSource.workspace_id
+        )
+        
+        if (!credential) {
+          console.warn(`Credential ${dataSource.credential_id} not found or not accessible for workspace ${dataSource.workspace_id}`)
+        }
+      } catch (error) {
+        console.error(`Failed to fetch credential ${dataSource.credential_id}:`, error)
+        // Continue without credential - some data sources might not need credentials
+      }
+    }
+    
+    return {
+      ...dataSource,
+      credential
+    } as DataSourceWithDecryptedCredential
+    
+  } catch (error) {
+    console.error('Error fetching user data source with decrypted credential:', error)
+    throw error
   }
 }

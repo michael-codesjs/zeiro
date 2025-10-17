@@ -36,30 +36,9 @@ export interface WebSocketMessage<TPayload = any> {
 }
 
 /**
- * WebSocket connection information stored in DynamoDB
- */
-export interface WebSocketConnection {
-  // DynamoDB keys
-  pk?: string
-  sk?: string
-  gsi1pk?: string
-  gsi1sk?: string
-  
-  // Business fields
-  connectionId: string
-  userId: string
-  databaseId?: string
-  status: WebSocketConnectionStatus
-  createdAt: string
-  lastSeenAt?: string
-  expiresAt: number
-  metadata?: Record<string, any>
-}
-
-/**
  * WebSocket event from API Gateway V2
  */
-export interface WebSocketEvent extends Omit<APIGatewayProxyEvent, 'httpMethod' | 'path'> {
+export interface WebSocketEvent extends Omit<APIGatewayProxyEvent, 'httpMethod' | 'path' | 'body'> {
   requestContext: APIGatewayProxyEvent['requestContext'] & {
     connectionId: string
     routeKey: WebSocketRouteKey

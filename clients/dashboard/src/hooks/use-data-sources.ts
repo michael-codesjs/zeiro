@@ -3,8 +3,6 @@ import { get, post, del } from 'aws-amplify/api';
 import { toast } from 'react-hot-toast';
 
 export type DataSourceType = 'DynamoDB' | 'PostgreSQL' | 'MySQL' | 'MongoDB' | 'Redis' | 'Cassandra' | 'InfluxDB' | 'Elasticsearch';
-export type DataSourceStatus = 'connected' | 'disconnected' | 'error' | 'connecting';
-export type DataSourceEnvironment = 'development' | 'staging' | 'production';
 
 export type DataSourceConnectionConfig = {
   // DynamoDB specific
@@ -84,18 +82,15 @@ export type DataSource = {
   name: string;
   description?: string;
   type: DataSourceType;
-  status: DataSourceStatus;
-  environment: DataSourceEnvironment;
   credential_id: string;
   connection_config: DataSourceConnectionConfig;
   auto_connect: boolean;
   created_at: string;
   updated_at: string;
   last_accessed?: string;
-  metadata?: DataSourceMetadata;
 };
 
-export type CreateDataSourceInput = Omit<DataSource, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'last_accessed' | 'metadata'>;
+export type CreateDataSourceInput = Omit<DataSource, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'last_accessed'>;
 
 const DATA_SOURCES_QUERY_KEY = ['data-sources'];
 
@@ -390,8 +385,6 @@ export const useDataSourceWithSchema = useDataSourceWithData;
 
 // Type aliases for backward compatibility
 export type DatabaseType = DataSourceType;
-export type DatabaseStatus = DataSourceStatus;
-export type DatabaseEnvironment = DataSourceEnvironment;
 export type DatabaseConnectionConfig = DataSourceConnectionConfig;
 export type DatabaseMetadata = DataSourceMetadata;
 export type Database = DataSource;

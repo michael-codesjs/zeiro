@@ -44,22 +44,22 @@ const handler = async (event: WebSocketEvent): Promise<APIGatewayProxyResult> =>
     const filters = (parsedMessage as any).filters
     if (filters) {
       if (filters.userIds) {
-        connections = connections.filter(conn => filters.userIds.includes(conn.userId))
+        connections = connections.filter(conn => filters.userIds.includes(conn.user_id))
       }
       if (filters.databaseIds) {
         connections = connections.filter(conn => 
-          conn.databaseId && filters.databaseIds.includes(conn.databaseId)
+          conn.database_id && filters.databaseIds.includes(conn.database_id)
         )
       }
       if (filters.excludeConnectionIds) {
         connections = connections.filter(conn => 
-          !filters.excludeConnectionIds.includes(conn.connectionId)
+          !filters.excludeConnectionIds.includes(conn.connection_id)
         )
       }
     }
 
     // Exclude sender's connection
-    connections = connections.filter(conn => conn.connectionId !== connectionId)
+    connections = connections.filter(conn => conn.connection_id !== connectionId)
 
     if (connections.length === 0) {
       return {
@@ -74,7 +74,7 @@ const handler = async (event: WebSocketEvent): Promise<APIGatewayProxyResult> =>
 
     // Send to all filtered connections
     const results = await webSocketClient.sendToConnections(
-      connections.map(conn => conn.connectionId),
+      connections.map(conn => conn.connection_id),
       message
     )
 

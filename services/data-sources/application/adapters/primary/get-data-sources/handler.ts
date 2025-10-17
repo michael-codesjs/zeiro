@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda'
-import { dataSources } from '@adapters/secondary/one-table'
+import { dataSources } from '@zeiro/domain'
 import { DataSource, DataSourceListQuery } from '@typings/data-source'
-import { withLambdaIOStandard } from '@zeiro/sdk'
+import { validateAuthenticatedUser } from '@zeiro/sdk'
 
 const handler = async (
   event: APIGatewayProxyEvent,
@@ -10,9 +10,9 @@ const handler = async (
   console.log('event', JSON.stringify(event, null, 2))
   
   try {
-    // Extract user_id from Cognito authorizer context
-    const user_id = event.requestContext?.authorizer?.claims?.sub
-    if (!user_id) {
+    // Extract cognito_user_id from Cognito authorizer context
+    const cognito_user_id = event.requestContext?.authorizer?.claims?.sub
+    if (!cognito_user_id) {
       return {
         statusCode: 401,
         headers: {
@@ -25,41 +25,48 @@ const handler = async (
       }
     }
 
+    // Validate user and get workspace information
+    let user
+    try {
+      user = await validateAuthenticatedUser(cognito_user_id)
+      console.log('Authenticated user:', { user_id: user.user_id, workspace_id: user.workspace_id })
+    } catch (authError) {
+      console.error('Error validating user:', authError)
+      return {
+        statusCode: 401,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent',
+          'Access-Control-Allow-Methods': 'GET,OPTIONS',
+        },
+        body: JSON.stringify({ error: 'User authentication failed' }),
+      }
+    }
+
     // Parse query parameters
     const queryParams = event.queryStringParameters || {}
-    const query: DataSourceListQuery = {
-      user_id,
+    const query = {
       type: queryParams.type as any,
-      status: queryParams.status as any,
-      environment: queryParams.environment as any,
       page: queryParams.page ? parseInt(queryParams.page) : 1,
       limit: queryParams.limit ? parseInt(queryParams.limit) : 50,
     }
 
-    // Build query conditions
-    const queryConditions: any = {
-      pk: `USER#${user_id}`,
-      sk: { begins: 'DATA_SOURCE#' },
-    }
+    // Query data sources by workspace
+    let queryBuilder = dataSources.query.byWorkspace({ workspace_id: user.workspace_id })
 
-    // Add filters if provided
+    // Apply type filter if provided
     if (query.type) {
-      queryConditions.type = query.type
-    }
-    if (query.status) {
-      queryConditions.status = query.status
-    }
-    if (query.environment) {
-      queryConditions.environment = query.environment
+      // Use byWorkspaceAndType index for type filtering
+      queryBuilder = dataSources.query.byWorkspaceAndType({
+        workspace_id: user.workspace_id,
+        type: query.type,
+      })
     }
 
-    // Query data sources
-    const result = await dataSources.find(queryConditions, {
-      limit: query.limit,
-      // Note: DynamoDB pagination would be implemented here in a real scenario
-    })
-
-    const userDataSources: DataSource[] = result || []
+    // Execute query with limit
+    const result = await queryBuilder.go({ limit: query.limit })
+    const userDataSources = result.data || []
 
     return {
       statusCode: 200,

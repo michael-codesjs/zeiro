@@ -1,24 +1,16 @@
 export type DataSourceType = 'DynamoDB' | 'PostgreSQL' | 'MySQL' | 'MongoDB'
 
-export type DataSourceStatus = 'connected' | 'disconnected' | 'error' | 'connecting'
-
-export type DataSourceEnvironment = 'development' | 'staging' | 'production'
-
 export type DataSource = {
   id: string
   user_id: string
+  workspace_id: string
   name: string
   description?: string
   type: DataSourceType
-  status: DataSourceStatus
-  environment: DataSourceEnvironment
   credential_id: string
   connection_config: DataSourceConnectionConfig
-  auto_connect: boolean
   created_at: string
   updated_at: string
-  last_accessed?: string
-  metadata?: DataSourceMetadata
 }
 
 export type DataSourceConnectionConfig = {
@@ -50,15 +42,13 @@ export type DataSourceMetadata = {
   [key: string]: any
 }
 
-export type CreateDataSourceInput = Omit<DataSource, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'last_accessed' | 'metadata'>
+export type CreateDataSourceInput = Omit<DataSource, 'id' | 'user_id' | 'workspace_id' | 'created_at' | 'updated_at'>
 
-export type UpdateDataSourceInput = Partial<Pick<DataSource, 'name' | 'description' | 'environment' | 'connection_config' | 'auto_connect'>>
+export type UpdateDataSourceInput = Partial<Pick<DataSource, 'name' | 'description' | 'connection_config'>>
 
 export type DataSourceListQuery = {
   user_id: string
   type?: DataSourceType
-  status?: DataSourceStatus
-  environment?: DataSourceEnvironment
   page?: number
   limit?: number
 }

@@ -1,17 +1,34 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useCallback, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { post, get } from 'aws-amplify/api';
+import { useSelectedDataSourceStore } from "./use-selected-data-source-store";
+
+export interface ToolCall {
+  id: string;
+  tool_id: string;
+  tool_name: string;
+  description?: string;
+  input?: any;
+  result?: any;
+  error?: string;
+  status: 'started' | 'completed' | 'failed';
+  timestamp: Date;
+}
 
 export interface ChatMessage {
   id: string;
   content: string;
   role: "user" | "assistant";
   timestamp: Date;
+  isStreaming?: boolean;
+  toolCalls?: ToolCall[];
   metadata?: {
     sources?: string[];
     reasoning?: string;
     confidence?: number;
+    thread_id?: string;
   };
 }
 
@@ -28,9 +45,202 @@ interface UseChatProps {
 
 export function useChat({ initialMessages = [], onError }: UseChatProps = {}) {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
-  const queryClient = useQueryClient();
+  const [threadId, setThreadId] = useState<string>();
+  const [isStreaming, setIsStreaming] = useState(false);
+  const { selectedDataSource } = useSelectedDataSourceStore();
 
-  // Simulate API call - replace with actual API integration
+  // Listen for WebSocket messages
+  useEffect(() => {
+    const wsUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
+    if (!wsUrl) return;
+
+    let ws: WebSocket;
+
+    const connect = async () => {
+      try {
+        const { fetchAuthSession } = await import('aws-amplify/auth');
+        const session = await fetchAuthSession();
+        const token = session.tokens?.idToken?.toString();
+        
+        if (!token) return;
+
+        ws = new WebSocket(`${wsUrl}?token=${encodeURIComponent(token)}`);
+
+        ws.onmessage = (event) => {
+          try {
+            const message = JSON.parse(event.data);
+            
+            switch (message.type) {
+              case 'chat_started':
+                setIsStreaming(true);
+                break;
+                
+              case 'chat_chunk':
+                setMessages(prev => {
+                  const lastMessage = prev[prev.length - 1];
+                  if (lastMessage && lastMessage.isStreaming) {
+                    return [
+                      ...prev.slice(0, -1),
+                      {
+                        ...lastMessage,
+                        content: message.payload.full_response,
+                      }
+                    ];
+                  } else {
+                    return [
+                      ...prev,
+                      {
+                        id: `assistant-${Date.now()}`,
+                        content: message.payload.full_response,
+                        role: 'assistant' as const,
+                        timestamp: new Date(),
+                        isStreaming: true,
+                        metadata: {
+                          thread_id: message.payload.thread_id
+                        }
+                      }
+                    ];
+                  }
+                });
+                break;
+                
+              case 'chat_complete':
+                setIsStreaming(false);
+                setMessages(prev => {
+                  const lastMessage = prev[prev.length - 1];
+                  if (lastMessage && lastMessage.isStreaming) {
+                    return [
+                      ...prev.slice(0, -1),
+                      {
+                        ...lastMessage,
+                        content: message.payload.message,
+                        isStreaming: false,
+                        metadata: {
+                          ...lastMessage.metadata,
+                          thread_id: message.payload.thread_id
+                        }
+                      }
+                    ];
+                  }
+                  return prev;
+                });
+                setThreadId(message.payload.thread_id);
+                break;
+                
+              case 'chat_error':
+                setIsStreaming(false);
+                setMessages(prev => [
+                  ...prev,
+                  {
+                    id: `error-${Date.now()}`,
+                    content: `Error: ${message.payload.error}`,
+                    role: 'assistant' as const,
+                    timestamp: new Date(),
+                  }
+                ]);
+                break;
+
+              case 'tool_call_started':
+                setMessages(prev => {
+                  const lastMessage = prev[prev.length - 1];
+                  if (lastMessage && lastMessage.role === 'assistant' && (lastMessage.isStreaming || !lastMessage.content)) {
+                    // Add tool call to existing assistant message
+                    const newToolCall: ToolCall = {
+                      id: `tool-${Date.now()}`,
+                      tool_id: message.payload.tool_id,
+                      tool_name: message.payload.tool_name,
+                      description: message.payload.description,
+                      input: message.payload.input,
+                      status: 'started',
+                      timestamp: new Date(message.payload.timestamp)
+                    };
+                    
+                    return [
+                      ...prev.slice(0, -1),
+                      {
+                        ...lastMessage,
+                        toolCalls: [...(lastMessage.toolCalls || []), newToolCall]
+                      }
+                    ];
+                  } else {
+                    // Create new assistant message with tool call
+                    const newToolCall: ToolCall = {
+                      id: `tool-${Date.now()}`,
+                      tool_id: message.payload.tool_id,
+                      tool_name: message.payload.tool_name,
+                      description: message.payload.description,
+                      input: message.payload.input,
+                      status: 'started',
+                      timestamp: new Date(message.payload.timestamp)
+                    };
+                    
+                    return [
+                      ...prev,
+                      {
+                        id: `assistant-${Date.now()}`,
+                        content: '',
+                        role: 'assistant' as const,
+                        timestamp: new Date(),
+                        isStreaming: true,
+                        toolCalls: [newToolCall],
+                        metadata: {
+                          thread_id: message.metadata?.threadId
+                        }
+                      }
+                    ];
+                  }
+                });
+                break;
+
+              case 'tool_call_completed':
+              case 'tool_call_failed':
+                setMessages(prev => {
+                  const lastMessage = prev[prev.length - 1];
+                  if (lastMessage && lastMessage.toolCalls) {
+                    const updatedToolCalls = lastMessage.toolCalls.map(toolCall => {
+                      if (toolCall.tool_id === message.payload.tool_id && toolCall.status === 'started') {
+                        return {
+                          ...toolCall,
+                          status: message.type === 'tool_call_completed' ? 'completed' as const : 'failed' as const,
+                          result: message.payload.result,
+                          error: message.payload.error,
+                          timestamp: new Date(message.payload.timestamp)
+                        };
+                      }
+                      return toolCall;
+                    });
+                    
+                    return [
+                      ...prev.slice(0, -1),
+                      {
+                        ...lastMessage,
+                        toolCalls: updatedToolCalls
+                      }
+                    ];
+                  }
+                  return prev;
+                });
+                break;
+            }
+          } catch (error) {
+            console.error('Error parsing WebSocket message:', error);
+          }
+        };
+
+      } catch (error) {
+        console.error('Failed to connect WebSocket:', error);
+      }
+    };
+
+    connect();
+
+    return () => {
+      if (ws) {
+        ws.close();
+      }
+    };
+  }, []);
+
   const sendMessageMutation = useMutation({
     mutationFn: async ({ 
       message, 
@@ -39,26 +249,39 @@ export function useChat({ initialMessages = [], onError }: UseChatProps = {}) {
       message: string; 
       options?: ChatOptions 
     }) => {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
-      
-      // Simulate different responses based on options
-      let response = "I understand your question. Let me help you analyze that data.";
-      
-      if (options?.deepSearch) {
-        response = "I've performed a deep search across your data sources. Here are the key insights I found...";
-      } else if (options?.reasoning) {
-        response = "Let me walk you through my reasoning process for this analysis...";
+      if (!selectedDataSource) {
+        throw new Error('No data source selected');
       }
+
+      // Get current user to fetch workspace_id
+      const userOperation = get({
+        apiName: 'zeiro-api',
+        path: '/user/me',
+      });
+      const userResponse = await userOperation.response;
+      const userData = await userResponse.body.json();
+
+      const restOperation = post({
+        apiName: 'zeiro-api',
+        path: '/chat',
+        options: {
+          body: {
+            message,
+            workspace_id: userData.workspace_id,
+            data_source_id: selectedDataSource.id,
+            thread_id: threadId,
+          },
+        },
+      });
+
+      const response = await restOperation.response;
       
-      return {
-        content: response,
-        metadata: {
-          sources: options?.deepSearch ? ["Database A", "API Endpoint B"] : undefined,
-          reasoning: options?.reasoning ? "Applied statistical analysis and pattern recognition" : undefined,
-          confidence: Math.random() * 0.3 + 0.7, // 70-100% confidence
-        }
-      };
+      if (response.statusCode !== 200) {
+        throw new Error(`Failed to send message: ${response.statusCode}`);
+      }
+
+      const result = await response.body.json();
+      return result.data;
     },
     onError: (error: Error) => {
       onError?.(error);
@@ -70,6 +293,10 @@ export function useChat({ initialMessages = [], onError }: UseChatProps = {}) {
     options?: ChatOptions
   ) => {
     if (!content.trim()) return;
+    if (!selectedDataSource) {
+      onError?.(new Error('Please select a data source first'));
+      return;
+    }
 
     const userMessage: ChatMessage = {
       id: `user-${Date.now()}`,
@@ -82,22 +309,12 @@ export function useChat({ initialMessages = [], onError }: UseChatProps = {}) {
     setMessages(prev => [...prev, userMessage]);
 
     try {
-      const response = await sendMessageMutation.mutateAsync({ 
+      await sendMessageMutation.mutateAsync({ 
         message: content, 
         options 
       });
-
-      const assistantMessage: ChatMessage = {
-        id: `assistant-${Date.now()}`,
-        content: response.content,
-        role: "assistant",
-        timestamp: new Date(),
-        metadata: response.metadata,
-      };
-
-      setMessages(prev => [...prev, assistantMessage]);
+      // Response will come via WebSocket
     } catch (error) {
-      // Remove user message on error or add error message
       const errorMessage: ChatMessage = {
         id: `error-${Date.now()}`,
         content: "I'm sorry, I encountered an error processing your request. Please try again.",
@@ -107,7 +324,7 @@ export function useChat({ initialMessages = [], onError }: UseChatProps = {}) {
 
       setMessages(prev => [...prev, errorMessage]);
     }
-  }, [sendMessageMutation]);
+  }, [sendMessageMutation, selectedDataSource, threadId, onError]);
 
   const clearMessages = useCallback(() => {
     setMessages([]);
@@ -137,13 +354,25 @@ export function useChat({ initialMessages = [], onError }: UseChatProps = {}) {
     await sendMessage(lastUserMessage.content);
   }, [messages, sendMessage]);
 
+  const addSystemMessage = useCallback((content: string) => {
+    const systemMessage: ChatMessage = {
+      id: `system-${Date.now()}`,
+      content,
+      role: "assistant",
+      timestamp: new Date(),
+    };
+    setMessages(prev => [...prev, systemMessage]);
+  }, []);
+
   return {
     messages,
     sendMessage,
+    addSystemMessage,
     clearMessages,
     removeMessage,
     regenerateLastResponse,
     isLoading: sendMessageMutation.isPending,
+    isStreaming,
     error: sendMessageMutation.error,
   };
 }

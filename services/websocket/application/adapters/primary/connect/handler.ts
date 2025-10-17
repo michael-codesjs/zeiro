@@ -1,5 +1,6 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { WebSocketConnectionService } from '../../secondary/dynamodb'
+import { users } from '@zeiro/domain'
 import type { WebSocketEvent, AuthContext } from '../../../types'
 
 const connectionService = new WebSocketConnectionService()
@@ -27,33 +28,68 @@ const handler = async (event: WebSocketEvent): Promise<APIGatewayProxyResult> =>
       }
     }
 
-    // Extract database ID if provided
-    const databaseId = event.queryStringParameters?.databaseId
+    // Get user to find their workspace
+    const user = await users.query.byCognitoUser({
+      cognito_user_id: authContext.userId,
+    }).go()
+
+    if (!user.data.length) {
+      console.error('❌ User not found for WebSocket connection')
+      return {
+        statusCode: 403,
+        body: JSON.stringify({ 
+          error: 'User not found',
+          message: 'Invalid user credentials'
+        }),
+      }
+    }
+
+    const userData = user.data[0]
+    const workspaceId = userData.workspace_id
+    const user_id = userData.id // Use the actual user ID from our system
 
     // Store the authenticated connection
-    console.log(`💾 Storing connection: ${connectionId} for user: ${authContext.userId}`)
-    await connectionService.storeConnection({
+    console.log(`💾 Storing connection: ${connectionId} for user: ${user_id} (cognito: ${authContext.userId}) in workspace: ${workspaceId}`)
+    
+    // Prepare connection data, filtering out undefined values
+    const connectionData: any = {
       connectionId,
-      userId: authContext.userId,
-      databaseId,
+      userId: user_id, // Use actual user ID instead of Cognito ID
+      workspaceId,
       status: 'connected',
       metadata: {
-        userAgent: event.headers?.['User-Agent'],
-        origin: event.headers?.Origin,
         connectedAt: Date.now(),
         authenticated: true,
-        username: authContext.username,
-        email: authContext.email,
+        cognitoUserId: authContext.userId, // Store Cognito ID as metadata for reference
       },
-    })
+    }
+    
+    if (event.headers?.['User-Agent']) {
+      connectionData.metadata.userAgent = event.headers['User-Agent']
+    }
+    
+    if (event.headers?.Origin) {
+      connectionData.metadata.origin = event.headers.Origin
+    }
+    
+    if (authContext.username) {
+      connectionData.metadata.username = authContext.username
+    }
+    
+    if (authContext.email) {
+      connectionData.metadata.email = authContext.email
+    }
 
-    console.log(`✅ WebSocket connected and stored: ${connectionId} for user: ${authContext.userId}`)
+    await connectionService.storeConnection(connectionData)
+
+    console.log(`✅ WebSocket connected and stored: ${connectionId} for user: ${user_id}`)
 
     return {
       statusCode: 200,
       body: JSON.stringify({ 
         message: 'Connected successfully',
-        userId: authContext.userId 
+        userId: user_id, // Return actual user ID
+        workspaceId,
       }),
     }
   } catch (error) {

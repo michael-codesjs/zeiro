@@ -5,6 +5,8 @@ import { cn } from "@/utils/cn";
 import { useChat, type ChatOptions } from "@/hooks/use-chat";
 import { motion } from "framer-motion";
 import { ChatInput } from "./chat-input";
+import { useSelectedDataSourceStore } from "@/hooks/use-selected-data-source-store";
+import { ToolCallDisplay } from "@/components/ui/tool-call-display";
 import { 
   SearchNormal1, 
   Lamp
@@ -19,8 +21,15 @@ interface ChatInterfaceProps {
 }
 
 export function ChatInterface({ className }: ChatInterfaceProps) {
+  
   const [chatOptions, setChatOptions] = useState<ChatOptions>({});
-  const { messages, sendMessage, isLoading } = useChat();
+  const { messages, sendMessage, addSystemMessage, isLoading, isStreaming } = useChat({
+    onError: (error) => {
+      // Handle errors from useChat (like missing data source)
+      console.error('Chat error:', error.message);
+    }
+  });
+  const { selectedDataSource } = useSelectedDataSourceStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -29,10 +38,17 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages, isLoading]);
+  }, [messages, isLoading, isStreaming]);
 
   const handleChatSubmit = async (data: ChatFormData) => {
     if (!data.message.trim()) return;
+    
+    // Check if data source is selected
+    if (!selectedDataSource) {
+      addSystemMessage("Please select a data source first to start chatting. You can choose one from the dropdown above.");
+      return;
+    }
+    
     await sendMessage(data.message, chatOptions);
     setChatOptions({}); // Reset options after sending
   };
@@ -76,7 +92,21 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
                         : "text-gray-900"
                     )}
                   >
-                    <p className="text-sm leading-relaxed">{message.content}</p>
+                    {/* Tool calls for assistant messages */}
+                    {message.role === "assistant" && message.toolCalls && message.toolCalls.length > 0 && (
+                      <div className="mb-3">
+                        {message.toolCalls.map((toolCall) => (
+                          <ToolCallDisplay 
+                            key={toolCall.id} 
+                            toolCall={toolCall}
+                          />
+                        ))}
+                      </div>
+                    )}
+                    
+                    {message.content && (
+                      <p className="text-sm leading-relaxed">{message.content}</p>
+                    )}
                     
                     {/* Metadata for assistant messages */}
                     {message.role === "assistant" && message.metadata && (
@@ -104,7 +134,7 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
                 </motion.div>
               ))}
 
-              {isLoading && (
+              {(isStreaming || messages.some(m => m.isStreaming)) && (
                 <div className="flex justify-start">
                   <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3 shadow-sm">
                     <div className="flex items-center gap-2">
@@ -113,7 +143,6 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
                       </div>
-                      <span className="text-sm text-gray-500">AI is thinking...</span>
                     </div>
                   </div>
                 </div>

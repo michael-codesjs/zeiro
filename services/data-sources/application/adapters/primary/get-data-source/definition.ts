@@ -38,8 +38,8 @@ export const definition: AWS.ServerlessLambdaFunction = {
         'dynamodb:Query',
       ],
       Resource: [
-        '${ssm:/zeiro/${self:custom.stage}/domain/data-sources/infrastructure/storage/zeiro-data-sources-table/arn}',
-        '${ssm:/zeiro/${self:custom.stage}/domain/data-sources/infrastructure/storage/zeiro-data-sources-table/arn}/index/*',
+        '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}',
+        '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}/index/*',
       ],
     },
     {
@@ -57,9 +57,8 @@ export const definition: AWS.ServerlessLambdaFunction = {
     },
   ],
   environment: {
-    DATA_SOURCES_DYNAMODB_TABLE_NAME:
-      '${ssm:/zeiro/${self:custom.stage}/domain/data-sources/infrastructure/storage/zeiro-data-sources-table/name}',
-    CREDENTIALS_SERVICE_URL:
-      '${ssm:/zeiro/${self:custom.stage}/infrastructure/io/central/api/url}',
+    ZEIRO_TABLE_NAME: '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/name}',
+    CREDENTIALS_SERVICE_URL: '${ssm:/zeiro/${self:custom.stage}/infrastructure/io/central/api/url}',
+    STAGE: '${self:custom.stage}',
   },
 }

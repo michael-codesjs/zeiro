@@ -25,7 +25,7 @@ const serverlessConfiguration: AWS.Service = {
         '${ssm:/zeiro/${self:custom.stage}/infrastructure/io/event-bus/central/arn}',
       CENTRAL_EVENT_BUS_NAME:
         '${ssm:/zeiro/${self:custom.stage}/infrastructure/io/event-bus/central/name}',
-      WEBSOCKET_CONNECTIONS_TABLE_NAME: '${ssm:/zeiro/${self:custom.stage}/domain/websocket/infrastructure/storage/connections-table/name}',
+      ZEIRO_TABLE_NAME: '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/name}',
     },
   },
 

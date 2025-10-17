@@ -1,29 +1,35 @@
-import { Model } from 'dynamodb-onetable'
-import { websocketConnectionsTable } from './table'
-import type { WebSocketConnection, WebSocketConnectionStatus, ConnectionFilter } from '../../types'
-
-const WebSocketConnectionModel = new Model<WebSocketConnection>(
-  websocketConnectionsTable,
-  'WebSocketConnection'
-)
+import { webSocketConnections, users } from '@zeiro/domain'
+import type { WebSocketConnectionStatus, ConnectionFilter } from '../../../types'
 
 export class WebSocketConnectionService {
   /**
    * Store a new WebSocket connection
    */
-  async storeConnection(data: Omit<WebSocketConnection, 'createdAt' | 'expiresAt'>): Promise<void> {
+  async storeConnection(data: {
+    connectionId: string
+    userId: string
+    workspaceId: string
+    status?: WebSocketConnectionStatus
+    metadata?: Record<string, any>
+  }): Promise<void> {
     const now = new Date()
-    const createdAt = now.toISOString()
     const expiresAt = Math.floor((now.getTime() + (24 * 60 * 60 * 1000)) / 1000) // 24 hours from now
 
-    const connection: WebSocketConnection = {
-      ...data,
-      createdAt,
-      expiresAt,
+    // Prepare the connection object, only including defined values
+    const connectionData: any = {
+      connection_id: data.connectionId,
+      user_id: data.userId,
+      workspace_id: data.workspaceId,
       status: data.status || 'connected',
+      expires_at: expiresAt,
     }
 
-    await WebSocketConnectionModel.create(connection as never)
+    if (data.metadata) {
+      connectionData.metadata = data.metadata
+    }
+
+    await webSocketConnections.create(connectionData).go()
+
     console.log(`✅ Stored WebSocket connection: ${data.connectionId} for user: ${data.userId}`)
   }
 
@@ -32,17 +38,18 @@ export class WebSocketConnectionService {
    */
   async removeConnection(connectionId: string): Promise<void> {
     try {
-      const connections = await WebSocketConnectionModel.find({
-        pk: `CONNECTION#${connectionId}`,
-      })
+      const connections = await webSocketConnections.query.byConnection({
+        connection_id: connectionId,
+      }).go()
 
-      if (connections.length > 0) {
-        const connection = connections[0] as WebSocketConnection
-        await WebSocketConnectionModel.update(
-          { pk: connection.pk, sk: connection.sk },
-          { status: 'disconnected' }
-        )
-        console.log(`✅ Marked connection as disconnected: ${connectionId}`)
+      if (connections.data.length > 0) {
+        const connection = connections.data[0]
+        await webSocketConnections.delete({
+          user_id: connection.user_id,
+          connection_id: connection.connection_id,
+        }).go()
+        
+        console.log(`✅ Deleted WebSocket connection: ${connectionId}`)
       }
     } catch (error) {
       console.error('Error removing WebSocket connection:', error)
@@ -53,12 +60,13 @@ export class WebSocketConnectionService {
   /**
    * Get a specific WebSocket connection
    */
-  async getConnection(connectionId: string): Promise<WebSocketConnection | null> {
+  async getConnection(connectionId: string): Promise<any | null> {
     try {
-      const connections = await WebSocketConnectionModel.find({
-        pk: `CONNECTION#${connectionId}`,
-      })
-      return connections.length > 0 ? connections[0] as WebSocketConnection : null
+      const connections = await webSocketConnections.query.byConnection({
+        connection_id: connectionId,
+      }).go()
+      
+      return connections.data.length > 0 ? connections.data[0] : null
     } catch (error) {
       console.error('Error getting WebSocket connection:', error)
       throw error
@@ -70,16 +78,20 @@ export class WebSocketConnectionService {
    */
   async updateConnectionStatus(connectionId: string, status: WebSocketConnectionStatus): Promise<void> {
     try {
-      const connections = await WebSocketConnectionModel.find({
-        pk: `CONNECTION#${connectionId}`,
-      })
+      const connections = await webSocketConnections.query.byConnection({
+        connection_id: connectionId,
+      }).go()
 
-      if (connections.length > 0) {
-        const connection = connections[0] as WebSocketConnection
-        await WebSocketConnectionModel.update(
-          { pk: connection.pk, sk: connection.sk },
-          { status, lastSeenAt: new Date().toISOString() }
-        )
+      if (connections.data.length > 0) {
+        const connection = connections.data[0]
+        await webSocketConnections.patch({
+          user_id: connection.user_id,
+          connection_id: connection.connection_id,
+        }).set({
+          status,
+          last_seen_at: new Date().toISOString(),
+        }).go()
+        
         console.log(`✅ Updated connection status: ${connectionId} -> ${status}`)
       }
     } catch (error) {
@@ -91,49 +103,45 @@ export class WebSocketConnectionService {
   /**
    * Get all connections for a specific user
    */
-  async getUserConnections(userId: string): Promise<WebSocketConnection[]> {
+  async getUserConnections(userId: string): Promise<any[]> {
     try {
       console.log(`🔍 Querying connections for user: ${userId}`)
-      console.log(`📋 Query parameters: gsi1pk=USER#${userId}, status=connected`)
       
-      const connections = await WebSocketConnectionModel.find(
-        { gsi1pk: `USER#${userId}` },
-        {
-          index: 'gsi1',
-          where: '${status} = {connected}',
-          substitutions: { connected: 'connected' },
-        }
-      )
+      // Use primary index since PK is now user_id
+      const connections = await webSocketConnections.query.primary({
+        user_id: userId,
+      }).where(({ status }, { eq }) => eq(status, 'connected')).go()
       
-      console.log(`📊 Query result: found ${connections.length} connections`)
-      connections.forEach((conn, index) => {
+      console.log(`📊 Query result: found ${connections.data.length} connections`)
+      connections.data.forEach((conn, index) => {
         console.log(`🔗 Connection ${index + 1}:`, {
-          connectionId: (conn as WebSocketConnection).connectionId,
-          userId: (conn as WebSocketConnection).userId,
-          status: (conn as WebSocketConnection).status,
-          createdAt: (conn as WebSocketConnection).createdAt
+          connectionId: conn.connection_id,
+          userId: conn.user_id,
+          status: conn.status,
+          createdAt: conn.created_at
         })
       })
       
-      return connections as WebSocketConnection[]
+      return connections.data
     } catch (error) {
       console.error('Error getting user WebSocket connections:', error)
       throw error
     }
   }
 
+
   /**
-   * Get all connections for a specific database
+   * Get all connections for a workspace
    */
-  async getDatabaseConnections(databaseId: string): Promise<WebSocketConnection[]> {
+  async getWorkspaceConnections(workspaceId: string, status: WebSocketConnectionStatus = 'connected'): Promise<any[]> {
     try {
-      const connections = await WebSocketConnectionModel.scan({
-        where: '${databaseId} = {databaseId} AND ${status} = {connected}',
-        substitutions: { databaseId, connected: 'connected' },
-      })
-      return connections as WebSocketConnection[]
+      const connections = await webSocketConnections.query.byWorkspace({
+        workspace_id: workspaceId,
+      }).where(({ status: connStatus }, { eq }) => eq(connStatus, status)).go()
+      
+      return connections.data
     } catch (error) {
-      console.error('Error getting database WebSocket connections:', error)
+      console.error('Error getting workspace WebSocket connections:', error)
       throw error
     }
   }
@@ -141,13 +149,14 @@ export class WebSocketConnectionService {
   /**
    * Get all active connections
    */
-  async getActiveConnections(): Promise<WebSocketConnection[]> {
+  async getActiveConnections(): Promise<any[]> {
     try {
-      const connections = await WebSocketConnectionModel.scan({
-        where: '${status} = {connected}',
-        substitutions: { connected: 'connected' },
-      })
-      return connections as WebSocketConnection[]
+      // Use scan to get all active connections across all workspaces
+      const connections = await webSocketConnections.scan
+        .where(({ status }, { eq }) => eq(status, 'connected'))
+        .go()
+      
+      return connections.data
     } catch (error) {
       console.error('Error getting active WebSocket connections:', error)
       throw error
@@ -159,16 +168,18 @@ export class WebSocketConnectionService {
    */
   async updateLastSeen(connectionId: string, timestamp = new Date().toISOString()): Promise<void> {
     try {
-      const connections = await WebSocketConnectionModel.find({
-        pk: `CONNECTION#${connectionId}`,
-      })
+      const connections = await webSocketConnections.query.byConnection({
+        connection_id: connectionId,
+      }).go()
 
-      if (connections.length > 0) {
-        const connection = connections[0] as WebSocketConnection
-        await WebSocketConnectionModel.update(
-          { pk: connection.pk, sk: connection.sk },
-          { lastSeenAt: timestamp }
-        )
+      if (connections.data.length > 0) {
+        const connection = connections.data[0]
+        await webSocketConnections.patch({
+          user_id: connection.user_id,
+          connection_id: connection.connection_id,
+        }).set({
+          last_seen_at: timestamp,
+        }).go()
       }
     } catch (error) {
       console.error('Error updating last seen:', error)
@@ -184,18 +195,30 @@ export class WebSocketConnectionService {
       const now = Math.floor(Date.now() / 1000)
       const staleThreshold = new Date(Date.now() - 5 * 60 * 1000).toISOString() // 5 minutes ago
       
-      // Find expired connections
-      const expiredConnections = await WebSocketConnectionModel.scan({
-        where: '${expiresAt} < {now} OR (${lastSeenAt} < {staleThreshold} AND ${status} = {connected})',
-        substitutions: { now, staleThreshold, connected: 'connected' },
-      })
+      // Find expired connections using scan
+      const expiredConnections = await webSocketConnections.scan
+        .where(
+          ({ expires_at, last_seen_at, status }, { lt, and, eq }) => 
+            and([
+              lt(expires_at, now),
+              // OR condition for stale connections
+              and([
+                last_seen_at ? lt(last_seen_at, staleThreshold) : eq(status, 'connected'),
+                eq(status, 'connected')
+              ])
+            ])
+        )
+        .go()
 
       let cleanedCount = 0
-      for (const connection of expiredConnections as WebSocketConnection[]) {
-        await WebSocketConnectionModel.update(
-          { pk: connection.pk, sk: connection.sk },
-          { status: 'stale' }
-        )
+      for (const connection of expiredConnections.data) {
+        await webSocketConnections.patch({
+          user_id: connection.user_id,
+          connection_id: connection.connection_id,
+        }).set({
+          status: 'stale',
+        }).go()
+        
         cleanedCount++
       }
 

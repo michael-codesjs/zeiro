@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { AgentFactory } from '../../../mastra/agents/abstracts/agent-factory'
+import { Zeiro } from '@zeiro/agents'
 import { IntegrationService } from '../../secondary/integration/services'
 import { openai } from "@ai-sdk/openai"
 import { anthropic } from "@ai-sdk/anthropic"
@@ -9,7 +9,6 @@ interface CognitoContext {
   email: string
   username?: string
 }
-
 interface ThreadManagementInput {
   action: 'create' | 'list' | 'get' | 'delete' | 'update'
   thread_id?: string

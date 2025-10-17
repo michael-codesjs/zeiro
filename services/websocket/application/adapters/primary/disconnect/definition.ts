@@ -13,9 +13,12 @@ export const disconnect: AWS.ServerlessLambdaFunction = {
   iamRoleStatements: [
     {
       Effect: 'Allow',
-      Action: ['dynamodb:UpdateItem', 'dynamodb:Query'],
+      Action: ['dynamodb:UpdateItem', 'dynamodb:Query', 'dynamodb:DeleteItem'],
       Resource: [
-        '${ssm:/zeiro/${self:custom.stage}/domain/websocket/infrastructure/storage/connections-table/arn}',
+        '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}',
+        '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/arn}/index/*',
+        'arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/zeiro-main-table',
+        'arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/zeiro-main-table/index/*',
       ],
     },
   ],

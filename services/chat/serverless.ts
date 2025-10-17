@@ -29,6 +29,8 @@ const serverlessConfiguration: AWS.Service = {
       EXECUTIONS_SERVICE_URL: '${ssm:/zeiro/${self:custom.stage}/infrastructure/io/central/api/url}',
       OPENAI_API_KEY: '${ssm:/zeiro/${self:custom.stage}/external/openai/api-key}',
       ANTHROPIC_API_KEY: '${ssm:/zeiro/${self:custom.stage}/external/anthropic/api-key}',
+      ZEIRO_TABLE_NAME: '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/name}',
+      MASTRA_STORAGE_TABLE_NAME: '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/mastra-single-table/name}',
     },
   },
 

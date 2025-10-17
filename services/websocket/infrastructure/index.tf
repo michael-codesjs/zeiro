@@ -20,9 +20,4 @@ variable "stage" {
   default     = "dev"
 }
 
-# Include storage module
-module "storage" {
-  source = "./storage"
-  region = var.region
-  stage  = var.stage
-}
+# Storage is now handled by the central single table approach

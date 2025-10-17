@@ -49,9 +49,9 @@ const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResu
       console.log(`🔍 Looking for connections for user: ${target.userId}`)
       const userConnections = await connectionService.getUserConnections(target.userId)
       console.log(`📊 Found ${userConnections.length} connections for user ${target.userId}:`, userConnections.map(c => ({
-        connectionId: c.connectionId,
+        connectionId: c.connection_id,
         status: c.status,
-        createdAt: c.createdAt
+        createdAt: c.created_at
       })))
       
       const activeConnections = userConnections.filter(conn => conn.status === 'connected')
@@ -70,7 +70,7 @@ const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResu
       }
 
       const results = await webSocketClient.sendToConnections(
-        activeConnections.map(conn => conn.connectionId),
+        activeConnections.map(conn => conn.connection_id),
         message
       )
 

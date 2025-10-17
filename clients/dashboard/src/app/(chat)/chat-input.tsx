@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/buttons/button";
 import { cn } from "@/utils/cn";
+import { DataSourceSelector } from "./data-source-selector";
 import { 
   ArrowUp,
   BoxAdd,
@@ -71,17 +72,11 @@ export function ChatInput({ onSubmit, isLoading = false, className, size = "larg
               isCompact && "items-center",
               isLarge && "items-start"
             )}>
-              {/* Left side button for compact */}
+              {/* Left side buttons for compact */}
               {isCompact && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="xs"
-                  onClick={handleAttachment}
-                  className="flex-shrink-0 p-1.5"
-                >
-                  <BoxAdd size={16} />
-                </Button>
+                <div className="flex items-center gap-1">
+                  <DataSourceSelector variant="compact" />
+                </div>
               )}
 
               {/* Input field */}
@@ -119,15 +114,7 @@ export function ChatInput({ onSubmit, isLoading = false, className, size = "larg
                 {isLarge && (
                   <div className="flex items-center justify-between mt-2">
                     <div className="flex items-center gap-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={handleAttachment}
-                        className="flex-shrink-0 p-2 text-gray-500 hover:text-gray-700 rounded-full"
-                      >
-                        <BoxAdd size={16} />
-                      </Button>
+                      <DataSourceSelector variant="large" className="text-gray-500 hover:text-gray-700" />
                     </div>
                     <Button
                       type="submit"

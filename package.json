@@ -10,7 +10,6 @@
     "check-types": "turbo run check-types",
     "install-cli": "cd shared/cli && yarn build",
     "shared:live": "turbo run build:watch --filter='@zeiro/sdk' --filter='@zeiro/domain' --filter='@zeiro/cli'"
-
   },
   "devDependencies": {
     "prettier": "^3.5.3",
@@ -25,6 +24,7 @@
     "shared/*",
     "services/*",
     "clients/*",
-    "infrastructure/*"
+    "infrastructure/*",
+    "agents"
   ]
 }

@@ -52,11 +52,10 @@ export interface ModalPropsLegacy extends VariantProps<typeof modalVariants> {
 export const Modal = forwardRef<HTMLDivElement, ModalProps | ModalPropsLegacy>(
   (props, ref) => {
     // Support both new disclosure prop and legacy isOpen/onClose props
-    const { disclosure, children, size, closeOnOverlayClick = true, closeOnEsc = true, className, ...restProps } = props as ModalProps;
-    const legacyProps = props as ModalPropsLegacy;
+    const { disclosure, children, size, closeOnOverlayClick = true, closeOnEsc = true, className, isOpen: legacyIsOpen, onClose: legacyOnClose, ...restProps } = props as ModalProps & ModalPropsLegacy;
     
-    const isOpen = disclosure?.isOpen ?? legacyProps.isOpen;
-    const onClose = disclosure?.onClose ?? legacyProps.onClose;
+    const isOpen = disclosure?.isOpen ?? legacyIsOpen;
+    const onClose = disclosure?.onClose ?? legacyOnClose;
 
     // Handle ESC key
     useEffect(() => {

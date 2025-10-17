@@ -55,7 +55,7 @@ const handler = async (event: WebSocketEvent): Promise<APIGatewayProxyResult> =>
       }
 
       const results = await webSocketClient.sendToConnections(
-        activeConnections.map(conn => conn.connectionId),
+        activeConnections.map(conn => conn.connection_id),
         message
       )
 
@@ -80,7 +80,7 @@ const handler = async (event: WebSocketEvent): Promise<APIGatewayProxyResult> =>
       }
 
       const results = await webSocketClient.sendToConnections(
-        activeConnections.map(conn => conn.connectionId),
+        activeConnections.map(conn => conn.connection_id),
         message
       )
 

@@ -4,6 +4,9 @@
   "description": "Zeiro data sources management service",
   "main": "serverless.ts",
   "scripts": {
+    "deploy": "npx zeiro deploy --stage ${STAGE:-dev} --force-init --reconfigure",
+    "deploy:application": "sls deploy",
+    "destroy": "sls remove && cd infrastructure && terraform init && terraform destroy -auto-approve",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -13,6 +16,7 @@
   },
   "dependencies": {
     "@zeiro/sdk": "*",
+    "@zeiro/domain": "*",
     "@zeiro/authentication": "*",
     "@zeiro/credentials": "*",
     "@aws-sdk/client-dynamodb": "^3.287.0",

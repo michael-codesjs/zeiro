@@ -23,7 +23,7 @@ export default function NavItems({ sidebarCollapsed }: NavItemsProps) {
   const pathname = usePathname();
 
   const navigationItems = [
-    { id: "chat", label: "Chats", path: "/", icon: Message, enabled: true },
+    { id: "chat", label: "Chats", path: "/chat", icon: Message, enabled: true },
     { id: "data-sources", label: "Data Sources", path: "/data-sources", icon: Box1, enabled: true },
     { id: "dashboards", label: "Dashboards", path: "/dashboards", icon: ChartSquare, enabled: false },
     { id: "migration-agent", label: "Migration Agent", path: "/migration-agent", icon: Data, enabled: false },
@@ -31,8 +31,8 @@ export default function NavItems({ sidebarCollapsed }: NavItemsProps) {
   ];
 
   const isActive = (path: string) => {
-    if (path === "/") {
-      return pathname === "/";
+    if (path === "/chat") {
+      return pathname === "/" || pathname.startsWith("/chat");
     }
     return pathname.startsWith(path);
   };

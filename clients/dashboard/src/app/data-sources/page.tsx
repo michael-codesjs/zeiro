@@ -1,390 +1,429 @@
 "use client";
 
-import { useState } from 'react';
-import { FiDatabase, FiPlus, FiSearch, FiFilter, FiTrash2, FiCheckSquare, FiSquare, FiRefreshCw } from 'react-icons/fi';
-import { Button, useDisclosure, Input, Select, type SelectOption } from '@/components/ui';
-import { useDataSources, useDeleteDatabase } from '@/hooks/use-data-sources';
-// import AddDatasourceModal from '../(chat)/add-datasource-modal';
-import DataSourceCard from './data-source-card';
-import QueryProvider from '@/providers/query-client-provider';
+import { useState, useMemo } from "react";
+import { 
+  Button, 
+  Input, 
+  Popover, 
+  ErrorState, 
+  ConfirmationModal, 
+  DataSourceTableSkeleton,
+} from "../../components/ui";
+import { 
+  Add,
+  SearchNormal1,
+  Filter,
+  Edit2,
+  Trash,
+  Data,
+  Warning2,
+  Eye,
+  Refresh
+} from "iconsax-react";
+import UpsertDataSourceModal from "./upsert-data-source-modal";
+import { 
+  useDataSources, 
+  useDeleteDataSource, 
+  useTestDataSourceConnection,
+  type DataSource,
+  type DataSourceType
+} from "../../hooks/use-data-sources";
+import { DATA_SOURCE_TYPES } from "../../data/data-source-types";
 
-const DATABASE_TYPE_OPTIONS: SelectOption[] = [
-  { value: 'all', label: 'All Types' },
-  { value: 'DynamoDB', label: 'DynamoDB' },
-  { value: 'PostgreSQL', label: 'PostgreSQL' },
-  { value: 'MySQL', label: 'MySQL' },
-  { value: 'MongoDB', label: 'MongoDB' },
-  { value: 'Redis', label: 'Redis' },
-  { value: 'Elasticsearch', label: 'Elasticsearch' },
-];
+type FilterType = 'all' | DataSourceType;
 
-const STATUS_OPTIONS: SelectOption[] = [
-  { value: 'all', label: 'All Status' },
-  { value: 'connected', label: 'Connected' },
-  { value: 'disconnected', label: 'Disconnected' },
-  { value: 'error', label: 'Error' },
-  { value: 'connecting', label: 'Connecting' },
-];
+const formatBytes = (bytes: number) => {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+};
 
-const ENVIRONMENT_OPTIONS: SelectOption[] = [
-  { value: 'all', label: 'All Environments' },
-  { value: 'development', label: 'Development' },
-  { value: 'staging', label: 'Staging' },
-  { value: 'production', label: 'Production' },
-];
+// Helper function to get data source logo
+const getDataSourceLogo = (type: DataSourceType) => {
+  const dataSourceType = DATA_SOURCE_TYPES.find(ds => ds.value === type);
+  return dataSourceType?.image || "/images/data-sources/postgres.png"; // fallback
+};
 
-const GROUP_BY_OPTIONS: SelectOption[] = [
-  { value: 'none', label: 'All' },
-  { value: 'type', label: 'Database Type' },
-  { value: 'environment', label: 'Environment' },
-  { value: 'status', label: 'Status' },
-  { value: 'region', label: 'Region' },
-];
+export default function DataSourcesPage() {
 
-function DataSourcesPageContent() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedType, setSelectedType] = useState('all');
-  const [selectedStatus, setSelectedStatus] = useState('all');
-  const [selectedEnvironment, setSelectedEnvironment] = useState('all');
-  const [groupBy, setGroupBy] = useState('none');
-  const [selectedDataSources, setSelectedDataSources] = useState<Set<string>>(new Set());
-  const [isSelectionMode, setIsSelectionMode] = useState(false);
-  
-  // React Query hooks
-  const { data: dataSources = [], isLoading, error, refetch, isRefetching } = useDataSources();
-  const { mutate: deleteDatabase } = useDeleteDatabase();
+  const { data: dataSources = [], isLoading, error, refetch } = useDataSources();
+  const deleteDataSourceMutation = useDeleteDataSource();
+  const testConnectionMutation = useTestDataSourceConnection();
 
-  // Filter data sources based on search and filters
-  const filteredDataSources = dataSources.filter(dataSource => {
-    const matchesSearch = dataSource.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         dataSource.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = selectedType === 'all' || dataSource.type === selectedType;
-    const matchesStatus = selectedStatus === 'all' || dataSource.status === selectedStatus;
-    const matchesEnvironment = selectedEnvironment === 'all' || dataSource.environment === selectedEnvironment;
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterType, setFilterType] = useState<FilterType>("all");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingDataSource, setEditingDataSource] = useState<DataSource | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [dataSourceToDelete, setDataSourceToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Filter data sources based on search query and filters
+  const filteredDataSources = useMemo(() => {
+    let filtered = dataSources; // Use real data instead of mockDataSources
+
+    // Search filter
+    if (searchQuery) {
+      filtered = filtered.filter(ds => 
+        ds.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        ds.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        ds.type.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Type filter
+    if (filterType !== "all") {
+      filtered = filtered.filter(ds => ds.type === filterType);
+    }
+
+    return filtered;
+  }, [dataSources, searchQuery, filterType]); // Add dataSources to dependencies
+
+  const handleAddDataSource = () => {
+    setShowAddModal(true);
+  };
+
+
+  const handleEditDataSource = (dataSource: DataSource) => {
+    setEditingDataSource(dataSource);
+    setShowEditModal(true);
+  };
+
+
+  const handleCancelEdit = () => {
+    setShowEditModal(false);
+    setEditingDataSource(null);
+  };
+
+  const handleDeleteDataSource = (id: string) => {
+    setDataSourceToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteDataSource = async () => {
+    if (!dataSourceToDelete) return;
     
-    return matchesSearch && matchesType && matchesStatus && matchesEnvironment;
-  });
-
-  // Group data sources
-  const getRegionForDataSource = (dataSource: any) => {
-    switch (dataSource.type) {
-      case 'DynamoDB':
-        return dataSource.connection_config.region || 'us-east-1';
-      case 'PostgreSQL':
-      case 'MySQL':
-        return dataSource.connection_config.host ? dataSource.connection_config.host.split('.')[0] : 'Unknown';
-      case 'MongoDB':
-        return dataSource.connection_config.region || 'Global';
-      default:
-        return 'N/A';
+    setIsDeleting(true);
+    try {
+      await deleteDataSourceMutation.mutateAsync(dataSourceToDelete);
+      setShowDeleteModal(false);
+      setDataSourceToDelete(null);
+    } catch (error) {
+      console.error("Failed to delete data source:", error);
+      // Error handling is done by the useDeleteDataSource hook (shows toast)
+    } finally {
+      setIsDeleting(false);
     }
   };
 
-  const groupedDataSources = (() => {
-    if (groupBy === 'none') {
-      return { 'All Data Sources': filteredDataSources };
-    }
-
-    const groups: Record<string, typeof filteredDataSources> = {};
-    
-    filteredDataSources.forEach(dataSource => {
-      let groupKey: string;
-      
-      switch (groupBy) {
-        case 'type':
-          groupKey = dataSource.type;
-          break;
-        case 'environment':
-          groupKey = dataSource.environment;
-          break;
-        case 'status':
-          groupKey = dataSource.status;
-          break;
-        case 'region':
-          groupKey = getRegionForDataSource(dataSource);
-          break;
-        default:
-          groupKey = 'Other';
-      }
-      
-      if (!groups[groupKey]) {
-        groups[groupKey] = [];
-      }
-      groups[groupKey].push(dataSource);
-    });
-
-    // Sort groups alphabetically
-    const sortedGroups: Record<string, typeof filteredDataSources> = {};
-    Object.keys(groups).sort().forEach(key => {
-      sortedGroups[key] = groups[key];
-    });
-
-    return sortedGroups;
-  })();
-
-  // Selection handlers
-  const handleSelectDataSource = (id: string) => {
-    const newSelected = new Set(selectedDataSources);
-    if (newSelected.has(id)) {
-      newSelected.delete(id);
-    } else {
-      newSelected.add(id);
-    }
-    setSelectedDataSources(newSelected);
+  const cancelDeleteDataSource = () => {
+    setShowDeleteModal(false);
+    setDataSourceToDelete(null);
   };
 
-  const handleSelectAll = () => {
-    if (selectedDataSources.size === filteredDataSources.length) {
-      setSelectedDataSources(new Set());
-    } else {
-      setSelectedDataSources(new Set(filteredDataSources.map(ds => ds.id)));
-    }
+  const handleTestConnection = async (id: string) => {
+    console.log("Testing connection for data source:", id);
+    // TODO: Implement connection test
   };
 
-  const handleBulkDelete = () => {
-    if (window.confirm(`Are you sure you want to delete ${selectedDataSources.size} data source(s)? This action cannot be undone.`)) {
-      selectedDataSources.forEach(id => {
-        deleteDatabase(id);
-      });
-      setSelectedDataSources(new Set());
-      setIsSelectionMode(false);
-    }
-  };
-
-  const toggleSelectionMode = () => {
-    setIsSelectionMode(!isSelectionMode);
-    setSelectedDataSources(new Set());
-  };
+  const activeFiltersCount = [
+    filterType !== "all" ? 1 : 0,
+  ].reduce((sum, count) => sum + count, 0);
 
   return (
-    <div className="min-h-screen w-full bg-slate-50">
-      <div className="p-8">
+    <div className="min-h-screen h-screen overflow-y-scroll w-full bg-slate-50">
+      <div className="px-6 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-8">
+        <div className="mb-6">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-slate-900">Data Sources</h1>
-              <p className="text-slate-600 mt-2">Manage your database connections and data sources</p>
-            </div>
-            <div className="flex items-center space-x-3">
-              {isSelectionMode && selectedDataSources.size > 0 && (
-                <Button
-                  variant="danger"
-                  onClick={handleBulkDelete}
-                  leftIcon={<FiTrash2 />}
-                >
-                  Delete ({selectedDataSources.size})
-                </Button>
-              )}
-              
-              <Button
-                onClick={onOpen}
-                variant="primary"
-                leftIcon={<FiPlus />}
-                className="shadow-lg"
-              >
-                Add Data Source
-              </Button>
-            </div>
-          </div>
-
-          {/* Search and Filters */}
-          <div className="mb-6">
-            <div className="flex flex-col lg:flex-row gap-4">
-              {/* Search */}
-              <div className="flex-1">
-                <div className="flex items-center space-x-3">
-                  {isSelectionMode && filteredDataSources.length > 0 && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleSelectAll}
-                      leftIcon={selectedDataSources.size === filteredDataSources.length ? <FiCheckSquare /> : <FiSquare />}
-                    >
-                      {selectedDataSources.size === filteredDataSources.length ? 'Deselect All' : 'Select All'}
-                    </Button>
-                  )}
-                  <div className="flex-1">
-                    <Input
-                      placeholder="Search data sources..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      leftIcon={<FiSearch className="w-4 h-4 text-slate-400" />}
-                    />
-                  </div>
-                </div>
-              </div>
-              
-              {/* Filters */}
-              <div className="flex gap-3">
-                <Select
-                  options={GROUP_BY_OPTIONS}
-                  value={groupBy}
-                  onValueChange={setGroupBy}
-                  placeholder="Group By"
-                  className="w-40"
-                />
-                <Select
-                  options={DATABASE_TYPE_OPTIONS}
-                  value={selectedType}
-                  onValueChange={setSelectedType}
-                  placeholder="Type"
-                  className="w-40"
-                />
-                <Select
-                  options={STATUS_OPTIONS}
-                  value={selectedStatus}
-                  onValueChange={setSelectedStatus}
-                  placeholder="Status"
-                  className="w-40"
-                />
-                <Select
-                  options={ENVIRONMENT_OPTIONS}
-                  value={selectedEnvironment}
-                  onValueChange={setSelectedEnvironment}
-                  placeholder="Environment"
-                  className="w-40"
-                />
-              </div>
+              <h1 className="text-2xl font-bold text-slate-900">Data Sources</h1>
+              <p className="text-gray-600 mt-1">Connect and manage your databases and data sources</p>
             </div>
           </div>
         </div>
 
-        {/* Data Sources Grid */}
-        {isLoading ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-lg shadow-sm p-6 animate-pulse">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-slate-200 rounded-lg"></div>
-                  <div className="flex-1 space-y-3">
-                    <div className="h-5 bg-slate-200 rounded w-32"></div>
-                    <div className="space-y-2">
-                      <div className="h-4 bg-slate-200 rounded w-full"></div>
-                      <div className="flex space-x-3">
-                        <div className="h-3 bg-slate-200 rounded w-20"></div>
-                        <div className="h-3 bg-slate-200 rounded w-16"></div>
-                      </div>
-                    </div>
+        <div className="space-y-6">
+          {/* Controls Section */}
+          <div className="flex items-center gap-3">
+            {/* Search Input */}
+            <div className="flex-1 max-w-md">
+              <Input
+                type="search"
+                placeholder="Search data sources..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                leftIcon={
+                  <SearchNormal1 size={16} color="currentColor" />
+                }
+                onClear={() => setSearchQuery("")}
+              />
+            </div>
+
+            {/* Filter Popover */}
+            <Popover
+              trigger={
+                <button className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                  <span className="text-sm font-medium text-slate-700">Filters</span>
+                  {activeFiltersCount > 0 && (
+                    <span className="inline-flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-gray-900 rounded-full">
+                      {activeFiltersCount}
+                    </span>
+                  )}
+                  <Filter size={16} color="currentColor" />
+                </button>
+              }
+              align="start"
+              contentClassName="w-80 p-4"
+            >
+              <div className="space-y-6">
+                {/* Type Filter */}
+                <div>
+                  <h3 className="text-sm font-medium text-slate-900 mb-3">Database Type</h3>
+                  <div className="space-y-2">
+                    {[
+                      { value: "all", label: "All Types" },
+                      { value: "PostgreSQL", label: "PostgreSQL" },
+                      { value: "MySQL", label: "MySQL" },
+                      { value: "MongoDB", label: "MongoDB" },
+                      { value: "DynamoDB", label: "DynamoDB" },
+                      { value: "Redis", label: "Redis" },
+                      { value: "Cassandra", label: "Cassandra" },
+                      { value: "InfluxDB", label: "InfluxDB" },
+                      { value: "Elasticsearch", label: "Elasticsearch" }
+                    ].map((option) => (
+                      <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                        <div className="relative">
+                          <input
+                            type="radio"
+                            name="filterType"
+                            value={option.value}
+                            checked={filterType === option.value}
+                            onChange={(e) => setFilterType(e.target.value as FilterType)}
+                            className="sr-only"
+                          />
+                          <div className={`w-4 h-4 border-2 rounded-full transition-colors ${
+                            filterType === option.value 
+                              ? 'border-gray-900 bg-gray-900' 
+                              : 'border-slate-300'
+                          }`}>
+                            {filterType === option.value && (
+                              <div className="w-2 h-2 bg-white rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                            )}
+                          </div>
+                        </div>
+                        <span className="text-sm text-slate-700">{option.label}</span>
+                      </label>
+                    ))}
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : error ? (
-          <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-            <div className="w-16 h-16 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-medium text-slate-900 mb-2">Failed to load data sources</h3>
-            <p className="text-slate-500">
-              {error instanceof Error ? error.message : 'An error occurred'}
-            </p>
-          </div>
-        ) : filteredDataSources.length === 0 ? (
-          dataSources.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-              <div className="w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <FiDatabase className="w-8 h-8 text-slate-400" />
-              </div>
-              <h3 className="text-lg font-medium text-slate-900 mb-2">No data sources yet</h3>
-              <p className="text-slate-500 mb-6">
-                Connect your first data source to start exploring and analyzing your data.
-              </p>
-              <Button
-                onClick={onOpen}
-                variant="primary"
-                leftIcon={<FiPlus />}
-              >
-                Add Your First Data Source
-              </Button>
-            </div>
-          ) : (
-            <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-              <div className="w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <FiSearch className="w-8 h-8 text-slate-400" />
-              </div>
-              <h3 className="text-lg font-medium text-slate-900 mb-2">No data sources found</h3>
-              <p className="text-slate-500 mb-6">
-                Try adjusting your search criteria or filters to find the data sources you're looking for.
-              </p>
-              <Button
-                onClick={() => {
-                  setSearchQuery('');
-                  setSelectedType('all');
-                  setSelectedStatus('all');
-                  setSelectedEnvironment('all');
-                  setGroupBy('none');
-                }}
-                variant="ghost"
-              >
-                Clear Filters
-              </Button>
-            </div>
-          )
-        ) : (
-          <div className="space-y-8">
-            {Object.entries(groupedDataSources).map(([groupName, groupDataSources]) => (
-              <div key={groupName}>
-                {groupBy !== 'none' && (
-                  <div className="mb-6">
-                    <h2 className="text-xl font-semibold text-slate-900 mb-2">
-                      {groupName}
-                      <span className="text-sm font-normal text-slate-500 ml-2">
-                        ({groupDataSources.length} {groupDataSources.length === 1 ? 'source' : 'sources'})
-                      </span>
-                    </h2>
+                
+                {activeFiltersCount > 0 && (
+                  <div className="pt-3 border-t border-slate-200">
+                    <button
+                      onClick={() => {
+                        setFilterType("all");
+                      }}
+                      className="text-sm text-gray-900 hover:text-gray-700 font-medium"
+                    >
+                      Clear all filters
+                    </button>
                   </div>
                 )}
-                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {groupDataSources.map((dataSource) => (
-                    <div key={dataSource.id} className="relative">
-                      {isSelectionMode && (
-                        <div className="absolute top-3 left-3 z-10">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleSelectDataSource(dataSource.id)}
-                            className="p-1 h-8 w-8 bg-white shadow-sm hover:bg-slate-50"
-                          >
-                            {selectedDataSources.has(dataSource.id) ? (
-                              <FiCheckSquare className="w-4 h-4 text-indigo-600" />
-                            ) : (
-                              <FiSquare className="w-4 h-4 text-slate-400" />
-                            )}
-                          </Button>
-                        </div>
-                      )}
-                      <DataSourceCard
-                        dataSource={dataSource}
-                        isSelected={selectedDataSources.has(dataSource.id)}
-                        isSelectionMode={isSelectionMode}
-                        onSelect={() => handleSelectDataSource(dataSource.id)}
-                      />
-                    </div>
-                  ))}
+              </div>
+            </Popover>
+
+            {/* Spacer */}
+            <div className="flex-1" />
+
+            {/* Add Button */}
+            <Button
+              onClick={handleAddDataSource}
+              rightIcon={<Add size={16} color="currentColor" />}
+              variant="primary"
+              size="md"
+            >
+              Add Data Source
+            </Button>
+          </div>
+
+          {/* Data Sources Table */}
+          {/* Loading State */}
+          {isLoading ? (
+            <DataSourceTableSkeleton />
+          ) : error ? (
+            /* Error State */
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="flex items-center justify-center py-12">
+                <div className="text-center space-y-3">
+                  <div className="mx-auto h-12 w-12 text-red-400">
+                    <Warning2 size={48} color="currentColor" />
+                  </div>
+                  <h3 className="text-sm font-medium text-slate-900">Failed to load data sources</h3>
+                  <p className="text-sm text-slate-500">There was an error loading your data sources.</p>
+                  <Button
+                    onClick={() => refetch()}
+                    rightIcon={<Refresh size={16} color="currentColor" />}
+                    variant="outline"
+                    size="sm"
+                  >
+                    Try Again
+                  </Button>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </div>
+          ) : filteredDataSources.length === 0 ? (
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="flex items-center justify-center py-12">
+                <div className="text-center space-y-3">
+                  <div className="mx-auto h-12 w-12 text-slate-400">
+                    <Data size={48} color="currentColor" />
+                  </div>
+                  <h3 className="text-sm font-medium text-slate-900">
+                    {searchQuery || activeFiltersCount > 0 ? "No data sources found" : "No data sources yet"}
+                  </h3>
+                  <p className="text-sm text-slate-500">
+                    {searchQuery || activeFiltersCount > 0
+                      ? "Try adjusting your search or filter criteria."
+                      : "Get started by connecting your first data source."
+                    }
+                  </p>
+                  {!searchQuery && activeFiltersCount === 0 && (
+                    <Button
+                      onClick={handleAddDataSource}
+                      rightIcon={<Add size={16} color="currentColor" />}
+                      variant="outline"
+                      size="sm"
+                    >
+                      Add Data Source
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                        Name
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                        Type
+                      </th>
+                        <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                          Created
+                        </th>
+                        <th className="px-6 py-3 text-right text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                          Actions
+                        </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {filteredDataSources.map((dataSource) => (
+                      <tr key={dataSource.id} className="hover:bg-slate-50">
+                          <td className="px-6 py-4">
+                            <div className="flex items-center space-x-2">
+                              <div className="flex-shrink-0">
+                                <img 
+                                  src={getDataSourceLogo(dataSource.type)} 
+                                  alt={`${dataSource.type} logo`}
+                                  className="h-5 w-5 object-contain"
+                                />
+                              </div>
+                            <div>
+                              <div className="text-sm font-medium text-slate-900">
+                                {dataSource.name}
+                              </div>
+                              {dataSource.description && (
+                                <div className="text-sm text-slate-500 mt-1">
+                                  {dataSource.description}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
+                            {dataSource.type}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-slate-500">
+                          {new Date(dataSource.created_at).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex items-center justify-end space-x-2">
+                            <button
+                              onClick={() => handleTestConnection(dataSource.id)}
+                              className="p-1 text-slate-400 hover:text-blue-600 transition-colors"
+                              title="Test connection"
+                            >
+                              <Refresh size={16} color="currentColor" />
+                            </button>
+                            <button
+                              onClick={() => console.log("View data source:", dataSource.id)}
+                              className="p-1 text-slate-400 hover:text-slate-600 transition-colors"
+                              title="View details"
+                            >
+                              <Eye size={16} color="currentColor" />
+                            </button>
+                            <button
+                              onClick={() => handleEditDataSource(dataSource)}
+                              className="p-1 text-slate-400 hover:text-slate-600 transition-colors"
+                              title="Edit data source"
+                            >
+                              <Edit2 size={16} color="currentColor" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteDataSource(dataSource.id)}
+                              className="p-1 text-slate-400 hover:text-red-600 transition-colors"
+                              title="Delete data source"
+                            >
+                              <Trash size={16} color="currentColor" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
 
-      {/* <AddDatasourceModal
-        isOpen={isOpen}
-        onClose={onClose}
-      /> */}
+          {/* Results Summary */}
+          {filteredDataSources.length > 0 && (
+            <div className="text-sm text-slate-500 text-center">
+              Showing {filteredDataSources.length} of {dataSources.length} data sources
+            </div>
+          )}
+
+          {/* Upsert Data Source Modal */}
+          <UpsertDataSourceModal
+            isOpen={showAddModal || showEditModal}
+            onClose={showAddModal ? () => setShowAddModal(false) : handleCancelEdit}
+            dataSource={showEditModal ? editingDataSource : undefined}
+          />
+
+          {/* Delete Confirmation Modal */}
+          <ConfirmationModal
+            isOpen={showDeleteModal}
+            onClose={cancelDeleteDataSource}
+            onConfirm={confirmDeleteDataSource}
+            title="Delete Data Source"
+            message="Are you sure you want to delete this data source? This action cannot be undone and may affect any applications using this connection."
+            confirmText="Delete"
+            cancelText="Cancel"
+            variant="danger"
+            isLoading={isDeleting}
+          />
+        </div>
+      </div>
     </div>
   );
 }
-
-export default function DataSourcesPage() {
-  return (
-    <QueryProvider>
-      <DataSourcesPageContent />
-    </QueryProvider>
-  );
-} 
