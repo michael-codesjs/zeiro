@@ -13,7 +13,6 @@ export async function sendUpdateViaWebsocket(
   userId: string,
   message: WebSocketMessage,
   options: {
-    databaseId?: string // Optional filter by database
     failSilently?: boolean // Whether to fail silently on errors
     maxRetries?: number // Maximum number of retries per connection
   } = {}
@@ -23,22 +22,15 @@ export async function sendUpdateViaWebsocket(
   totalConnections: number
   errors: Array<{ connectionId: string; error: string }>
 }> {
-  const { databaseId, failSilently = true, maxRetries = 2 } = options
+  const { failSilently = true, maxRetries = 2 } = options
 
   try {
     console.log(`📡 Fetching active websocket connections for user: ${userId}`)
 
-    // Build query for user connections
-    let query = webSocketConnections.query.byUser({
+    // Build query for user connections using primary index (all assumed active since we delete disconnected ones)
+    const connections = await webSocketConnections.query.primary({
       user_id: userId,
-    }).where(({ status }, { eq }) => eq(status, 'connected'))
-
-    // Add database filter if specified
-    if (databaseId) {
-      query = query.where(({ database_id }, { eq }) => eq(database_id, databaseId))
-    }
-
-    const connections = await query.go()
+    }).go()
     const activeConnections = connections.data
 
     console.log(`🔍 Found ${activeConnections.length} active connections for user ${userId}`)
@@ -211,7 +203,6 @@ export async function sendChatUpdateViaWebsocket(
   options: {
     threadId?: string
     executionId?: string
-    databaseId?: string
     failSilently?: boolean
   } = {}
 ): Promise<{
@@ -226,13 +217,11 @@ export async function sendChatUpdateViaWebsocket(
     payload,
     executionId: options.executionId,
     metadata: {
-      threadId: options.threadId,
-      databaseId: options.databaseId
+      threadId: options.threadId
     }
   }
 
   return sendUpdateViaWebsocket(userId, message, {
-    databaseId: options.databaseId,
     failSilently: options.failSilently
   })
 }
