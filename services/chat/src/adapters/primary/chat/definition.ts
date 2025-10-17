@@ -7,18 +7,7 @@ export const definition: AWS.ServerlessLambdaFunction = {
       http: {
         method: 'post',
         path: '/chat',
-        cors: {
-          origin: '*',
-          headers: [
-            'Content-Type',
-            'X-Amz-Date',
-            'Authorization',
-            'X-Api-Key',
-            'X-Amz-Security-Token',
-            'X-Amz-User-Agent'
-          ],
-          allowCredentials: false
-        },
+        cors: true,
         authorizer: {
           name: 'CognitoAuthorizerChat',
           type: 'COGNITO_USER_POOLS',
