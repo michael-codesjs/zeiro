@@ -1,5 +1,5 @@
 import { credentials, dataSources } from '@zeiro/domain'
-import { decryptWithKMS } from './kms-encryption'
+import { decrypt } from './encryption'
 
 /**
  * Credential utility functions for common credential operations
@@ -152,13 +152,13 @@ async function decryptCredentialSecrets(credential: any): Promise<any> {
         // If field has encryption metadata, decrypt it
         if (metadata[field]?.encrypted) {
           console.log(`Decrypting field ${field} with metadata:`, credential[field].substring(0, 100) + '...')
-          decrypted[field] = await decryptWithKMS(credential[field])
+          decrypted[field] = await decrypt(credential[field])
         }
         // If no metadata but field exists, assume it might be encrypted and try to decrypt
         else if (typeof credential[field] === 'string' && credential[field].length > 50) {
           try {
             console.log(`Attempting to decrypt field ${field} (no metadata):`, credential[field].substring(0, 100) + '...')
-            decrypted[field] = await decryptWithKMS(credential[field])
+            decrypted[field] = await decrypt(credential[field])
           } catch (error) {
             // If decryption fails, assume it's not encrypted
             console.log(`Field ${field} decryption failed, using as plaintext:`, error.message)
@@ -298,9 +298,28 @@ export async function getDataSourceWithCredentials(
       
     }
     
+    // Structure credential data for agent compatibility
+    let structuredCredential = null;
+    if (credential) {
+      structuredCredential = {
+        ...credential,
+        secrets: {
+          username: credential.username,
+          password: credential.password,
+          accessKeyId: credential.access_key_id,
+          secretAccessKey: credential.secret_access_key,
+          host: credential.host,
+          port: credential.port,
+          database: credential.database,
+          ssl: credential.ssl,
+          region: credential.region
+        }
+      };
+    }
+    
     return {
       ...dataSource,
-      credential
+      credential: structuredCredential
     } as DataSourceWithDecryptedCredential
   } catch (error) {
     console.error(`Error fetching data source ${dataSourceId}:`, error)

@@ -92,9 +92,9 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
                         : "text-gray-900"
                     )}
                   >
-                    {/* Tool calls for assistant messages */}
+                    {/* Tool calls for assistant messages - inline and subtle */}
                     {message.role === "assistant" && message.toolCalls && message.toolCalls.length > 0 && (
-                      <div className="mb-3">
+                      <div className="flex flex-wrap gap-2 mb-2 opacity-75">
                         {message.toolCalls.map((toolCall) => (
                           <ToolCallDisplay 
                             key={toolCall.id} 

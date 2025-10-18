@@ -8,15 +8,19 @@ import {
 } from './types';
 
 const createDatabaseConnection = (config: any) => {
-    const { host, port = 5432, database, username, password, ssl = false, timeout = 30000 } = config;
+    const { host, port = 5432, database, database_name, username, password, timeout = 30000 } = config;
+    
+    // Handle backward compatibility: use database_name if database is not provided
+    const dbName = database || database_name;
+    
+    console.log('PostgreSQL introspector connecting to database:', dbName);
     
   return new Client({
       host,
       port,
-      database,
+      database: dbName,
       user: username,
       password,
-      ssl: ssl ? { rejectUnauthorized: false } : false,
       connectionTimeoutMillis: timeout,
       statement_timeout: timeout,
       query_timeout: timeout,

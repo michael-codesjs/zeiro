@@ -21,7 +21,6 @@ type CreateDataSourceWithConnectionInput = {
     database?: string
     username?: string
     password?: string
-    ssl?: boolean
     // DynamoDB
     region?: string
     accessKeyId?: string
@@ -149,17 +148,15 @@ const handler = async (
           status: 'active',
           host: input.connection_details.host,
           port: input.connection_details.port,
-          database_name: input.connection_details.database,
+          database: input.connection_details.database,
           username: input.connection_details.username,
           password: input.connection_details.password,
-          ssl_enabled: input.connection_details.ssl || false,
         }
 
         connection_config = {
           host: input.connection_details.host,
           port: input.connection_details.port,
-          database_name: input.connection_details.database,
-          ssl: input.connection_details.ssl || false
+          database: input.connection_details.database
         }
         break
 
@@ -212,7 +209,11 @@ const handler = async (
     }
 
     // Encrypt sensitive credential fields
-    const encrypted_credential = await encryptCredentialSecrets(credential_data)
+    const keyAlias = process.env.KMS_KEY_ALIAS
+    if (!keyAlias) {
+      throw new Error('KMS_KEY_ALIAS environment variable is required')
+    }
+    const encrypted_credential = await encryptCredentialSecrets(credential_data, keyAlias)
     console.log('Creating encrypted credential:', { credential_id, type: credential_data.type })
 
     // Create credential in database

@@ -2,15 +2,6 @@
 
 import { ToolCall } from "@/hooks/use-chat";
 import { cn } from "@/utils/cn";
-import { 
-  SearchNormal1, 
-  Code, 
-  Play,
-  TickCircle,
-  CloseCircle,
-  Refresh,
-  Setting2
-} from "iconsax-reactjs";
 
 interface ToolCallDisplayProps {
   toolCall: ToolCall;
@@ -18,35 +9,39 @@ interface ToolCallDisplayProps {
 }
 
 export function ToolCallDisplay({ toolCall, className }: ToolCallDisplayProps) {
-  const getToolIcon = (toolId: string) => {
-    switch (toolId) {
-      case 'query_generation':
-        return <Code size={16} />;
-      case 'query_execution':
-        return <Play size={16} />;
-      case 'data_source_introspection':
-        return <Setting2 size={16} />;
-      default:
-        return <Code size={16} />;
-    }
-  };
-
-  const getStatusIcon = (status: ToolCall['status']) => {
+  const getStatusIndicator = (status: ToolCall['status']) => {
     switch (status) {
       case 'started':
-        return <Refresh size={14} className="animate-spin text-blue-500" />;
+        return (
+          <div className="flex items-center gap-2">
+            <div className="flex gap-0.5">
+              <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" />
+              <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: "0.2s" }} />
+              <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: "0.4s" }} />
+            </div>
+            <span className="text-[10px] text-gray-500">{toolCall.tool_name}</span>
+          </div>
+        );
       case 'completed':
-        return <TickCircle size={14} className="text-green-500" />;
+        return (
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+            <span className="text-[10px] text-gray-500">{toolCall.tool_name}</span>
+          </div>
+        );
       case 'failed':
-        return <CloseCircle size={14} className="text-red-500" />;
+        return (
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 bg-red-500 rounded-full" />
+            <span className="text-[10px] text-gray-500">{toolCall.tool_name}</span>
+          </div>
+        );
     }
   };
 
-
   return (
-    <div className={cn("flex items-center gap-2 mb-1", className)}>
-      <span className="font-bold text-sm text-gray-400">{toolCall.tool_name}</span>
-      {getStatusIcon(toolCall.status)}
+    <div className={cn("inline-flex items-center py-1", className)}>
+      {getStatusIndicator(toolCall.status)}
     </div>
   );
 }

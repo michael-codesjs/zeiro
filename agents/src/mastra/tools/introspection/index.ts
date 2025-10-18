@@ -50,11 +50,18 @@ export function getDataSourceIntrospectionTool(dataSource: DataSource) {
         if (credential) {
           console.log(`Using decrypted credential: ${credential.id}`);
           
-          // Merge credential fields into connection config based on credential type
-          // Merge secrets into connection config
+          // Merge credential secrets into connection config
           if (credential.secrets) {
             finalConnectionConfig = { ...finalConnectionConfig, ...credential.secrets };
           }
+          
+          // Handle backward compatibility: normalize database_name to database
+          if ((finalConnectionConfig as any).database_name && !(finalConnectionConfig as any).database) {
+            (finalConnectionConfig as any).database = (finalConnectionConfig as any).database_name;
+            delete (finalConnectionConfig as any).database_name;
+          }
+          
+          console.log('Connection configured with credential data');
         } else {
           console.log('No credential found, using connection config only');
         }

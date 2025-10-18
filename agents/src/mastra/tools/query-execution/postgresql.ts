@@ -30,13 +30,17 @@ export class PostgreSQLQueryExecutor extends QueryExecutor {
       const config = this.dataSource.connection_config as any;
       const credentials = this.dataSource.credential?.secrets;
       
+      // Handle backward compatibility for database field
+      const databaseName = config.database || config.database_name || credentials?.database || credentials?.database_name;
+      
+      console.log('Connecting to PostgreSQL database:', databaseName);
+      
       client = new Client({
         host: config.host,
         port: config.port,
-        database: config.database,
+        database: databaseName,
         user: credentials?.username,
         password: credentials?.password,
-        ssl: config.ssl ? { rejectUnauthorized: false } : false,
         statement_timeout: (options?.timeout || 10) * 1000, // Convert to milliseconds
       });
 

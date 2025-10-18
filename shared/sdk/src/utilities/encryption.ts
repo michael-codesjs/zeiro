@@ -1,154 +1,130 @@
-import { createCipheriv, createDecipheriv, randomBytes, scrypt, createDecipher } from 'crypto'
-import { promisify } from 'util'
-
-const scryptAsync = promisify(scrypt)
-const ALGORITHM = 'aes-256-gcm'
-const ENCRYPTION_KEY = process.env.CREDENTIAL_ENCRYPTION_KEY || 'default-key-change-in-production'
+import { KMSClient, EncryptCommand, DecryptCommand } from '@aws-sdk/client-kms'
 
 /**
- * Encryption utilities for sensitive data
+ * KMS-based encryption utilities for sensitive data
+ * All encryption now uses AWS KMS for enhanced security
  */
 
-// Derive a key from the password using scrypt
-async function deriveKey(password: string, salt: Buffer): Promise<Buffer> {
-  return (await scryptAsync(password, salt, 32)) as Buffer
-}
+const kmsClient = new KMSClient({ 
+  region: process.env.AWS_REGION || 'eu-central-1'
+})
 
 /**
- * Encrypt text using AES-256-GCM
+ * Encrypt text using KMS (simple, no encryption context)
  * @param text - The text to encrypt
- * @returns Encrypted string in format: salt:iv:authTag:encrypted
+ * @param keyId - The KMS key ID or alias to use for encryption
+ * @returns Encrypted string (base64-encoded ciphertext blob)
  */
-export async function encrypt(text: string): Promise<string> {
+export async function encrypt(text: string, keyId: string): Promise<string> {
   try {
-    const iv = randomBytes(16)
-    const salt = randomBytes(16)
-    const key = await deriveKey(ENCRYPTION_KEY, salt)
+    if (!keyId) {
+      throw new Error('KMS Key ID is required')
+    }
     
-    const cipher = createCipheriv(ALGORITHM, key, iv)
-    let encrypted = cipher.update(text, 'utf8', 'hex')
-    encrypted += cipher.final('hex')
+    if (Buffer.byteLength(text, 'utf8') > 4096) {
+      throw new Error('Data too large for direct KMS encryption. Use envelope encryption for data > 4KB.')
+    }
     
-    const authTag = cipher.getAuthTag()
+    const command = new EncryptCommand({
+      KeyId: keyId,
+      Plaintext: Buffer.from(text, 'utf8')
+    })
     
-    // Combine salt, iv, authTag, and encrypted data
-    return salt.toString('hex') + ':' + iv.toString('hex') + ':' + authTag.toString('hex') + ':' + encrypted
+    const result = await kmsClient.send(command)
+    
+    if (!result.CiphertextBlob) {
+      throw new Error('KMS encryption failed: no ciphertext returned')
+    }
+    
+    // Return just the base64-encoded ciphertext blob
+    return Buffer.from(result.CiphertextBlob).toString('base64')
+    
   } catch (error) {
-    console.error('Encryption error:', error)
-    throw new Error('Failed to encrypt data')
+    console.error('KMS encryption failed:', error)
+    throw new Error(`KMS encryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
 
 /**
- * Decrypt text using AES-256-GCM with backward compatibility
- * @param encryptedText - The encrypted text to decrypt
+ * Decrypt text using KMS with proper error handling
+ * @param encryptedText - The encrypted text to decrypt (base64-encoded ciphertext blob)
  * @returns Decrypted string
  */
 export async function decrypt(encryptedText: string): Promise<string> {
   try {
-    // First try new GCM format with current key
-    if (encryptedText.includes(':')) {
-      const parts = encryptedText.split(':')
-      if (parts.length === 4) {
-        try {
-          const [saltHex, ivHex, authTagHex, encrypted] = parts
-          const salt = Buffer.from(saltHex, 'hex')
-          const iv = Buffer.from(ivHex, 'hex')
-          const authTag = Buffer.from(authTagHex, 'hex')
-          
-          const key = await deriveKey(ENCRYPTION_KEY, salt)
-          
-          const decipher = createDecipheriv(ALGORITHM, key, iv)
-          decipher.setAuthTag(authTag)
-          
-          let decrypted = decipher.update(encrypted, 'hex', 'utf8')
-          decrypted += decipher.final('utf8')
-          
-          return decrypted
-        } catch (gcmError) {
-          console.warn('GCM decryption failed with current key, trying default key:', gcmError)
-          
-          // Try with default key for backward compatibility
-          try {
-            const [saltHex, ivHex, authTagHex, encrypted] = parts
-            const salt = Buffer.from(saltHex, 'hex')
-            const iv = Buffer.from(ivHex, 'hex')
-            const authTag = Buffer.from(authTagHex, 'hex')
-            
-            const defaultKey = await deriveKey('default-key-change-in-production', salt)
-            
-            const decipher = createDecipheriv(ALGORITHM, defaultKey, iv)
-            decipher.setAuthTag(authTag)
-            
-            let decrypted = decipher.update(encrypted, 'hex', 'utf8')
-            decrypted += decipher.final('utf8')
-            
-            console.log('Successfully decrypted with default key - credential needs re-encryption')
-            return decrypted
-          } catch (defaultKeyError) {
-            console.warn('GCM decryption failed with default key, trying legacy formats:', defaultKeyError)
-            // Fall through to legacy decryption
-          }
-        }
-      }
+    // Check if the data looks like KMS-encrypted data (base64)
+    if (!encryptedText) {
+      throw new Error('No encrypted text provided')
     }
     
-    // Try legacy decryption methods
-    return await legacyDecrypt(encryptedText)
+    // If it doesn't look like base64, it's probably not KMS-encrypted
+    if (!/^[A-Za-z0-9+/]+=*$/.test(encryptedText)) {
+      console.warn('Data does not appear to be KMS-encrypted (not base64), treating as plaintext')
+      return encryptedText
+    }
+    
+    // If it's too short to be KMS data, treat as plaintext
+    if (encryptedText.length < 100) {
+      console.warn('Data too short to be KMS-encrypted, treating as plaintext')
+      return encryptedText
+    }
+    
+    const command = new DecryptCommand({
+      CiphertextBlob: Buffer.from(encryptedText, 'base64')
+    })
+    
+    const result = await kmsClient.send(command)
+    
+    if (!result.Plaintext) {
+      throw new Error('KMS decryption failed: no plaintext returned')
+    }
+    
+    return Buffer.from(result.Plaintext).toString('utf8')
+    
   } catch (error) {
-    console.error('Decryption error:', error)
-    throw new Error('Failed to decrypt data')
+    console.error('KMS decryption failed for data:', encryptedText.substring(0, 50) + '...', error)
+    
+    // If it's an InvalidCiphertextException, the data is probably not KMS-encrypted
+    if (error.name === 'InvalidCiphertextException') {
+      console.warn('InvalidCiphertextException - data is not KMS-encrypted, returning as plaintext')
+      return encryptedText
+    }
+    
+    throw new Error(`KMS decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
 
 /**
- * Legacy decryption for backward compatibility
- * @param encryptedText - The encrypted text to decrypt using legacy methods
- * @returns Decrypted string
- */
-async function legacyDecrypt(encryptedText: string): Promise<string> {
-  try {
-    // If it doesn't look encrypted, return as-is (for development/testing)
-    if (!encryptedText || encryptedText.length < 32) {
-      console.warn('Text appears to be unencrypted, returning as-is')
-      return encryptedText
-    }
-    throw new Error('Unable to decrypt using any known method')
-  } catch (error) {
-    console.error('Legacy decryption failed:', error)
-    if (typeof encryptedText === 'string') {
-      console.warn('Returning encrypted text as-is due to decryption failure')
-      return encryptedText
-    }
-    throw error
-  }
-}
-
-/**
- * Encrypt sensitive fields in credential data
+ * Encrypt sensitive fields in credential data using KMS
  * @param credential - The credential object with potentially sensitive fields
- * @returns Credential object with encrypted sensitive fields
+ * @param keyId - The KMS key ID or alias to use for encryption
+ * @returns Credential object with encrypted sensitive fields and metadata
  */
-export async function encryptCredentialSecrets(credential: any): Promise<any> {
+export async function encryptCredentialSecrets(credential: any, keyId: string): Promise<any> {
   const encrypted = { ...credential }
-  
-  // Encrypt sensitive fields based on credential type
-  if (credential.secret_access_key) {
-    encrypted.secret_access_key = await encrypt(credential.secret_access_key)
+
+  if (!keyId) {
+    throw new Error('KMS Key ID is required for credential encryption')
   }
-  
-  if (credential.service_account_key) {
-    encrypted.service_account_key = await encrypt(credential.service_account_key)
+
+  const sensitiveFields = [
+    'secret_access_key',
+    'service_account_key',
+    'client_secret',
+    'password'
+  ]
+
+  for (const field of sensitiveFields) {
+    if (credential[field]) {
+      try {
+        encrypted[field] = await encrypt(credential[field], keyId)
+      } catch (error) {
+        console.error(`Failed to encrypt field ${field} with KMS:`, error)
+        throw new Error(`KMS encryption failed for sensitive field: ${field}`)
+      }
+    }
   }
-  
-  if (credential.client_secret) {
-    encrypted.client_secret = await encrypt(credential.client_secret)
-  }
-  
-  if (credential.password) {
-    encrypted.password = await encrypt(credential.password)
-  }
-  
+
   return encrypted
 }
 

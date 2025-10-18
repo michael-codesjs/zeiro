@@ -101,7 +101,7 @@ export class Zeiro {
         data_source_id: this.dataSource.id,
         user_id: this.user_id
       }),
-      model: openai('gpt-4o'),
+      model: openai('gpt-4o-mini'),
       tools,
       memory: this.memory
     });

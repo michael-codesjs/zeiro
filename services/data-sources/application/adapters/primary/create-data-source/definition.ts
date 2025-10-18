@@ -75,6 +75,7 @@ export const definition: AWS.ServerlessLambdaFunction = {
   ],
   environment: {
     ZEIRO_TABLE_NAME: '${ssm:/zeiro/${self:custom.stage}/infrastructure/storage/database/zeiro-table/name}',
+    KMS_KEY_ALIAS: '${ssm:/zeiro/${self:custom.stage}/infrastructure/security/kms/credentials-key/alias}',
     STAGE: '${self:custom.stage}',
   },
 } 

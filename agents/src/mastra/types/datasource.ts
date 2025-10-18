@@ -10,7 +10,6 @@ export interface PostgreSQLConfig {
   host: string
   port: number
   database: string
-  ssl?: boolean
   schema?: string
 }
 
