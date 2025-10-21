@@ -25,6 +25,8 @@ export class Zeiro {
   private agent: Agent = {} as any
   private websocketManager?: any
   private streamingWrapper?: StreamingToolWrapper
+  private currentExecutionId?: string
+  private currentThreadId?: string
 
   constructor(config: Config) {
 
@@ -71,7 +73,7 @@ export class Zeiro {
   }
 
   private async setupAgent() {
-    // Get base tools
+    // Get base tools - visualization options will be set dynamically during execution
     const introspectionTool = getDataSourceIntrospectionTool(this.dataSource);
     const queryGenerationTool = getQueryGenerationTool(this.dataSource);
     const queryExecutionTool = getQueryExecutionTool(this.dataSource);
@@ -111,6 +113,48 @@ export class Zeiro {
     return this.agent;
   }
 
+  /**
+   * Update tools with current execution context for visualization support
+   */
+  private updateToolsWithExecutionContext(executionId: string, threadId: string) {
+    if (!this.websocketManager) return;
+
+    // Create tools with WebSocket options for visualization
+    const websocketOptions = {
+      websocketManager: this.websocketManager,
+      executionId,
+      threadId
+    };
+
+    const introspectionTool = getDataSourceIntrospectionTool(this.dataSource);
+    const queryGenerationTool = getQueryGenerationTool(this.dataSource);
+    const queryExecutionTool = getQueryExecutionTool(this.dataSource, websocketOptions);
+
+    // Initialize streaming wrapper with current context
+    this.streamingWrapper = new StreamingToolWrapper(this.websocketManager, executionId, threadId);
+
+    // Wrap tools for streaming
+    const tools = {
+      'Introspect Data Source': this.streamingWrapper.wrapTool(introspectionTool),
+      'Generate Query': this.streamingWrapper.wrapTool(queryGenerationTool),
+      'Execute Query': this.streamingWrapper.wrapTool(queryExecutionTool)
+    };
+
+    // Recreate agent with updated tools
+    this.agent = new Agent({
+      name: 'Zeiro Data Analyst',
+      instructions: getInstructions({
+        data_source_name: this.dataSource.name,
+        data_source_type: this.dataSource.type,
+        data_source_id: this.dataSource.id,
+        user_id: this.user_id
+      }),
+      model: openai('gpt-4o'),
+      tools,
+      memory: this.memory
+    });
+  }
+
   // Thread management methods
   private async createThread(): Promise<string> {
     const thread = await this.memory.createThread({
@@ -130,19 +174,27 @@ export class Zeiro {
     // Handle thread ID - use provided one or create new
     const threadId = options.threadId || await this.createThread()
     
-    // If WebSocket manager is available and executionId is provided, wrap tools for streaming
+    // If WebSocket manager is available and executionId is provided, update tools with execution context
     if (this.websocketManager && options.executionId) {
-      this.streamingWrapper = new StreamingToolWrapper(
-        this.websocketManager, 
-        options.executionId, 
-        threadId
-      );
+      // Store current execution context
+      this.currentExecutionId = options.executionId;
+      this.currentThreadId = threadId;
       
-      // Re-setup agent with streaming tools
+      // Create tools with WebSocket options for visualization
+      const websocketOptions = {
+        websocketManager: this.websocketManager,
+        executionId: options.executionId,
+        threadId
+      };
+
       const introspectionTool = getDataSourceIntrospectionTool(this.dataSource);
       const queryGenerationTool = getQueryGenerationTool(this.dataSource);
-      const queryExecutionTool = getQueryExecutionTool(this.dataSource);
+      const queryExecutionTool = getQueryExecutionTool(this.dataSource, websocketOptions);
+
+      // Initialize streaming wrapper with current context
+      this.streamingWrapper = new StreamingToolWrapper(this.websocketManager, options.executionId, threadId);
       
+      // Re-setup agent with streaming tools and visualization support
       this.agent = new Agent({
         name: 'Zeiro Data Analyst',
         instructions: getInstructions({

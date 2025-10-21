@@ -17,6 +17,23 @@ export interface ToolCall {
   timestamp: Date;
 }
 
+export interface DataVisualization {
+  id: string;
+  type: 'table' | 'bar_chart' | 'line_chart' | 'pie_chart' | 'area_chart' | 'scatter_plot';
+  data: {
+    columns: Array<{
+      key: string;
+      label: string;
+      type: 'string' | 'number' | 'date' | 'boolean';
+      format?: string;
+    }>;
+    rows: Record<string, any>[];
+  };
+  config: any;
+  query?: string;
+  timestamp: string;
+}
+
 export interface ChatMessage {
   id: string;
   content: string;
@@ -24,6 +41,7 @@ export interface ChatMessage {
   timestamp: Date;
   isStreaming?: boolean;
   toolCalls?: ToolCall[];
+  visualizations?: DataVisualization[];
   metadata?: {
     sources?: string[];
     reasoning?: string;
@@ -219,6 +237,52 @@ export function useChat({ initialMessages = [], onError }: UseChatProps = {}) {
                     ];
                   }
                   return prev;
+                });
+                break;
+
+              case 'data_visualization':
+                setMessages(prev => {
+                  const lastMessage = prev[prev.length - 1];
+                  if (lastMessage && lastMessage.role === 'assistant') {
+                    // Add visualization to existing assistant message
+                    const newVisualization: DataVisualization = {
+                      id: message.payload.visualization.id,
+                      type: message.payload.visualization.type,
+                      data: message.payload.visualization.data,
+                      config: message.payload.visualization.config,
+                      query: message.payload.visualization.query,
+                      timestamp: message.payload.visualization.timestamp
+                    };
+                    
+                    return [
+                      ...prev.slice(0, -1),
+                      {
+                        ...lastMessage,
+                        visualizations: [...(lastMessage.visualizations || []), newVisualization]
+                      }
+                    ];
+                  } else {
+                    // Create new assistant message with visualization
+                    const newVisualization: DataVisualization = {
+                      id: message.payload.visualization.id,
+                      type: message.payload.visualization.type,
+                      data: message.payload.visualization.data,
+                      config: message.payload.visualization.config,
+                      query: message.payload.visualization.query,
+                      timestamp: message.payload.visualization.timestamp
+                    };
+                    
+                    return [
+                      ...prev,
+                      {
+                        id: `assistant-${Date.now()}`,
+                        content: '',
+                        role: 'assistant' as const,
+                        timestamp: new Date(),
+                        visualizations: [newVisualization]
+                      }
+                    ];
+                  }
                 });
                 break;
             }

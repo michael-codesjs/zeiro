@@ -7,6 +7,8 @@ export interface QueryExecutionResult {
   executionTime?: number;
   error?: string;
   query: string;
+  message?: string; // For custom messages when visualizations are sent
+  visualizationSent?: boolean; // Flag to indicate if visualization was sent
   metadata?: {
     columns?: Array<{
       name: string;
@@ -53,6 +55,7 @@ export const queryExecutionInputSchema = z.object({
   limit: z.number().min(1).max(1000).default(100).optional().describe('Maximum number of rows to return (default: 100, max: 1000)'),
   timeout: z.number().min(1).max(30).default(10).optional().describe('Query timeout in seconds (default: 10, max: 30)'),
   async: z.boolean().default(false).optional().describe('Whether to execute asynchronously (default: false)'),
+  userIntent: z.string().optional().describe('The original user request to help determine the best visualization type (e.g., "show in pie chart")'),
 });
 
 // Abstract base class for query executors

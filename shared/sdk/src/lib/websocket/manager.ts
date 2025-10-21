@@ -117,7 +117,7 @@ export class WebSocketManager {
    * Publish a chat-specific message to all connections
    */
   async publishChatUpdate(
-    chatType: 'chat_started' | 'chat_chunk' | 'chat_complete' | 'chat_error' | 'tool_call_started' | 'tool_call_completed' | 'tool_call_failed',
+    chatType: 'chat_started' | 'chat_chunk' | 'chat_complete' | 'chat_error' | 'tool_call_started' | 'tool_call_completed' | 'tool_call_failed' | 'data_visualization',
     payload: any,
     options: {
       threadId?: string

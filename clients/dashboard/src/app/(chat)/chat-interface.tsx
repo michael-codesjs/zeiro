@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { ChatInput } from "./chat-input";
 import { useSelectedDataSourceStore } from "@/hooks/use-selected-data-source-store";
 import { ToolCallDisplay } from "@/components/ui/tool-call-display";
+import { DataVisualization } from "@/components/ui/data-visualization";
 import { 
   SearchNormal1, 
   Lamp
@@ -92,9 +93,9 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
                         : "text-gray-900"
                     )}
                   >
-                    {/* Tool calls for assistant messages - inline and subtle */}
+                    {/* Tool calls for assistant messages - vertical flow */}
                     {message.role === "assistant" && message.toolCalls && message.toolCalls.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-2 opacity-75">
+                      <div className="space-y-1 mb-3">
                         {message.toolCalls.map((toolCall) => (
                           <ToolCallDisplay 
                             key={toolCall.id} 
@@ -106,6 +107,18 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
                     
                     {message.content && (
                       <p className="text-sm leading-relaxed">{message.content}</p>
+                    )}
+
+                    {/* Data visualizations for assistant messages */}
+                    {message.role === "assistant" && message.visualizations && message.visualizations.length > 0 && (
+                      <div className="mt-4 space-y-4">
+                        {message.visualizations.map((visualization) => (
+                          <DataVisualization 
+                            key={visualization.id} 
+                            visualization={visualization}
+                          />
+                        ))}
+                      </div>
                     )}
                     
                     {/* Metadata for assistant messages */}
@@ -136,13 +149,11 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
 
               {(isStreaming || messages.some(m => m.isStreaming)) && (
                 <div className="flex justify-start">
-                  <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3 shadow-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
-                      </div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
                     </div>
                   </div>
                 </div>
