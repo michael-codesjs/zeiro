@@ -9,3 +9,5 @@ Zeiro is a modern database client that leverages AI to simplify database interac
 - Intuitive visualization tools
 - Secure connection management
 - Natural language data exploration
+
+<!-- Security scan triggered at 2026-09-05 07:55:47 -->
